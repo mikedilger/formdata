@@ -78,16 +78,19 @@ mod tests {
         assert_eq!(e, None);
     }
 
-    #[test]
-    fn parse_header_test_rfc_2184() {
-        let a: ContentDispositionFormData =
-            ContentDispositionFormData::parse_header(
-                [b"form-data; dummy=3;\r\n filename*0=\"sample%20music\"; filename*1=\".png\"".to_vec()].as_ref() )
-            .unwrap();
-        let b = ContentDispositionFormData {
-            name: None,
-            filename: Some("sample music.png".to_string()),
-        };
-        assert_eq!(a, b);
-    }
+    // RFC 2231 (obsoletes 2184) is NOT supported presently
+    // See closed issue #3
+    //
+    //#[test]
+    //fn parse_header_test_rfc_2231() {
+    //    let a: ContentDispositionFormData =
+    //        ContentDispositionFormData::parse_header(
+    //            [b"form-data; dummy=3;\r\n filename*0=\"sample%20music\"; filename*1=\".png\"".to_vec()].as_ref() )
+    //        .unwrap();
+    //    let b = ContentDispositionFormData {
+    //        name: None,
+    //        filename: Some("sample music.png".to_string()),
+    //    };
+    //    assert_eq!(a, b);
+    //}
 }
