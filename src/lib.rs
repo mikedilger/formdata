@@ -74,7 +74,7 @@ pub fn parse_multipart<'a,'b>(
         match state {
             State::Discarding => {
                 // Read up to and including the boundary
-                let read = try!( r.read_until_token( &*boundary, &mut buf ) );
+                let read = try!( r.stream_until_token( &*boundary, &mut buf ) );
                 if read==0 { return Err(Error::Eof); }
 
                 state = State::ReadingHeaders;
@@ -89,11 +89,11 @@ pub fn parse_multipart<'a,'b>(
                 } // drop peeker
 
                 // Read up to and including the CRLF after the boundary
-                let read = try!( r.read_until_token( b"\r\n", &mut buf ) );
+                let read = try!( r.stream_until_token( b"\r\n", &mut buf ) );
                 if read==0 { return Err(Error::Eof); }
 
                 buf.truncate(0);
-                let read = try!( r.read_until_token( b"\r\n\r\n", &mut buf ) );
+                let read = try!( r.stream_until_token( b"\r\n\r\n", &mut buf ) );
                 if read==0 { return Err(Error::Eof); }
                 buf.push_all(b"\r\n\r\n"); // parse_headers() needs this token at the end
 
@@ -126,7 +126,7 @@ pub fn parse_multipart<'a,'b>(
             // FIXME:  CapturingFile should be done properly
             State::CapturingValue | State::CapturingFile => {
                 buf.truncate(0);
-                let read = try!( r.read_until_token( &*boundary, &mut buf ) );
+                let read = try!( r.stream_until_token( &*boundary, &mut buf ) );
                 if read==0 { return Err(Error::Eof); }
 
                 let cd: &ContentDispositionFormData = headers.get().unwrap();
