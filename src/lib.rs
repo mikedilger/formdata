@@ -8,4 +8,6 @@ extern crate hyper;
 
 #[cfg(test)]
 mod mock;
-mod buf;
+pub mod buf;
+
+pub use buf::BufReadPlus;
