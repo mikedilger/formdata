@@ -170,18 +170,18 @@ fn get_boundary<'a,'b>(request: &Request<'a,'b>) -> Result<String,Error>
     }
 
     // Get the boundary token
-    let mut boundary: String = String::new();
     for &(ref attr,ref value) in params.iter() {
         match (attr,value) {
             (&Attr::Ext(ref k), &Value::Ext(ref v)) => {
                 if *k=="boundary" {
-                    boundary = v.clone();
+                    return Ok( format!("--{}",v.clone()) )
                 }
             }
-            _ => { continue; }
+            _ => {}
         }
     }
-    Ok( format!("--{}",boundary) )
+    Err(Error::BoundaryNotSpecified)
+
 }
 
 #[test]

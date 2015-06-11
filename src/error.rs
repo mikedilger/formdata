@@ -18,7 +18,8 @@ pub enum Error {
     Hyper(hyper::Error),
     MissingDisposition,
     NoName,
-    Utf8(FromUtf8Error)
+    Utf8(FromUtf8Error),
+    BoundaryNotSpecified
 }
 
 impl From<io::Error> for Error {
