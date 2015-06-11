@@ -9,5 +9,6 @@ extern crate hyper;
 #[cfg(test)]
 mod mock;
 pub mod buf;
+mod content_disposition;
 
 pub use buf::BufReadPlus;
