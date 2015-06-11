@@ -1,5 +1,5 @@
 
-use std::io::{BufRead,ErrorKind,Result};
+use std::io::{BufRead,ErrorKind,Result,Write};
 
 /// This trait extends any type that implements BufRead with a
 /// read_until_token() function.
@@ -12,7 +12,8 @@ pub trait BufReadPlus: BufRead {
     /// the stream will advance past the token (the token will be discarded).
     ///
     /// This function will return `Ok(n)` where `n` is the number of bytes
-    /// which were read, counting the token if it was found.
+    /// which were read, counting the token if it was found.  If the token was
+    /// not found, it will still return `Ok(n)`
     ///
     /// # Errors
     ///
@@ -26,7 +27,7 @@ pub trait BufReadPlus: BufRead {
     }
 }
 
-use std::io::{Read,Write};
+use std::io::{Read};
 use std::io::{BufReader,BufStream,Cursor,Empty,StdinLock,Take};
 impl<R: Read> BufReadPlus for BufReader<R> {}
 impl<S: Read + Write> BufReadPlus for BufStream<S> {}
@@ -43,7 +44,10 @@ impl<T: BufRead> BufReadPlus for Take<T> {}
 fn read_until_token<R: BufRead + ?Sized>(r: &mut R, token: &[u8], buf: &mut Vec<u8>)
                                          -> Result<usize> {
     let mut read = 0;
-    let mut partial: Option<usize> = None;
+    // Partial represents the size of a token prefix found at the end of a buffer,
+    // usually 0.  If not zero, the beginning of the next buffer is checked for the
+    // suffix to find matches that straddle two buffers
+    let mut partial: usize = 0;
     loop {
         let (done,used) = {
             let available = match r.fill_buf() {
@@ -51,41 +55,46 @@ fn read_until_token<R: BufRead + ?Sized>(r: &mut R, token: &[u8], buf: &mut Vec<
                 Err(ref e) if e.kind() == ErrorKind::Interrupted => continue,
                 Err(e) => return Err(e)
             };
-            // Check for 2nd half of partial match straddling filled available buffer
-            if partial.is_some() &&
-                available[..token.len() - partial.unwrap()] == token[partial.unwrap()..]
-            {
-                let trunc = buf.len() - partial.unwrap();
-                buf.truncate(trunc);
-                (true, token.len() - partial.unwrap())
+            // If last buffer ended in a token prefix, check if this one starts with the
+            // matching suffix
+            if partial > 0 && available[..token.len() - partial] == token[partial..] {
+                (true, token.len() - partial)
             }
             else {
-                let mut found_at: Option<usize> = None;
-                for (i,w) in available.windows(token.len()).enumerate() {
-                    if w == token {
-                        found_at = Some(i);
-                        break;
-                    }
+                if partial > 0 {
+                    // Last buffer ended in a token prefix, but it didn't pan out, so
+                    // we need to push it along
+                    buf.push_all(&token[..partial])
                 }
-                match found_at {
+                // Search for the token
+                match available
+                    .windows(token.len())
+                    .enumerate()
+                    .filter(|&(_,w)| { w == token })
+                    .map(|(i,_)| { i })
+                    .next()
+                {
                     Some(i) => {
                         buf.push_all(&available[..i]);
                         (true, i + token.len())
                     },
                     None => {
                         // Check for partial matches at the end of the buffer
-                        let mut width = token.len() - 1;
-                        if available.len() > width {
-                            while width>0 {
-                                if token[..width] == available[available.len() - width..] {
-                                    partial = Some(width);
-                                    break;
-                                }
-                                width = width - 1;
+                        partial = if available.len() > token.len() - 1 {
+                            match (1..(token.len()-1))
+                                .rev()
+                                .filter(|&width| {
+                                    token[..width] == available[available.len() - width..]
+                                })
+                                .next()
+                            {
+                                Some(width) => width,
+                                None => 0
                             }
-                        }
-                        buf.push_all(available);
-                        (false, available.len())
+                        } else { 0 };
+                        // Push all except the partial token at the end (if any)
+                        buf.push_all(&available[..available.len()-partial]);
+                        (false, available.len()) // But mark it all consumed
                     }
                 }
             }
@@ -97,7 +106,6 @@ fn read_until_token<R: BufRead + ?Sized>(r: &mut R, token: &[u8], buf: &mut Vec<
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -147,5 +155,11 @@ mod tests {
         v.truncate(0);
         assert_eq!(buf.read_until_token(b"TOKEN", &mut v).unwrap(), 0);
         assert_eq!(v, b"");
+
+        let cursor = Cursor::new(&b"12345TOKE23456781TOKEN78"[..]);
+        let mut buf = BufReader::with_capacity(8, cursor);
+        let mut v = Vec::new();
+        assert_eq!(buf.read_until_token(b"TOKEN", &mut v).unwrap(), 22);
+        assert_eq!(v, b"12345TOKE23456781");
     }
 }
