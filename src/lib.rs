@@ -2,7 +2,10 @@
 //! containing multipart/form-data formatted data in a streaming
 //! fashion.
 
+#![feature(buf_stream,collections)]
+
 extern crate hyper;
 
 #[cfg(test)]
 mod mock;
+mod buf;
