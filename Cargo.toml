@@ -5,3 +5,6 @@ authors = ["Mike Dilger <mike@efx.co.nz>"]
 
 [dependencies]
 hyper = "*"
+httparse = "*"
+mime = "*"
+libc = "*"
