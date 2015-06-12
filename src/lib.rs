@@ -6,6 +6,7 @@ extern crate hyper;
 extern crate mime;
 extern crate httparse;
 extern crate libc;
+extern crate textnonce;
 
 #[cfg(test)]
 mod mock;
@@ -16,19 +17,18 @@ pub mod error;
 pub use error::Error;
 pub use buf::BufReadPlus;
 
-//use std::path::PathBuf;
+use std::path::PathBuf;
 use std::io::{BufReader,BufRead};
 
 use hyper::server::Request;
 use hyper::header::{Headers,ContentType};
 use mime::{Mime,TopLevel,SubLevel,Attr,Value};
+use tempdir::TempDir;
 
 pub use content_disposition::ContentDispositionFormData;
 
 #[cfg(test)]
 use std::net::SocketAddr;
-//#[cfg(test)]
-//use std::io::Read;
 
 // FIXME: define these
 pub struct UploadedFile;
