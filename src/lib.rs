@@ -3,9 +3,10 @@
 //! fashion.
 
 extern crate hyper;
-extern crate mime;
+#[macro_use] extern crate mime;
 extern crate httparse;
 extern crate libc;
+extern crate tempdir;
 extern crate textnonce;
 
 #[cfg(test)]
@@ -18,36 +19,45 @@ pub use error::Error;
 pub use buf::BufReadPlus;
 
 use std::path::PathBuf;
+use std::fs::File;
 use std::io::{BufReader,BufRead};
 
 use hyper::server::Request;
 use hyper::header::{Headers,ContentType};
 use mime::{Mime,TopLevel,SubLevel,Attr,Value};
 use tempdir::TempDir;
+use textnonce::TextNonce;
 
 pub use content_disposition::ContentDispositionFormData;
 
 #[cfg(test)]
 use std::net::SocketAddr;
 
-// FIXME: define these
-pub struct UploadedFile;
-/*{
-    path: PathBuf,
-    name: Option<String>,
-    content_type: Mime,
-}*/
+pub struct UploadedFile {
+    /// This is the temporary file where the data was saved.
+    pub path: PathBuf,
+    /// This is the filename that was specified in the data, unfiltered.  It may or may not
+    /// be legal on the local filesystem.
+    pub filename: Option<String>,
+    /// This is the content-type that was specified in the data, unvalidated.
+    pub content_type: Mime,
+    /// This is the actual size of the file received
+    pub size: usize,
+}
 
 pub fn parse_multipart<'a,'b>(
     request: &mut Request<'a,'b>)
-    -> Result< (Vec<(String,String)>, Vec<UploadedFile>), Error >
+    -> Result< (Vec<(String,String)>, Vec<(String,UploadedFile)>), Error >
 {
     let mut parameters: Vec<(String,String)> = Vec::new();
-    let mut files: Vec<UploadedFile> = Vec::new();
+    let mut files: Vec<(String,UploadedFile)> = Vec::new();
 
     let string_boundary = try!( get_boundary(request) );
     println!("Boundary is {}", string_boundary);
     let boundary: Vec<u8> = string_boundary.into_bytes();
+    let mut crlf_boundary: Vec<u8> = Vec::with_capacity(2 + boundary.len());
+    crlf_boundary.extend(b"\r\n");
+    crlf_boundary.extend(boundary.clone());
 
     // Request implements Read.  Internally it's a BufReader, but it's not
     // exposed that way.  We need to wrap it into a BufReader to get that
@@ -119,11 +129,9 @@ pub fn parse_multipart<'a,'b>(
                     Err(e) => return Err( From::from(e) ),
                 }
             },
-            // FIXME:  CapturingFile should be done properly
-            State::CapturingValue | State::CapturingFile => {
+            State::CapturingValue => {
                 buf.truncate(0);
-                let read = try!( r.stream_until_token( &*boundary, &mut buf ) );
-                if read==0 { return Err(Error::Eof); }
+                let _ = try!( r.stream_until_token( &*crlf_boundary, &mut buf ) );
 
                 let cd: &ContentDispositionFormData = headers.get().unwrap();
 
@@ -137,14 +145,35 @@ pub fn parse_multipart<'a,'b>(
 
                 state = State::ReadingHeaders;
             },
-            /*
             State::CapturingFile => {
-                // FIXME: default to text/plain if no content-type header.
-                // FIXME: handle content-transfer-encoding
+                // Setup a file to capture the contents
+                let mut temp = try!( TempDir::new("formdata") ).into_path();
+                temp.push( TextNonce::sized_urlsafe(32).unwrap().into_string() );
+                let mut tmpfile = try!( File::create(temp.clone()) );
+
+                // Stream out the file
+                let read = try!( r.stream_until_token( &*crlf_boundary, &mut tmpfile ) );
+
+                let cd: &ContentDispositionFormData = headers.get().unwrap();
+                let key = match cd.name {
+                    None => return Err(Error::NoName),
+                    Some(ref name) => name.clone()
+                };
+                // FIXME: handle content-type header, and default to text/plain if
+                //        no content-type header.
                 // FIXME: handle content-type: multipart/mixed as multiple files
-                return Err(Error::NotImplementedYet);
+                // FIXME: handle content-transfer-encoding
+
+                let ufile = UploadedFile {
+                    path: temp,
+                    filename: cd.filename.clone(),
+                    content_type: mime!(Text/Plain; Charset=Utf8), // FIXME
+                    size: read - crlf_boundary.len()
+                };
+                files.push( (key,ufile) );
+
+                state = State::ReadingHeaders;
             },
-            */
         }
     }
 }
@@ -212,10 +241,20 @@ fn test1() {
 
     match parse_multipart(&mut req) {
         Ok((fields,files)) => {
+            assert_eq!(fields.len(),1);
             for (k,v) in fields {
-                println!("{}={}",k,v);
+                if &k=="field1" { assert_eq!( &v, "data1" ) }
             }
-            assert!(true);
+            assert_eq!(files.len(),1);
+            for (k,file) in files {
+                if &k=="field2" {
+                    assert_eq!(file.size, 30);
+                    assert!(file.filename.is_some());
+                    assert_eq!(&file.filename.unwrap(), "file.txt");
+                    // FIXME add content_type check after impl
+                }
+            }
+
         }
         Err(e) => {
             println!("FAILED ON: {:?}",e);
