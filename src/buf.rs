@@ -25,19 +25,8 @@ pub trait BufReadPlus: BufRead {
     }
 }
 
-use std::io::{Read};
-use std::io::{BufReader,BufStream,Cursor,Empty,StdinLock,Take};
-impl<R: Read> BufReadPlus for BufReader<R> {}
-impl<S: Read + Write> BufReadPlus for BufStream<S> {}
-impl<'a> BufReadPlus for Cursor<&'a [u8]> {}
-impl<'a> BufReadPlus for Cursor<&'a mut [u8]> {}
-impl<'a> BufReadPlus for Cursor<Vec<u8>> {}
-impl<'a, B: BufRead + ?Sized> BufReadPlus for &'a mut B {}
-impl<B: BufRead + ?Sized> BufReadPlus for Box<B> {}
-impl<'a> BufReadPlus for &'a [u8] {}
-impl BufReadPlus for Empty {}
-impl<'a> BufReadPlus for StdinLock<'a> {}
-impl<T: BufRead> BufReadPlus for Take<T> {}
+// Implement BufReadPlus for everything that implements BufRead
+impl<T: BufRead> BufReadPlus for T {}
 
 fn stream_until_token<R: BufRead + ?Sized, W: Write>(r: &mut R, token: &[u8], mut out: &mut W)
                                                      -> Result<usize> {

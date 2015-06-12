@@ -2,10 +2,6 @@
 //! containing multipart/form-data formatted data in a streaming
 //! fashion.
 
-// FIXME: replace push_all() with extend()
-#![feature(buf_stream,collections)]
-
-extern crate collections;
 extern crate hyper;
 extern crate mime;
 extern crate httparse;
@@ -95,7 +91,7 @@ pub fn parse_multipart<'a,'b>(
                 buf.truncate(0);
                 let read = try!( r.stream_until_token( b"\r\n\r\n", &mut buf ) );
                 if read==0 { return Err(Error::Eof); }
-                buf.push_all(b"\r\n\r\n"); // parse_headers() needs this token at the end
+                buf.extend(b"\r\n\r\n"); // parse_headers() needs this token at the end
 
                 // Parse the headers
                 let mut header_memory = [httparse::EMPTY_HEADER; 4];

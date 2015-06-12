@@ -1,6 +1,6 @@
 
 use std::io;
-use collections::string::FromUtf8Error;
+use std::string::FromUtf8Error;
 use super::httparse;
 use super::hyper;
 
