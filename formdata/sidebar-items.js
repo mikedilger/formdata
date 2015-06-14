@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parse_multipart",""]],"mod":[["buf",""],["error",""]],"struct":[["ContentDispositionFormData","We define a Content-Disposition form-data only header, which is found within the mime multipart sections.  NOT FOR GENERAL USE"],["UploadedFile",""]]});

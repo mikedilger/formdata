@@ -1,0 +1,10 @@
+(function() {var implementors = {};
+implementors['hyper'] = [];implementors['formdata'] = ["impl <a class='trait' href='hyper/header/trait.HeaderFormat.html' title='hyper::header::HeaderFormat'>HeaderFormat</a> for <a class='struct' href='formdata/struct.ContentDispositionFormData.html' title='formdata::ContentDispositionFormData'>ContentDispositionFormData</a>",];
+
+            if (window.register_implementors) {
+                window.register_implementors(implementors);
+            } else {
+                window.pending_implementors = implementors;
+            }
+        
+})()

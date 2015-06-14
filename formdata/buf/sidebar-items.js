@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["BufReadPlus","This trait extends any type that implements BufRead with a read_until_token() function."]]});
