@@ -2,24 +2,24 @@
 use std::io::{BufRead,ErrorKind,Result,Write};
 
 /// This trait extends any type that implements BufRead with a
-/// read_until_token() function.
+/// stream_until_token() function.
 pub trait BufReadPlus: BufRead {
-    // Stream all bytes to out until the `token` delimiter is reached.
-    //
-    // This function will continue to read (and stream) bytes from the
-    // underlying stream until the token or EOF is found. Once found, all
-    // bytes up to the token (if found) will have been streamed to `out` and
-    // this input stream will advance past the token (the token will be
-    // discarded).
-    //
-    // This function will return `Ok(n)` where `n` is the number of bytes
-    // which were read, counting the token if it was found.  If the token was
-    // not found, it will still return `Ok(n)`
-    //
-    // # Errors
-    //
-    // This function will ignore all instances of `ErrorKind::Interrupted` and
-    // will otherwise return any errors returned by `fill_buf`.
+    /// Stream all bytes to out until the `token` delimiter is reached.
+    ///
+    /// This function will continue to read (and stream) bytes from the
+    /// underlying stream until the token or EOF is found. Once found, all
+    /// bytes up to the token (if found) will have been streamed to `out` and
+    /// this input stream will advance past the token (the token will be
+    /// discarded).
+    ///
+    /// This function will return `Ok(n)` where `n` is the number of bytes
+    /// which were read, counting the token if it was found.  If the token was
+    /// not found, it will still return `Ok(n)`
+    ///
+    /// # Errors
+    ///
+    /// This function will ignore all instances of `ErrorKind::Interrupted` and
+    /// will otherwise return any errors returned by `fill_buf`.
     fn stream_until_token<W: Write>(&mut self, token: &[u8], out: &mut W) -> Result<usize> {
         stream_until_token(self, token, out)
     }

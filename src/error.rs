@@ -4,6 +4,7 @@ use std::string::FromUtf8Error;
 use super::httparse;
 use super::hyper;
 
+/// An error type for the `formdata` crate
 #[derive(Debug)]
 pub enum Error {
     NoRequestContentType,
