@@ -8,12 +8,10 @@ repository = "https://github.com/mikedilger/formdata"
 license = "MIT"
 keywords = ["multipart", "form-data"]
 
-[dependencies.textnonce]
-git = "https://github.com/mikedilger/textnonce"
-
 [dependencies]
 hyper = "0.5.2"
 httparse = "*"
 mime = "0.0.11"
 libc = "*"
 tempdir = "*"
+textnonce = "*"
