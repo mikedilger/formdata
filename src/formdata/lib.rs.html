@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -304,10 +304,24 @@
 <span id="262">262</span>
 <span id="263">263</span>
 <span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
 </pre><pre class='rust '>
-<span class='doccomment'>//! This crate parses and processes hyper::server::Request data</span>
-<span class='doccomment'>//! containing multipart/form-data formatted data in a streaming</span>
-<span class='doccomment'>//! fashion.</span>
+<span class='doccomment'>//! This crate parses and processes `hyper::server::Request` data</span>
+<span class='doccomment'>//! that contains `multipart/form-data` content.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! The main entry point is `parse_multipart`</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hyper</span>;
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>mime</span>;
@@ -340,6 +354,9 @@
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::<span class='ident'>SocketAddr</span>;
 
+<span class='doccomment'>/// This structure represents uploaded files which were received as</span>
+<span class='doccomment'>/// part of the `multipart/form-data` parsing.  They are streamed to</span>
+<span class='doccomment'>/// disk because they may not fit in memory.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>UploadedFile</span> {
     <span class='doccomment'>/// This is the temporary file where the data was saved.</span>
     <span class='kw'>pub</span> <span class='ident'>path</span>: <span class='ident'>PathBuf</span>,
@@ -352,6 +369,15 @@
     <span class='kw'>pub</span> <span class='ident'>size</span>: <span class='ident'>usize</span>,
 }
 
+<span class='doccomment'>/// This function parses and processes `hyper::server::Request` data</span>
+<span class='doccomment'>/// that contains `multipart/form-data` content.  It does this in a streaming</span>
+<span class='doccomment'>/// fashion, saving embedded uploaded files to disk as they are encountered by</span>
+<span class='doccomment'>/// the parser.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// It returns two sets of data.  The first, `Vec&lt;(String,String)&gt;`, are the</span>
+<span class='doccomment'>/// variable-value pairs from the POST-ed form.  The second</span>
+<span class='doccomment'>/// `Vec&lt;(String,UploadedFile)&gt;` are the variable-file pairs from the POST-ed</span>
+<span class='doccomment'>/// form, where `UploadedFile` structures describe the uploaded file.</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_multipart</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='lifetime'>&#39;b</span><span class='op'>&gt;</span>(
     <span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Request</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='lifetime'>&#39;b</span><span class='op'>&gt;</span>)
     <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span> (<span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>,<span class='ident'>String</span>)<span class='op'>&gt;</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>,<span class='ident'>UploadedFile</span>)<span class='op'>&gt;</span>), <span class='ident'>Error</span> <span class='op'>&gt;</span>
