@@ -1,6 +1,7 @@
-//! This crate parses and processes hyper::server::Request data
-//! containing multipart/form-data formatted data in a streaming
-//! fashion.
+//! This crate parses and processes `hyper::server::Request` data
+//! that contains `multipart/form-data` content.
+//!
+//! The main entry point is `parse_multipart`
 
 extern crate hyper;
 #[macro_use] extern crate mime;
@@ -33,6 +34,9 @@ pub use content_disposition::ContentDispositionFormData;
 #[cfg(test)]
 use std::net::SocketAddr;
 
+/// This structure represents uploaded files which were received as
+/// part of the `multipart/form-data` parsing.  They are streamed to
+/// disk because they may not fit in memory.
 pub struct UploadedFile {
     /// This is the temporary file where the data was saved.
     pub path: PathBuf,
@@ -45,6 +49,15 @@ pub struct UploadedFile {
     pub size: usize,
 }
 
+/// This function parses and processes `hyper::server::Request` data
+/// that contains `multipart/form-data` content.  It does this in a streaming
+/// fashion, saving embedded uploaded files to disk as they are encountered by
+/// the parser.
+///
+/// It returns two sets of data.  The first, `Vec<(String,String)>`, are the
+/// variable-value pairs from the POST-ed form.  The second
+/// `Vec<(String,UploadedFile)>` are the variable-file pairs from the POST-ed
+/// form, where `UploadedFile` structures describe the uploaded file.
 pub fn parse_multipart<'a,'b>(
     request: &mut Request<'a,'b>)
     -> Result< (Vec<(String,String)>, Vec<(String,UploadedFile)>), Error >
