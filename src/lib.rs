@@ -137,7 +137,7 @@ pub fn parse_multipart<'a,'b>(
                     },
                     Ok(httparse::Status::Partial) => {
                         println!("Header Parsing was Partial");
-                        return Err(Error::ParseError);
+                        return Err(Error::PartialHeaders);
                     },
                     Err(e) => return Err( From::from(e) ),
                 }
