@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `buf.rs`.">
+    <meta name="description" content="Source to the Rust file `src/buf.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>buf.rs.html -- source</title>
@@ -196,24 +196,24 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='ident'>BufRead</span>,<span class='ident'>ErrorKind</span>,<span class='prelude-ty'>Result</span>,<span class='ident'>Write</span>};
 
 <span class='doccomment'>/// This trait extends any type that implements BufRead with a</span>
-<span class='doccomment'>/// read_until_token() function.</span>
+<span class='doccomment'>/// stream_until_token() function.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>BufReadPlus</span>: <span class='ident'>BufRead</span> {
-    <span class='comment'>// Stream all bytes to out until the `token` delimiter is reached.</span>
-    <span class='comment'>//</span>
-    <span class='comment'>// This function will continue to read (and stream) bytes from the</span>
-    <span class='comment'>// underlying stream until the token or EOF is found. Once found, all</span>
-    <span class='comment'>// bytes up to the token (if found) will have been streamed to `out` and</span>
-    <span class='comment'>// this input stream will advance past the token (the token will be</span>
-    <span class='comment'>// discarded).</span>
-    <span class='comment'>//</span>
-    <span class='comment'>// This function will return `Ok(n)` where `n` is the number of bytes</span>
-    <span class='comment'>// which were read, counting the token if it was found.  If the token was</span>
-    <span class='comment'>// not found, it will still return `Ok(n)`</span>
-    <span class='comment'>//</span>
-    <span class='comment'>// # Errors</span>
-    <span class='comment'>//</span>
-    <span class='comment'>// This function will ignore all instances of `ErrorKind::Interrupted` and</span>
-    <span class='comment'>// will otherwise return any errors returned by `fill_buf`.</span>
+    <span class='doccomment'>/// Stream all bytes to out until the `token` delimiter is reached.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// This function will continue to read (and stream) bytes from the</span>
+    <span class='doccomment'>/// underlying stream until the token or EOF is found. Once found, all</span>
+    <span class='doccomment'>/// bytes up to the token (if found) will have been streamed to `out` and</span>
+    <span class='doccomment'>/// this input stream will advance past the token (the token will be</span>
+    <span class='doccomment'>/// discarded).</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// This function will return `Ok(n)` where `n` is the number of bytes</span>
+    <span class='doccomment'>/// which were read, counting the token if it was found.  If the token was</span>
+    <span class='doccomment'>/// not found, it will still return `Ok(n)`</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Errors</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// This function will ignore all instances of `ErrorKind::Interrupted` and</span>
+    <span class='doccomment'>/// will otherwise return any errors returned by `fill_buf`.</span>
     <span class='kw'>fn</span> <span class='ident'>stream_until_token</span><span class='op'>&lt;</span><span class='ident'>W</span>: <span class='ident'>Write</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>token</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>out</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>W</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span> {
         <span class='ident'>stream_until_token</span>(<span class='self'>self</span>, <span class='ident'>token</span>, <span class='ident'>out</span>)
     }

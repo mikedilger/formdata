@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `lib.rs`.">
+    <meta name="description" content="Source to the Rust file `src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -389,7 +389,7 @@
     <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Boundary is {}&quot;</span>, <span class='ident'>string_boundary</span>);
     <span class='kw'>let</span> <span class='ident'>boundary</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>string_boundary</span>.<span class='ident'>into_bytes</span>();
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>crlf_boundary</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='number'>2</span> <span class='op'>+</span> <span class='ident'>boundary</span>.<span class='ident'>len</span>());
-    <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n&quot;</span>);
+    <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>));
     <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='ident'>boundary</span>.<span class='ident'>clone</span>());
 
     <span class='comment'>// Request implements Read.  Internally it&#39;s a BufReader, but it&#39;s not</span>
@@ -434,7 +434,7 @@
                 <span class='ident'>buf</span>.<span class='ident'>truncate</span>(<span class='number'>0</span>);
                 <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>stream_until_token</span>( <span class='string'>b&quot;\r\n\r\n&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span> ) );
                 <span class='kw'>if</span> <span class='ident'>read</span><span class='op'>==</span><span class='number'>0</span> { <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>); }
-                <span class='ident'>buf</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n\r\n&quot;</span>); <span class='comment'>// parse_headers() needs this token at the end</span>
+                <span class='ident'>buf</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>)); <span class='comment'>// parse_headers() needs this token at the end</span>
 
                 <span class='comment'>// Parse the headers</span>
                 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>header_memory</span> <span class='op'>=</span> [<span class='ident'>httparse</span>::<span class='ident'>EMPTY_HEADER</span>; <span class='number'>4</span>];
@@ -457,7 +457,7 @@
                     },
                     <span class='prelude-val'>Ok</span>(<span class='ident'>httparse</span>::<span class='ident'>Status</span>::<span class='ident'>Partial</span>) <span class='op'>=&gt;</span> {
                         <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Header Parsing was Partial&quot;</span>);
-                        <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>ParseError</span>);
+                        <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>PartialHeaders</span>);
                     },
                     <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>( <span class='ident'>From</span>::<span class='ident'>from</span>(<span class='ident'>e</span>) ),
                 }
