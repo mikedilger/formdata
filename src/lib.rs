@@ -69,7 +69,7 @@ pub fn parse_multipart<'a,'b>(
     println!("Boundary is {}", string_boundary);
     let boundary: Vec<u8> = string_boundary.into_bytes();
     let mut crlf_boundary: Vec<u8> = Vec::with_capacity(2 + boundary.len());
-    crlf_boundary.extend(b"\r\n".iter());
+    crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
     crlf_boundary.extend(boundary.clone());
 
     // Request implements Read.  Internally it's a BufReader, but it's not
@@ -114,7 +114,7 @@ pub fn parse_multipart<'a,'b>(
                 buf.truncate(0);
                 let read = try!( r.stream_until_token( b"\r\n\r\n", &mut buf ) );
                 if read==0 { return Err(Error::Eof); }
-                buf.extend(b"\r\n\r\n".iter()); // parse_headers() needs this token at the end
+                buf.extend(b"\r\n\r\n".iter().map(|&i| i)); // parse_headers() needs this token at the end
 
                 // Parse the headers
                 let mut header_memory = [httparse::EMPTY_HEADER; 4];
