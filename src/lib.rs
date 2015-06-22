@@ -66,7 +66,6 @@ pub fn parse_multipart<'a,'b>(
     let mut files: Vec<(String,UploadedFile)> = Vec::new();
 
     let string_boundary = try!( get_boundary(request) );
-    println!("Boundary is {}", string_boundary);
     let boundary: Vec<u8> = string_boundary.into_bytes();
     let mut crlf_boundary: Vec<u8> = Vec::with_capacity(2 + boundary.len());
     crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
