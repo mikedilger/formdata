@@ -9,7 +9,8 @@ use hyper::header::{Header, HeaderFormat, parsing};
 use hyper::error::Error as HyperError;
 
 /// We define a Content-Disposition form-data only header, which is found within
-/// the mime multipart sections.  NOT FOR GENERAL USE
+/// the mime multipart sections.  NOT FOR GENERAL USE, as it is very limited
+/// in scope.
 #[derive(Debug,Clone,PartialEq)]
 pub struct ContentDispositionFormData {
     pub name: Option<String>,
