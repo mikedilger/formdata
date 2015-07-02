@@ -171,15 +171,19 @@ pub fn parse_multipart(
                     None => return Err(Error::NoName),
                     Some(ref name) => name.clone()
                 };
-                // FIXME: handle content-type header, and default to text/plain if
-                //        no content-type header.
+
+                let content_type = match headers.get::<ContentType>() {
+                    Some(ct) => (**ct).clone(),
+                    None => mime!(Text/Plain; Charset=Utf8)
+                };
+
                 // FIXME: handle content-type: multipart/mixed as multiple files
                 // FIXME: handle content-transfer-encoding
 
                 let ufile = UploadedFile {
                     path: temp,
                     filename: cd.filename.clone(),
-                    content_type: mime!(Text/Plain; Charset=Utf8), // FIXME
+                    content_type: content_type,
                     size: read - crlf_boundary.len()
                 };
                 files.push( (key,ufile) );
@@ -251,11 +255,15 @@ fn test1() {
                 \r\n\
                 data1\r\n\
                 --abcdefg\r\n\
-                Content-Disposition: form-data; name=\"field2\"; filename=\"file.txt\"\r\n\
-                Content-Type: text/plain\r\n\
+                Content-Disposition: form-data; name=\"field2\"; filename=\"image.gif\"\r\n\
+                Content-Type: image/gif\r\n\
                 \r\n\
                 This is a file\r\n\
                 with two lines\r\n\
+                --abcdefg\r\n\
+                Content-Disposition: form-data; name=\"field3\"; filename=\"file.txt\"\r\n\
+                \r\n\
+                This is a file\r\n\
                 --abcdefg--";
     let mut mock = MockStream::with_input(input);
 
@@ -271,13 +279,18 @@ fn test1() {
             for (k,v) in fields {
                 if &k=="field1" { assert_eq!( &v, "data1" ) }
             }
-            assert_eq!(files.len(),1);
+            assert_eq!(files.len(),2);
             for (k,file) in files {
                 if &k=="field2" {
                     assert_eq!(file.size, 30);
                     assert!(file.filename.is_some());
+                    assert_eq!(&file.filename.unwrap(), "image.gif");
+                    assert_eq!(file.content_type, mime!(Image/Gif));
+                } else if &k=="field3" {
+                    assert_eq!(file.size, 14);
+                    assert!(file.filename.is_some());
                     assert_eq!(&file.filename.unwrap(), "file.txt");
-                    // FIXME add content_type check after impl
+                    assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
                 }
             }
 
