@@ -6,6 +6,7 @@ use std::fmt;
 use std::ascii::AsciiExt;
 
 use hyper::header::{Header, HeaderFormat, parsing};
+use hyper::error::Error as HyperError;
 
 /// We define a Content-Disposition form-data only header, which is found within
 /// the mime multipart sections.  NOT FOR GENERAL USE
@@ -20,14 +21,14 @@ impl Header for ContentDispositionFormData {
         "Content-Disposition"
     }
 
-    fn parse_header(raw: &[Vec<u8>]) -> Option<ContentDispositionFormData> {
+    fn parse_header(raw: &[Vec<u8>]) -> Result<ContentDispositionFormData,HyperError> {
         parsing::from_one_raw_str(raw).and_then(|s: String| {
             let mut sections = s.split(';');
             match sections.next() {
-                None => return None,
+                None => return Err(HyperError::Header),
                 Some(s) => {
                     if &s.trim().to_ascii_lowercase() != "form-data" {
-                        return None
+                        return Err(HyperError::Header)
                     }
                 }
             };
@@ -46,7 +47,7 @@ impl Header for ContentDispositionFormData {
                     _ => {}
                 }
             }
-            Some(cd)
+            Ok(cd)
         })
     }
 }
@@ -61,6 +62,7 @@ impl HeaderFormat for ContentDispositionFormData {
 mod tests {
     use super::ContentDispositionFormData;
     use hyper::header::Header;
+    use hyper::error::Error as HyperError;
 
     #[test]
     fn parse_header() {
@@ -74,8 +76,11 @@ mod tests {
         };
         assert_eq!(a, b);
 
-        let e: Option<ContentDispositionFormData> = Header::parse_header([b"".to_vec()].as_ref());
-        assert_eq!(e, None);
+        match ContentDispositionFormData::parse_header([b"".to_vec()].as_ref()) {
+            Ok(_) => assert!(false, "Empty header was parsed as ok!"),
+            Err(HyperError::Header) => assert!(true),
+            Err(_) => assert!(false, "Empty header parsed with wrong error"),
+        }
     }
 
     // RFC 2231 (obsoletes 2184) is NOT supported presently
