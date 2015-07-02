@@ -21,9 +21,9 @@ pub use buf::BufReadPlus;
 
 use std::path::PathBuf;
 use std::fs::File;
-use std::io::{BufReader,BufRead};
+use std::io::{BufReader,BufRead,Read};
 
-use hyper::server::Request;
+use hyper::server::Request as HyperRequest;
 use hyper::header::{Headers,ContentType};
 use mime::{Mime,TopLevel,SubLevel,Attr,Value};
 use tempdir::TempDir;
@@ -58,8 +58,8 @@ pub struct UploadedFile {
 /// variable-value pairs from the POST-ed form.  The second
 /// `Vec<(String,UploadedFile)>` are the variable-file pairs from the POST-ed
 /// form, where `UploadedFile` structures describe the uploaded file.
-pub fn parse_multipart<'a,'b>(
-    request: &mut Request<'a,'b>)
+pub fn parse_multipart(
+    request: &mut Request)
     -> Result< (Vec<(String,String)>, Vec<(String,UploadedFile)>), Error >
 {
     let mut parameters: Vec<(String,String)> = Vec::new();
@@ -171,15 +171,19 @@ pub fn parse_multipart<'a,'b>(
                     None => return Err(Error::NoName),
                     Some(ref name) => name.clone()
                 };
-                // FIXME: handle content-type header, and default to text/plain if
-                //        no content-type header.
+
+                let content_type = match headers.get::<ContentType>() {
+                    Some(ct) => (**ct).clone(),
+                    None => mime!(Text/Plain; Charset=Utf8)
+                };
+
                 // FIXME: handle content-type: multipart/mixed as multiple files
                 // FIXME: handle content-transfer-encoding
 
                 let ufile = UploadedFile {
                     path: temp,
                     filename: cd.filename.clone(),
-                    content_type: mime!(Text/Plain; Charset=Utf8), // FIXME
+                    content_type: content_type,
                     size: read - crlf_boundary.len()
                 };
                 files.push( (key,ufile) );
@@ -190,10 +194,10 @@ pub fn parse_multipart<'a,'b>(
     }
 }
 
-fn get_boundary<'a,'b>(request: &Request<'a,'b>) -> Result<String,Error>
+fn get_boundary(request: &Request) -> Result<String,Error>
 {
     // Verify that the request is 'content-type: multipart/form-data'
-    let content_type: &ContentType = match request.headers.get() {
+    let content_type: &ContentType = match request.headers().get() {
         Some(h) => h,
         None => return Err(Error::NoRequestContentType),
     };
@@ -221,6 +225,20 @@ fn get_boundary<'a,'b>(request: &Request<'a,'b>) -> Result<String,Error>
 
 }
 
+/// A wrapper trait for `hyper::server::Request` data to provide parsing multipart requests to any
+/// front-end that provides a `hyper::header::Headers` and a `std::io::Read` of the request's
+/// entire body.
+pub trait Request: Read {
+    /// Returns a reference to the request's Hyper headers.
+    fn headers(&self) -> &Headers;
+}
+
+impl<'a,'b> Request for HyperRequest<'a,'b> {
+    fn headers(&self) -> &Headers {
+        &self.headers
+    }
+}
+
 #[test]
 fn test1() {
     use mock::MockStream;
@@ -237,11 +255,15 @@ fn test1() {
                 \r\n\
                 data1\r\n\
                 --abcdefg\r\n\
-                Content-Disposition: form-data; name=\"field2\"; filename=\"file.txt\"\r\n\
-                Content-Type: text/plain\r\n\
+                Content-Disposition: form-data; name=\"field2\"; filename=\"image.gif\"\r\n\
+                Content-Type: image/gif\r\n\
                 \r\n\
                 This is a file\r\n\
                 with two lines\r\n\
+                --abcdefg\r\n\
+                Content-Disposition: form-data; name=\"field3\"; filename=\"file.txt\"\r\n\
+                \r\n\
+                This is a file\r\n\
                 --abcdefg--";
     let mut mock = MockStream::with_input(input);
 
@@ -249,7 +271,7 @@ fn test1() {
     let mut stream = BufReader::new(mock);
     let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
 
-    let mut req = Request::new(&mut stream, sock).unwrap();
+    let mut req = HyperRequest::new(&mut stream, sock).unwrap();
 
     match parse_multipart(&mut req) {
         Ok((fields,files)) => {
@@ -257,13 +279,18 @@ fn test1() {
             for (k,v) in fields {
                 if &k=="field1" { assert_eq!( &v, "data1" ) }
             }
-            assert_eq!(files.len(),1);
+            assert_eq!(files.len(),2);
             for (k,file) in files {
                 if &k=="field2" {
                     assert_eq!(file.size, 30);
                     assert!(file.filename.is_some());
+                    assert_eq!(&file.filename.unwrap(), "image.gif");
+                    assert_eq!(file.content_type, mime!(Image/Gif));
+                } else if &k=="field3" {
+                    assert_eq!(file.size, 14);
+                    assert!(file.filename.is_some());
                     assert_eq!(&file.filename.unwrap(), "file.txt");
-                    // FIXME add content_type check after impl
+                    assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
                 }
             }
 
