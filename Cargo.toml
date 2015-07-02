@@ -2,16 +2,16 @@
 name = "formdata"
 version = "0.2.1"
 description = "Parsing of multipart/form-data"
-authors = [ "Mike Dilger <mike@efx.co.nz>" ]
+authors = [ "Mike Dilger <mike@efx.co.nz>"  ]
 readme = "README.md"
 repository = "https://github.com/mikedilger/formdata"
 license = "MIT"
 keywords = ["multipart", "form-data"]
 
 [dependencies]
-hyper = "0.5.2"
+hyper = "*"
 httparse = "*"
-mime = "0.0.11"
+mime = "*"
 libc = "*"
 tempdir = "*"
 textnonce = "*"
