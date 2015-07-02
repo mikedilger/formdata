@@ -213,10 +213,8 @@ fn get_boundary(request: &Request) -> Result<String,Error>
     // Get the boundary token
     for &(ref attr,ref value) in params.iter() {
         match (attr,value) {
-            (&Attr::Ext(ref k), &Value::Ext(ref v)) => {
-                if *k=="boundary" {
-                    return Ok( format!("--{}",v.clone()) )
-                }
+            (&Attr::Boundary, &Value::Ext(ref v)) => {
+                return Ok( format!("--{}",v.clone()) )
             }
             _ => {}
         }
@@ -296,8 +294,8 @@ fn test1() {
 
         }
         Err(e) => {
-            println!("FAILED ON: {:?}",e);
-            assert!(false);
+            let msg = format!("FAILED ON: {:?}",e);
+            assert!(false, msg);
         }
     }
 }
