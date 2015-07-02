@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/formdata/lib.rs.html#1-277' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/formdata/lib.rs.html#1-303' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This crate parses and processes <code>hyper::server::Request</code> data
 that contains <code>multipart/form-data</code> content.</p>
 
@@ -87,6 +87,18 @@ the mime multipart sections.  NOT FOR GENERAL USE</p>
                              <p>This structure represents uploaded files which were received as
 part of the <code>multipart/form-data</code> parsing.  They are streamed to
 disk because they may not fit in memory.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.Request.html'
+                               title='formdata::Request'>Request</a></td>
+                        <td class='docblock short'>
+                             <p>A wrapper trait for <code>hyper::server::Request</code> data to provide parsing multipart requests to any
+front-end that provides a <code>hyper::header::Headers</code> and a <code>std::io::Read</code> of the request&#39;s
+entire body.</p>
 
                         </td>
                     </tr>
