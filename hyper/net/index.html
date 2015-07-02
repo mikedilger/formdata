@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-31313' class='srclink' href='../../src/hyper/net.rs.html#1-388' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-35941' class='srclink' href='../../src/hyper/net.rs.html#1-497' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>A collection of traits abstracting over Listeners and Streams.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
@@ -59,10 +59,55 @@
                     </tr>
                 
                     <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HttpListener.html'
+                               title='hyper::net::HttpListener'>HttpListener</a></td>
+                        <td class='docblock short'>
+                             <p>A <code>NetworkListener</code> for <code>HttpStream</code>s.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HttpStream.html'
+                               title='hyper::net::HttpStream'>HttpStream</a></td>
+                        <td class='docblock short'>
+                             <p>A wrapper around a TcpStream.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HttpsConnector.html'
+                               title='hyper::net::HttpsConnector'>HttpsConnector</a></td>
+                        <td class='docblock short'>
+                             <p>A connector that can protect HTTP streams using SSL.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HttpsListener.html'
+                               title='hyper::net::HttpsListener'>HttpsListener</a></td>
+                        <td class='docblock short'>
+                             <p>A Http Listener over SSL.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
                         <td><a class='struct' href='struct.NetworkConnections.html'
                                title='hyper::net::NetworkConnections'>NetworkConnections</a></td>
                         <td class='docblock short'>
                              <p>An iterator wrapper over a NetworkAcceptor.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Openssl.html'
+                               title='hyper::net::Openssl'>Openssl</a></td>
+                        <td class='docblock short'>
+                             <p>An implementation of <code>Ssl</code> for OpenSSL.</p>
 
                         </td>
                     </tr>
@@ -78,19 +123,10 @@
                     </tr>
                 
                     <tr class=' module-item'>
-                        <td><a class='enum' href='enum.HttpListener.html'
-                               title='hyper::net::HttpListener'>HttpListener</a></td>
+                        <td><a class='enum' href='enum.HttpsStream.html'
+                               title='hyper::net::HttpsStream'>HttpsStream</a></td>
                         <td class='docblock short'>
-                             <p>A <code>NetworkListener</code> for <code>HttpStream</code>s.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.HttpStream.html'
-                               title='hyper::net::HttpStream'>HttpStream</a></td>
-                        <td class='docblock short'>
-                             <p>A wrapper around a TcpStream.</p>
+                             <p>A stream over the HTTP protocol, possibly protected by SSL.</p>
 
                         </td>
                     </tr>
@@ -131,13 +167,12 @@
 
                         </td>
                     </tr>
-                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
-<table>
+                
                     <tr class=' module-item'>
-                        <td><a class='type' href='type.ContextVerifier.html'
-                               title='hyper::net::ContextVerifier'>ContextVerifier</a></td>
+                        <td><a class='trait' href='trait.Ssl.html'
+                               title='hyper::net::Ssl'>Ssl</a></td>
                         <td class='docblock short'>
-                             <p>A method that can set verification methods on an SSL context</p>
+                             <p>An abstraction to allow any SSL implementation to be used with HttpsStreams.</p>
 
                         </td>
                     </tr>

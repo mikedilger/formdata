@@ -45,11 +45,17 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-33407' class='srclink' href='../../../src/hyper/server/response.rs.html#23-34' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-38407' class='srclink' href='../../../src/hyper/server/response.rs.html#29-40' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Response&lt;'a, W: <a class='trait' href='http://doc.rust-lang.org/nightly/core/any/trait.Any.html' title='core::any::Any'>Any</a> = <a class='enum' href='../../../hyper/net/enum.Fresh.html' title='hyper::net::Fresh'>Fresh</a>&gt; {
     pub version: <a class='enum' href='../../../hyper/version/enum.HttpVersion.html' title='hyper::version::HttpVersion'>HttpVersion</a>,
     // some fields omitted
 }</pre><div class='docblock'><p>The outgoing half for a Tcp connection, created by a <code>Server</code> and given to a <code>Handler</code>.</p>
+
+<p>The default <code>StatusCode</code> for a <code>Response</code> is <code>200 OK</code>.</p>
+
+<p>There is a <code>Drop</code> implementation for <code>Response</code> that will automatically
+write the head and flush the body, if the handler has not already done so,
+so that the server doesn&#39;t accidentally leave dangling requests.</p>
 </div><h2 class='fields'>Fields</h2>
 <table><tr class='stab '>
                                   <td id='structfield.version'><code>version</code></td><td><div class='docblock'><p>The HTTP version of this response.</p>
@@ -57,19 +63,34 @@
 <div class='docblock'><p>The status of this response.</p>
 </div><h4 id='method.headers' class='method'><code>fn <a href='#method.headers' class='fnname'>headers</a>(&amp;self) -&gt; &amp;<a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a></code></h4>
 <div class='docblock'><p>The headers of this response.</p>
-</div><h4 id='method.construct' class='method'><code>fn <a href='#method.construct' class='fnname'>construct</a>(version: <a class='enum' href='../../../hyper/version/enum.HttpVersion.html' title='hyper::version::HttpVersion'>HttpVersion</a>, body: <a class='enum' href='../../../hyper/http/enum.HttpWriter.html' title='hyper::http::HttpWriter'>HttpWriter</a>&lt;&amp;'a mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a> + 'a&gt;, status: <a class='enum' href='../../../hyper/status/enum.StatusCode.html' title='hyper::status::StatusCode'>StatusCode</a>, headers: &amp;'a mut <a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>) -&gt; <a class='struct' href='../../../hyper/server/response/struct.Response.html' title='hyper::server::response::Response'>Response</a>&lt;'a, <a class='enum' href='../../../hyper/net/enum.Fresh.html' title='hyper::net::Fresh'>Fresh</a>&gt;</code></h4>
+</div><h4 id='method.construct' class='method'><code>fn <a href='#method.construct' class='fnname'>construct</a>(version: <a class='enum' href='../../../hyper/version/enum.HttpVersion.html' title='hyper::version::HttpVersion'>HttpVersion</a>, body: <a class='enum' href='../../../hyper/http/h1/enum.HttpWriter.html' title='hyper::http::h1::HttpWriter'>HttpWriter</a>&lt;&amp;'a mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a> + 'a&gt;, status: <a class='enum' href='../../../hyper/status/enum.StatusCode.html' title='hyper::status::StatusCode'>StatusCode</a>, headers: &amp;'a mut <a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>) -&gt; <a class='struct' href='../../../hyper/server/response/struct.Response.html' title='hyper::server::response::Response'>Response</a>&lt;'a, <a class='enum' href='../../../hyper/net/enum.Fresh.html' title='hyper::net::Fresh'>Fresh</a>&gt;</code></h4>
 <div class='docblock'><p>Construct a Response from its constituent parts.</p>
-</div><h4 id='method.deconstruct' class='method'><code>fn <a href='#method.deconstruct' class='fnname'>deconstruct</a>(self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='enum' href='../../../hyper/version/enum.HttpVersion.html' title='hyper::version::HttpVersion'>HttpVersion</a>, <a class='enum' href='../../../hyper/http/enum.HttpWriter.html' title='hyper::http::HttpWriter'>HttpWriter</a>&lt;&amp;'a mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a> + 'a&gt;, <a class='enum' href='../../../hyper/status/enum.StatusCode.html' title='hyper::status::StatusCode'>StatusCode</a>, &amp;'a mut <a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>)</a></code></h4>
+</div><h4 id='method.deconstruct' class='method'><code>fn <a href='#method.deconstruct' class='fnname'>deconstruct</a>(self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='enum' href='../../../hyper/version/enum.HttpVersion.html' title='hyper::version::HttpVersion'>HttpVersion</a>, <a class='enum' href='../../../hyper/http/h1/enum.HttpWriter.html' title='hyper::http::h1::HttpWriter'>HttpWriter</a>&lt;&amp;'a mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a> + 'a&gt;, <a class='enum' href='../../../hyper/status/enum.StatusCode.html' title='hyper::status::StatusCode'>StatusCode</a>, &amp;'a mut <a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>)</a></code></h4>
 <div class='docblock'><p>Deconstruct this Response into its constituent parts.</p>
 </div></div><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../../hyper/server/response/struct.Response.html' title='hyper::server::response::Response'>Response</a>&lt;'a, <a class='enum' href='../../../hyper/net/enum.Fresh.html' title='hyper::net::Fresh'>Fresh</a>&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(stream: &amp;'a mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a> + 'a, headers: &amp;'a mut <a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>) -&gt; <a class='struct' href='../../../hyper/server/response/struct.Response.html' title='hyper::server::response::Response'>Response</a>&lt;'a, <a class='enum' href='../../../hyper/net/enum.Fresh.html' title='hyper::net::Fresh'>Fresh</a>&gt;</code></h4>
 <div class='docblock'><p>Creates a new Response that can be used to write to a network stream.</p>
 </div><h4 id='method.send' class='method'><code>fn <a href='#method.send' class='fnname'>send</a>(self, body: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
 <div class='docblock'><p>Writes the body and ends the response.</p>
 
+<p>This is a shortcut method for when you have a response with a fixed
+size, and would only need a single <code>write</code> call normally.</p>
+
 <h1 id="example" class='section-header'><a
                            href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
 <span class='kw'>fn</span> <span class='ident'>handler</span>(<span class='ident'>res</span>: <span class='ident'>Response</span>) {
     <span class='ident'>res</span>.<span class='ident'>send</span>(<span class='string'>b&quot;Hello World!&quot;</span>).<span class='ident'>unwrap</span>();
+}
+</pre>
+
+<p>The above is the same, but shorter, than the longer:</p>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Write</span>;
+<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::<span class='ident'>ContentLength</span>;
+<span class='kw'>fn</span> <span class='ident'>handler</span>(<span class='kw-2'>mut</span> <span class='ident'>res</span>: <span class='ident'>Response</span>) {
+    <span class='kw'>let</span> <span class='ident'>body</span> <span class='op'>=</span> <span class='string'>b&quot;Hello World!&quot;</span>;
+    <span class='ident'>res</span>.<span class='ident'>headers_mut</span>().<span class='ident'>set</span>(<span class='ident'>ContentLength</span>(<span class='ident'>body</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>u64</span>));
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='ident'>res</span>.<span class='ident'>start</span>().<span class='ident'>unwrap</span>();
+    <span class='ident'>res</span>.<span class='ident'>write_all</span>(<span class='ident'>body</span>).<span class='ident'>unwrap</span>();
 }
 </pre>
 </div><h4 id='method.start' class='method'><code>fn <a href='#method.start' class='fnname'>start</a>(self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../../../hyper/server/response/struct.Response.html' title='hyper::server::response::Response'>Response</a>&lt;'a, <a class='enum' href='../../../hyper/net/enum.Streaming.html' title='hyper::net::Streaming'>Streaming</a>&gt;&gt;</code></h4>

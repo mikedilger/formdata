@@ -45,13 +45,87 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-6758' class='srclink' href='../../src/hyper/header/mod.rs.html#1-638' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-6081' class='srclink' href='../../src/hyper/header/mod.rs.html#1-719' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Headers container, and common header fields.</p>
 
 <p>hyper has the opinion that Headers should be strongly-typed, because that&#39;s
 why we&#39;re using Rust in the first place. To set or get any header, an object
 must implement the <code>Header</code> trait from this module. Several common headers
 are already provided, such as <code>Host</code>, <code>ContentType</code>, <code>UserAgent</code>, and others.</p>
+
+<h1 id="why-typed?" class='section-header'><a
+                           href="#why-typed?">Why Typed?</a></h1>
+<p>Or, why not stringly-typed? Types give the following advantages:</p>
+
+<ul>
+<li>More difficult to typo, since typos in types should be caught by the compiler</li>
+<li>Parsing to a proper type by default</li>
+</ul>
+
+<h1 id="defining-custom-headers" class='section-header'><a
+                           href="#defining-custom-headers">Defining Custom Headers</a></h1>
+<p>Hyper provides many of the most commonly used headers in HTTP. If
+you need to define a custom header, it&#39;s easy to do while still taking
+advantage of the type system. Hyper includes a <code>header!</code> macro for defining
+many wrapper-style headers.</p>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hyper</span>;
+<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::<span class='ident'>Headers</span>;
+<span class='macro'>header</span><span class='macro'>!</span> { (<span class='ident'>XRequestGuid</span>, <span class='string'>&quot;X-Request-Guid&quot;</span>) <span class='op'>=&gt;</span> [<span class='ident'>String</span>] }
+
+<span class='kw'>fn</span> <span class='ident'>main</span> () {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
+
+    <span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>XRequestGuid</span>(<span class='string'>&quot;a proper guid&quot;</span>.<span class='ident'>to_owned</span>()))
+}
+</pre>
+
+<p>This works well for simple &quot;string&quot; headers. But the header system
+actually involves 2 parts: parsing, and formatting. If you need to
+customize either part, you can do so.</p>
+
+<h2 id="header-and-headerformat" class='section-header'><a
+                           href="#header-and-headerformat"><code>Header</code> and <code>HeaderFormat</code></a></h2>
+<p>Consider a Do Not Track header. It can be true or false, but it represents
+that via the numerals <code>1</code> and <code>0</code>.</p>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
+<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Header</span>, <span class='ident'>HeaderFormat</span>};
+
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>, <span class='ident'>Copy</span>)]</span>
+<span class='kw'>struct</span> <span class='ident'>Dnt</span>(<span class='ident'>bool</span>);
+
+<span class='kw'>impl</span> <span class='ident'>Header</span> <span class='kw'>for</span> <span class='ident'>Dnt</span> {
+    <span class='kw'>fn</span> <span class='ident'>header_name</span>() <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> {
+        <span class='string'>&quot;DNT&quot;</span>
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>parse_header</span>(<span class='ident'>raw</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>]) <span class='op'>-&gt;</span> <span class='ident'>hyper</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Dnt</span><span class='op'>&gt;</span> {
+        <span class='kw'>if</span> <span class='ident'>raw</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='number'>1</span> {
+            <span class='kw'>let</span> <span class='ident'>line</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>raw</span>[<span class='number'>0</span>];
+            <span class='kw'>if</span> <span class='ident'>line</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='number'>1</span> {
+                <span class='kw'>let</span> <span class='ident'>byte</span> <span class='op'>=</span> <span class='ident'>line</span>[<span class='number'>0</span>];
+                <span class='kw'>match</span> <span class='ident'>byte</span> {
+                    <span class='string'>b&#39;0&#39;</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(<span class='ident'>Dnt</span>(<span class='boolval'>true</span>)),
+                    <span class='string'>b&#39;1&#39;</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(<span class='ident'>Dnt</span>(<span class='boolval'>false</span>)),
+                    _ <span class='op'>=&gt;</span> ()
+                }
+            }
+        }
+        <span class='prelude-val'>Err</span>(<span class='ident'>hyper</span>::<span class='ident'>Error</span>::<span class='ident'>Header</span>)
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>HeaderFormat</span> <span class='kw'>for</span> <span class='ident'>Dnt</span> {
+    <span class='kw'>fn</span> <span class='ident'>fmt_header</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+        <span class='kw'>if</span> <span class='self'>self</span>.<span class='number'>0</span> {
+            <span class='ident'>f</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;1&quot;</span>)
+        } <span class='kw'>else</span> {
+            <span class='ident'>f</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;0&quot;</span>)
+        }
+    }
+}
+</pre>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
@@ -186,6 +260,15 @@ are already provided, such as <code>Host</code>, <code>ContentType</code>, <code
                                title='hyper::header::Basic'>Basic</a></td>
                         <td class='docblock short'>
                              <p>Credential holder for Basic Authentication</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Bearer.html'
+                               title='hyper::header::Bearer'>Bearer</a></td>
+                        <td class='docblock short'>
+                             <p>Token holder for Bearer Authentication, most often seen with oauth</p>
 
                         </td>
                     </tr>
@@ -378,16 +461,6 @@ are already provided, such as <code>Host</code>, <code>ContentType</code>, <code
                     </tr>
                 
                     <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Language.html'
-                               title='hyper::header::Language'>Language</a></td>
-                        <td class='docblock short'>
-                             <p>A language tag.
-See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10">http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10</a></p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
                         <td><a class='struct' href='struct.LastModified.html'
                                title='hyper::header::LastModified'>LastModified</a></td>
                         <td class='docblock short'>
@@ -504,6 +577,16 @@ part of <a href="http://www.w3.org/TR/cors/#access-control-allow-origin-response
                     </tr>
                 
                     <tr class=' module-item'>
+                        <td><a class='enum' href='enum.ByteRangeSpec.html'
+                               title='hyper::header::ByteRangeSpec'>ByteRangeSpec</a></td>
+                        <td class='docblock short'>
+                             <p>Each Range::Bytes header can contain one or more ByteRangeSpecs.
+Each ByteRangeSpec defines a range of bytes to fetch</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
                         <td><a class='enum' href='enum.CacheDirective.html'
                                title='hyper::header::CacheDirective'>CacheDirective</a></td>
                         <td class='docblock short'>
@@ -593,6 +676,15 @@ or <code>Accept-Encoding</code> header.</p>
                         <td class='docblock short'>
                              <p>A protocol name used to identify a spefic protocol. Names are case-sensitive
 except for the <code>WebSocket</code> value.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.Range.html'
+                               title='hyper::header::Range'>Range</a></td>
+                        <td class='docblock short'>
+                             <p><code>Range</code> header, defined in <a href="https://tools.ietf.org/html/rfc7233#section-3.1">RFC7233</a></p>
 
                         </td>
                     </tr>

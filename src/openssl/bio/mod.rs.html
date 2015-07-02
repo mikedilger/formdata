@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/openssl-0.6.2/src/bio/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/openssl-0.6.3/src/bio/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -140,6 +140,12 @@
 <span id="98"> 98</span>
 <span id="99"> 99</span>
 <span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>c_int</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -198,6 +204,12 @@
     <span class='doccomment'>/// Temporarily gets wrapped value</span>
     <span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>get_handle</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>ffi</span>::<span class='ident'>BIO</span> {
         <span class='self'>self</span>.<span class='ident'>bio</span>
+    }
+
+    <span class='doccomment'>/// Sets the BIO&#39;s EOF state.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_eof</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>eof</span>: <span class='ident'>bool</span>) {
+        <span class='kw'>let</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>eof</span> { <span class='number'>0</span> } <span class='kw'>else</span> { <span class='op'>-</span><span class='number'>1</span> };
+        <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>BIO_set_mem_eof_return</span>(<span class='self'>self</span>.<span class='ident'>bio</span>, <span class='ident'>v</span>); }
     }
 }
 

@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-31418' class='srclink' href='../../src/hyper/net.rs.html#57-65' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-36036' class='srclink' href='../../src/hyper/net.rs.html#53-61' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait NetworkStream: <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/any/trait.Any.html' title='core::any::Any'>Any</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='../../typeable/trait.Typeable.html' title='typeable::Typeable'>Typeable</a> {
     fn <a href='#tymethod.peer_addr' class='fnname'>peer_addr</a>(&amp;mut self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='enum' href='http://doc.rust-lang.org/nightly/std/net/addr/enum.SocketAddr.html' title='std::net::addr::SocketAddr'>SocketAddr</a>&gt;;
 
@@ -72,7 +72,9 @@ data.</p>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
     <li><code>impl&lt;S: <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a>&gt; <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> for <a class='struct' href='../../hyper/client/pool/struct.PooledStream.html' title='hyper::client::pool::PooledStream'>PooledStream</a>&lt;S&gt;</code></li>
-<li><code>impl <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> for <a class='enum' href='../../hyper/net/enum.HttpStream.html' title='hyper::net::HttpStream'>HttpStream</a></code></li>
+<li><code>impl&lt;S: <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a>&gt; <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> for <a class='struct' href='../../openssl/ssl/struct.SslStream.html' title='openssl::ssl::SslStream'>SslStream</a>&lt;S&gt;</code></li>
+<li><code>impl <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> for <a class='struct' href='../../hyper/net/struct.HttpStream.html' title='hyper::net::HttpStream'>HttpStream</a></code></li>
+<li><code>impl&lt;S: <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a>&gt; <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> for <a class='enum' href='../../hyper/net/enum.HttpsStream.html' title='hyper::net::HttpsStream'>HttpsStream</a>&lt;S&gt;</code></li>
 </ul><script type="text/javascript" async
                               src="../../implementors/hyper/net/trait.NetworkStream.js">
                       </script></section>

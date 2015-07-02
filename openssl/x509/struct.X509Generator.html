@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-13923' class='srclink' href='../../src/openssl/x509/mod.rs.html#182-189' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-14338' class='srclink' href='../../src/openssl/x509/mod.rs.html#224-231' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct X509Generator {
     // some fields omitted
 }</pre><div class='docblock'><p>Generator of private key/certificate pairs</p>
@@ -99,10 +99,12 @@
 <div class='docblock'><p>Sets allowed extended usage of certificate</p>
 </div><h4 id='method.set_sign_hash' class='method'><code>fn <a href='#method.set_sign_hash' class='fnname'>set_sign_hash</a>(self, hash_type: <a class='enum' href='../../openssl/crypto/hash/enum.Type.html' title='openssl::crypto::hash::Type'>Type</a>) -&gt; <a class='struct' href='../../openssl/x509/struct.X509Generator.html' title='openssl::x509::X509Generator'>X509Generator</a></code></h4>
 <h4 id='method.generate' class='method'><code>fn <a href='#method.generate' class='fnname'>generate</a>&lt;'a&gt;(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='struct' href='../../openssl/x509/struct.X509.html' title='openssl::x509::X509'>X509</a>&lt;'a&gt;, <a class='struct' href='../../openssl/crypto/pkey/struct.PKey.html' title='openssl::crypto::pkey::PKey'>PKey</a>)</a>, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
-<div class='docblock'><p>Generates a private key and a signed certificate and returns them</p>
+<div class='docblock'><p>Generates a private key and a self-signed certificate and returns them</p>
 </div><h4 id='method.sign' class='method'><code>fn <a href='#method.sign' class='fnname'>sign</a>&lt;'a&gt;(&amp;self, p_key: &amp;<a class='struct' href='../../openssl/crypto/pkey/struct.PKey.html' title='openssl::crypto::pkey::PKey'>PKey</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../openssl/x509/struct.X509.html' title='openssl::x509::X509'>X509</a>&lt;'a&gt;, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
-<div class='docblock'><p>Signs certificate with a private key and returns it
+<div class='docblock'><p>Sets the certificate public-key, then self-sign and return it
 Note: That the bit-length of the private key is used (set_bitlength is ignored)</p>
+</div><h4 id='method.request' class='method'><code>fn <a href='#method.request' class='fnname'>request</a>(&amp;self, p_key: &amp;<a class='struct' href='../../openssl/crypto/pkey/struct.PKey.html' title='openssl::crypto::pkey::PKey'>PKey</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../openssl/x509/struct.X509Req.html' title='openssl::x509::X509Req'>X509Req</a>, <a class='enum' href='../../openssl/ssl/error/enum.SslError.html' title='openssl::ssl::error::SslError'>SslError</a>&gt;</code></h4>
+<div class='docblock'><p>Obtain a certificate signing request (CSR)</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
 
