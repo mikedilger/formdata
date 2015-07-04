@@ -23,7 +23,7 @@ use std::io::{BufRead, BufReader, Read};
 
 use hyper::header::{ContentType, Headers};
 use hyper::server::Request as HyperRequest;
-use mime::{Attr, Mime, SubLevel, TopLevel, Value};
+use mime::{Attr, Mime, Param, SubLevel, TopLevel, Value};
 use tempdir::TempDir;
 use textnonce::TextNonce;
 
@@ -59,55 +59,76 @@ pub struct FormData {
     pub files: Vec<(String, UploadedFile)>,
 }
 
+impl FormData {
+    pub fn new() -> FormData {
+        FormData { fields: vec![], files: vec![] }
+    }
+}
+
 /// Parses and processes `hyper::server::Request` data that is `multipart/form-data` content.
 ///
 /// The request is streamed, and this function saves embedded uploaded files to disk as they are
 /// encountered by the parser.
 pub fn parse_multipart(request: &mut Request) -> Result<FormData, Error> {
-    let mut fields: Vec<(String, String)> = Vec::new();
-    let mut files: Vec<(String, UploadedFile)> = Vec::new();
-
-    let string_boundary = try!(get_boundary(request));
-    let boundary: Vec<u8> = string_boundary.into_bytes();
-    let mut crlf_boundary: Vec<u8> = Vec::with_capacity(2 + boundary.len());
-    crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
-    crlf_boundary.extend(boundary.clone());
-
+    let boundary = try!(get_boundary(request));
     let mut reader = BufReader::with_capacity(4096, request);
+    let mut form_data = FormData::new();
+    try!(run_state_machine(boundary, &mut reader, &mut form_data, MultipartSubLevel::FormData));
+    Ok(form_data)
+}
 
-    enum State {
-        // Discard until after initial boundary and CRLF.
-        Discarding,
-        // Capture headers to blank line.
-        ReadingHeaders,
-        // Capture value until boundary, then discard past CRLF.
-        CapturingValue,
-        // Capture file until boundary, then discard past CRLF.
-        CapturingFile,
-    }
+// A state in the parsing state machine.
+enum State {
+    // Discard until after initial boundary and CRLF.
+    Discarding,
+    // Capture headers to blank line.
+    ReadingHeaders,
+    // Capture entire `multipart/mixed` body until boundary, then discard past CRLF.
+    CapturingMixed(ContentDisposition, ContentType),
+    // Capture value until boundary, then discard past CRLF.
+    CapturingValue(ContentDisposition),
+    // Capture file until boundary, then discard past CRLF.
+    CapturingFile(ContentDisposition, Option<ContentType>),
+}
 
-    let mut state = State::Discarding;
-    let mut headers = Headers::new();
+// A multipart MIME parsing mode.
+#[derive(PartialEq)]
+enum MultipartSubLevel {
+    // Represents `multipart/form-data`.
+    FormData,
+    // Represents `multipart/mixed` with a `name` key.
+    Mixed(String),
+}
+
+// Parse either a `multipart/form-data` or `multipart/mixed` MIME body.
+fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &mut FormData,
+                                 mode: MultipartSubLevel) -> Result<(), Error> {
+    use State::*;
+    use MultipartSubLevel::*;
+
+    let boundary = boundary.into_bytes();
+    let crlf_boundary = crlf_boundary(&boundary);
+    let mut state = Discarding;
 
     loop {
         let mut buf: Vec<u8> = Vec::new();
 
         match state {
-            State::Discarding => {
-                // Read up to and including the boundary
-                let read = try!(reader.stream_until_token(&*boundary, &mut buf));
+            Discarding => {
+                // Read up to and including the boundary.
+                let read = try!(reader.stream_until_token(&boundary, &mut buf));
                 if read == 0 {
                     return Err(Error::Eof);
                 }
 
-                state = State::ReadingHeaders;
+                state = ReadingHeaders;
             },
-            State::ReadingHeaders => {
+            ReadingHeaders => {
                 {
                     // If the next two lookahead characters are '--', parsing is finished.
                     let peeker = try!(reader.fill_buf());
                     if peeker.len() >= 2 && &peeker[..2] == b"--" {
-                        return Ok(FormData { fields: fields, files: files });
+                        return Ok(());
                     }
                 }
 
@@ -127,79 +148,102 @@ pub fn parse_multipart(request: &mut Request) -> Result<FormData, Error> {
 
                 // Parse the headers.
                 let mut header_memory = [httparse::EMPTY_HEADER; 4];
-                match httparse::parse_headers(&*buf, &mut header_memory) {
+                match httparse::parse_headers(&buf, &mut header_memory) {
                     Ok(httparse::Status::Complete((_, raw_headers))) => {
                         // Turn raw headers into hyper headers.
-                        headers = try!(Headers::from_raw(raw_headers));
+                        let headers = try!(Headers::from_raw(raw_headers));
 
                         let cd: &ContentDisposition = match headers.get() {
                             Some(cd) => cd,
                             None => return Err(Error::MissingDisposition),
                         };
+
                         let ct: Option<&ContentType> = headers.get();
 
-                        state = if ct.is_some() || cd.filename.is_some() {
-                            State::CapturingFile
-                        } else {
-                            State::CapturingValue
-                        };
+                        match mode {
+                            FormData if cd.disposition == "form-data" => {
+                                state = if is_multipart_mixed(ct) {
+                                    CapturingMixed(cd.clone(), ct.unwrap().clone())
+                                } else if ct.is_some() || cd.filename.is_some() {
+                                    CapturingFile(cd.clone(), ct.map(|ct| ct.clone()))
+                                } else {
+                                    CapturingValue(cd.clone())
+                                };
+                            },
+                            Mixed(_) if cd.disposition == "file" => {
+                                state = CapturingFile(cd.clone(), ct.map(|ct| ct.clone()));
+                            },
+                            _ => return Err(Error::InvalidDisposition),
+                        }
                     },
-                    Ok(httparse::Status::Partial) => {
-                        return Err(Error::PartialHeaders);
-                    },
+                    Ok(httparse::Status::Partial) => return Err(Error::PartialHeaders),
                     Err(err) => return Err(From::from(err)),
                 }
             },
-            State::CapturingValue => {
+            CapturingMixed(cd, ct) => {
+                let boundary = try!(get_boundary_token(&(ct.0).2));
+                let mode = Mixed(try!(cd.name.ok_or(Error::NoName)));
+                try!(run_state_machine(boundary, reader, form_data, mode));
+                state = Discarding;
+            },
+            CapturingValue(_) if mode != FormData => unreachable!(),
+            CapturingValue(cd) => {
                 buf.truncate(0);
-                let _ = try!(reader.stream_until_token(&*crlf_boundary, &mut buf));
+                let _ = try!(reader.stream_until_token(&crlf_boundary, &mut buf));
 
-                let cd: &ContentDisposition = headers.get().unwrap();
-
-                let key = match cd.name {
-                    None => return Err(Error::NoName),
-                    Some(ref name) => name.clone(),
-                };
+                let key = try!(cd.name.ok_or(Error::NoName));
                 let val = try!(String::from_utf8(buf));
 
-                fields.push((key, val));
+                form_data.fields.push((key, val));
 
-                state = State::ReadingHeaders;
+                state = ReadingHeaders;
             },
-            State::CapturingFile => {
+            CapturingFile(cd, ct) => {
                 // Setup a file to capture the contents.
                 let mut path = try!(TempDir::new("formdata")).into_path();
                 path.push(TextNonce::sized_urlsafe(32).unwrap().into_string());
                 let mut file = try!(File::create(path.clone()));
 
                 // Stream out the file.
-                let read = try!(reader.stream_until_token(&*crlf_boundary, &mut file));
+                let read = try!(reader.stream_until_token(&crlf_boundary, &mut file));
 
-                let cd: &ContentDisposition = headers.get().unwrap();
-                let key = match cd.name {
-                    None => return Err(Error::NoName),
-                    Some(ref name) => name.clone()
+                // TODO: Handle Content-Transfer-Encoding.
+
+                let key = match mode {
+                    Mixed(ref name) => name.clone(),
+                    FormData => try!(cd.name.ok_or(Error::NoName)),
                 };
-
-                let ct = match headers.get::<ContentType>() {
-                    Some(ct) => (**ct).clone(),
-                    None => mime!(Text/Plain; Charset=Utf8)
-                };
-
-                // TODO: Handle content-type: multipart/mixed as multiple files.
-                // TODO: Handle content-transfer-encoding.
 
                 let file = UploadedFile {
                     path: path,
                     filename: cd.filename.clone(),
-                    content_type: ct,
+                    content_type: ct.map_or(mime!(Text/Plain; Charset=Utf8), |ct| ct.0),
                     size: read - crlf_boundary.len()
                 };
-                files.push((key, file));
 
-                state = State::ReadingHeaders;
+                form_data.files.push((key, file));
+                state = ReadingHeaders;
             },
         }
+    }
+}
+
+fn is_multipart_mixed(ct: Option<&ContentType>) -> bool {
+    let ct = match ct {
+        Some(ct) => ct,
+        None => return false,
+    };
+
+    let ContentType(ref mime) = *ct;
+    let Mime(ref top_level, ref sub_level, _) = *mime;
+
+    if *top_level != TopLevel::Multipart {
+        return false;
+    }
+
+    match *sub_level {
+        SubLevel::Ext(ref ext) => ext == "mixed",
+        _ => false,
     }
 }
 
@@ -220,7 +264,10 @@ fn get_boundary(request: &Request) -> Result<String, Error> {
         return Err(Error::NotFormData);
     }
 
-    // Get the boundary token.
+    get_boundary_token(params)
+}
+
+fn get_boundary_token(params: &[Param]) -> Result<String, Error> {
     for &(ref attr, ref val) in params.iter() {
         if let (&Attr::Boundary, &Value::Ext(ref val)) = (attr, val) {
             return Ok(format!("--{}", val.clone()));
@@ -228,7 +275,13 @@ fn get_boundary(request: &Request) -> Result<String, Error> {
     }
 
     Err(Error::BoundaryNotSpecified)
+}
 
+fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
+    let mut crlf_boundary = Vec::with_capacity(2 + boundary.len());
+    crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
+    crlf_boundary.extend(boundary.clone());
+    crlf_boundary
 }
 
 /// A wrapper for request data to provide parsing multipart requests to any front-end that provides
@@ -259,25 +312,25 @@ mod tests {
     #[test]
     fn parser() {
         let input = b"POST / HTTP/1.1\r\n\
-                  Host: example.domain\r\n\
-                  Content-Type: multipart/form-data; boundary=\"abcdefg\"\r\n\
-                  Content-Length: 217\r\n\
-                  \r\n\
-                  --abcdefg\r\n\
-                  Content-Disposition: form-data; name=\"field1\"\r\n\
-                  \r\n\
-                  data1\r\n\
-                  --abcdefg\r\n\
-                  Content-Disposition: form-data; name=\"field2\"; filename=\"image.gif\"\r\n\
-                  Content-Type: image/gif\r\n\
-                  \r\n\
-                  This is a file\r\n\
-                  with two lines\r\n\
-                  --abcdefg\r\n\
-                  Content-Disposition: form-data; name=\"field3\"; filename=\"file.txt\"\r\n\
-                  \r\n\
-                  This is a file\r\n\
-                  --abcdefg--";
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=\"abcdefg\"\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field1\"\r\n\
+                      \r\n\
+                      data1\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field2\"; filename=\"image.gif\"\r\n\
+                      Content-Type: image/gif\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      with two lines\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field3\"; filename=\"file.txt\"\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      --abcdefg--";
 
         let mut mock = MockStream::with_input(input);
 
@@ -305,6 +358,70 @@ mod tests {
                         assert_eq!(file.size, 14);
                         assert_eq!(&file.filename.unwrap(), "file.txt");
                         assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
+                    }
+                }
+            },
+            Err(err) => panic!("{}", err),
+        }
+    }
+
+    #[test]
+    fn mixed_parser() {
+        let input = b"POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=AaB03x\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --AaB03x\r\n\
+                      Content-Disposition: form-data; name=\"submit-name\"\r\n\
+                      \r\n\
+                      Larry\r\n\
+                      --AaB03x\r\n\
+                      Content-Disposition: form-data; name=\"files\"\r\n\
+                      Content-Type: multipart/mixed; boundary=BbC04y\r\n\
+                      \r\n\
+                      --BbC04y\r\n\
+                      Content-Disposition: file; filename=\"file1.txt\"\r\n\
+                      \r\n\
+                      ... contents of file1.txt ...\r\n\
+                      --BbC04y\r\n\
+                      Content-Disposition: file; filename=\"awesome_image.gif\"\r\n\
+                      Content-Type: image/gif\r\n\
+                      Content-Transfer-Encoding: binary\r\n\
+                      \r\n\
+                      ... contents of awesome_image.gif ...\r\n\
+                      --BbC04y--\r\n\
+                      --AaB03x--";
+
+        let mut mock = MockStream::with_input(input);
+
+        let mock: &mut NetworkStream = &mut mock;
+        let mut stream = BufReader::new(mock);
+        let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
+        let mut req = HyperRequest::new(&mut stream, sock).unwrap();
+
+        match parse_multipart(&mut req) {
+            Ok(form_data) => {
+                assert_eq!(form_data.fields.len(), 1);
+                for (key, val) in form_data.fields {
+                    if &key == "submit-name" {
+                        assert_eq!(&val, "Larry");
+                    }
+                }
+
+                assert_eq!(form_data.files.len(), 2);
+                for (key, file) in form_data.files {
+                    assert_eq!(&key, "files");
+                    match &file.filename.unwrap()[..] {
+                        "file1.txt" => {
+                            assert_eq!(file.size, 29);
+                            assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
+                        }
+                        "awesome_image.gif" => {
+                            assert_eq!(file.size, 37);
+                            assert_eq!(file.content_type, mime!(Image/Gif));
+                        },
+                        _ => unreachable!(),
                     }
                 }
             },

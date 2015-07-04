@@ -16,6 +16,7 @@ use hyper::header::{Header, HeaderFormat, parsing};
 /// scope.
 #[derive(Clone, Debug, PartialEq)]
 pub struct ContentDisposition {
+    pub disposition: String,
     pub name: Option<String>,
     pub filename: Option<String>,
 }
@@ -28,16 +29,16 @@ impl Header for ContentDisposition {
     fn parse_header(raw: &[Vec<u8>]) -> Result<ContentDisposition, HyperError> {
         parsing::from_one_raw_str(raw).and_then(|s: String| {
             let mut sections = s.split(';');
-            match sections.next() {
-                Some(s) => {
-                    if &s.trim().to_ascii_lowercase() != "form-data" {
-                        return Err(HyperError::Header);
-                    }
-                },
+            let disposition = match sections.next() {
+                Some(s) => s.trim().to_ascii_lowercase(),
                 None => return Err(HyperError::Header),
             };
 
-            let mut cd = ContentDisposition { name: None, filename: None };
+            let mut cd = ContentDisposition {
+                disposition: disposition,
+                name: None,
+                filename: None
+            };
 
             for section in sections {
                 let mut parts = section.split('=');
@@ -87,6 +88,7 @@ mod tests {
         let a = [b"form-data; dummy=3; name=upload;\r\n filename=\"sample.png\"".to_vec()];
         let a: ContentDisposition = ContentDisposition::parse_header(a.as_ref()).unwrap();
         let b = ContentDisposition {
+            disposition: String::from("form-data"),
             name: Some("upload".to_string()),
             filename: Some("sample.png".to_string()),
         };

@@ -8,19 +8,21 @@ use super::{httparse, hyper};
 /// An error type for the `formdata` crate.
 #[derive(Debug)]
 pub enum Error {
-    /// The Hyper request did not have a content-type header.
+    /// The Hyper request did not have a Content-Type header.
     NoRequestContentType,
-    /// The Hyper request content-type top-level Mime was not `Multipart`.
+    /// The Hyper request Content-Type top-level Mime was not `Multipart`.
     NotMultipart,
-    /// The Hyper request content-type sub-level Mime was not `FormData`.
+    /// The Hyper request Content-Type sub-level Mime was not `FormData`.
     NotFormData,
-    /// The content-type header failed to specify boundary token.
+    /// The Content-Type header failed to specify boundary token.
     BoundaryNotSpecified,
     /// A multipart section contained only partial headers.
     PartialHeaders,
-    /// A multipart section did not have the required content-disposition header.
+    /// A multipart section did not have the required Content-Disposition header.
     MissingDisposition,
-    /// A multipart section content-disposition header failed to specify a name.
+    /// A multipart section did not have a valid corresponding Content-Disposition.
+    InvalidDisposition,
+    /// A multipart section Content-Disposition header failed to specify a name.
     NoName,
     /// The request body ended prior to reaching the expected terminating boundary.
     Eof,
@@ -77,18 +79,20 @@ impl Display for Error {
 impl StdError for Error {
     fn description(&self) -> &str{
         match *self {
-            Error::NoRequestContentType => "The Hyper request did not have a content-type header.",
+            Error::NoRequestContentType => "The Hyper request did not have a Content-Type header.",
             Error::NotMultipart =>
-                "The Hyper request content-type top-level Mime was not multipart.",
+                "The Hyper request Content-Type top-level Mime was not multipart.",
             Error::NotFormData =>
-                "The Hyper request content-type sub-level Mime was not form-data.",
+                "The Hyper request Content-Type sub-level Mime was not form-data.",
             Error::BoundaryNotSpecified =>
-                "The content-type header failed to specify a boundary token.",
+                "The Content-Type header failed to specify a boundary token.",
             Error::PartialHeaders => "A multipart section contained only partial headers.",
             Error::MissingDisposition =>
-                "A multipart section did not have the required content-disposition header.",
+                "A multipart section did not have the required Content-Disposition header.",
+            Error::InvalidDisposition =>
+                "A multipart section did not have a valid corresponding Content-Disposition.",
             Error::NoName =>
-                "A multipart section content-disposition header failed to specify a name.",
+                "A multipart section Content-Disposition header failed to specify a name.",
             Error::Eof =>
                 "The request body ended prior to reaching the expected terminating boundary.",
             Error::Httparse(_) =>
