@@ -15,13 +15,13 @@ separates those files and streams them to disk.
 ```rust
 // request is your ::hyper::server::Request
 
-if let Ok((fields,files)) = parse_multipart(&mut request) {
-    for (name,value) in fields {
+if let Ok(form_data) = parse_multipart(&mut request) {
+    for (name, value) in form_data.fields {
         println!("Posted variable name={} value={}",name,value);
     }
-    for (name,file) in files {
-        println!("Posted file name={} filename={} content_type={} size={}
-                  temporary_path={}",
+
+    for (name, file) in form_data.files {
+        println!("Posted file name={} filename={} content_type={} size={} temporary_path={}",
                  name, file.filename, file.content_type, file.size, file.path);
     }
 }
