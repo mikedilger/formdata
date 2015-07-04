@@ -47,18 +47,24 @@ pub struct UploadedFile {
     pub size: usize,
 }
 
-/// Parses and processes `hyper::server::Request` data is `multipart/form-data` content.
+/// The extracted text fields and uploaded files from a `multipart/form-data` request.
+///
+/// Use `parse_multipart` to devise this object from a request.
+pub struct FormData {
+    /// Key-value pairs for plain text fields. Technically, these are form data parts with no
+    /// filename specified in the part's `Content-Disposition`.
+    pub fields: Vec<(String, String)>,
+    /// Key-value pairs for temporary files. Technically, these are form data parts with a filename
+    /// specified in the part's `Content-Disposition`.
+    pub files: Vec<(String, UploadedFile)>,
+}
+
+/// Parses and processes `hyper::server::Request` data that is `multipart/form-data` content.
 ///
 /// The request is streamed, and this function saves embedded uploaded files to disk as they are
 /// encountered by the parser.
-///
-/// This function returns two sets of data. The first, `Vec<(String, String)>`, are the
-/// variable-value pairs from the POST-ed form. The second `Vec<(String, UploadedFile)>` are the
-/// variable-file pairs from the POST-ed form, where `UploadedFile` structures describe the
-/// uploaded file.
-pub fn parse_multipart(request: &mut Request)
-                       -> Result<(Vec<(String, String)>, Vec<(String, UploadedFile)>), Error> {
-    let mut parameters: Vec<(String, String)> = Vec::new();
+pub fn parse_multipart(request: &mut Request) -> Result<FormData, Error> {
+    let mut fields: Vec<(String, String)> = Vec::new();
     let mut files: Vec<(String, UploadedFile)> = Vec::new();
 
     let string_boundary = try!(get_boundary(request));
@@ -101,7 +107,7 @@ pub fn parse_multipart(request: &mut Request)
                     // If the next two lookahead characters are '--', parsing is finished.
                     let peeker = try!(reader.fill_buf());
                     if peeker.len() >= 2 && &peeker[..2] == b"--" {
-                        return Ok((parameters, files));
+                        return Ok(FormData { fields: fields, files: files });
                     }
                 }
 
@@ -156,7 +162,7 @@ pub fn parse_multipart(request: &mut Request)
                 };
                 let val = try!(String::from_utf8(buf));
 
-                parameters.push((key, val));
+                fields.push((key, val));
 
                 state = State::ReadingHeaders;
             },
@@ -281,16 +287,16 @@ mod tests {
         let mut req = HyperRequest::new(&mut stream, sock).unwrap();
 
         match parse_multipart(&mut req) {
-            Ok((fields, files)) => {
-                assert_eq!(fields.len(), 1);
-                for (key, val) in fields {
+            Ok(form_data) => {
+                assert_eq!(form_data.fields.len(), 1);
+                for (key, val) in form_data.fields {
                     if &key == "field1" {
                         assert_eq!(&val, "data1");
                     }
                 }
 
-                assert_eq!(files.len(), 2);
-                for (key, file) in files {
+                assert_eq!(form_data.files.len(), 2);
+                for (key, file) in form_data.files {
                     if &key == "field2" {
                         assert_eq!(file.size, 30);
                         assert_eq!(&file.filename.unwrap(), "image.gif");
