@@ -50,6 +50,7 @@ pub struct UploadedFile {
 /// The extracted text fields and uploaded files from a `multipart/form-data` request.
 ///
 /// Use `parse_multipart` to devise this object from a request.
+#[derive(Clone, Debug, PartialEq)]
 pub struct FormData {
     /// Key-value pairs for plain text fields. Technically, these are form data parts with no
     /// filename specified in the part's `Content-Disposition`.
