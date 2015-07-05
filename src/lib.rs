@@ -71,7 +71,7 @@ impl FormData {
 /// encountered by the parser.
 pub fn parse_multipart(request: &mut Request) -> Result<FormData, Error> {
     let boundary = try!(get_boundary(request));
-    let mut reader = BufReader::with_capacity(4096, request);
+    let mut reader = BufReader::with_capacity(4096, request.read_mut());
     let mut form_data = FormData::new();
     try!(run_state_machine(boundary, &mut reader, &mut form_data, MultipartSubLevel::FormData));
     Ok(form_data)
@@ -286,14 +286,21 @@ fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
 
 /// A wrapper for request data to provide parsing multipart requests to any front-end that provides
 /// a `hyper::header::Headers` and a `std::io::Read` of the request's entire body.
-pub trait Request: Read {
+pub trait Request {
     /// Returns a reference to the request's headers.
     fn headers(&self) -> &Headers;
+
+    /// Returns a mutable reference to the request's body reader.
+    fn read_mut(&mut self) -> &mut Read;
 }
 
 impl<'a,'b> Request for HyperRequest<'a,'b> {
     fn headers(&self) -> &Headers {
         &self.headers
+    }
+
+    fn read_mut(&mut self) -> &mut Read {
+        self
     }
 }
 
