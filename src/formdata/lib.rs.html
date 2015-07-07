@@ -341,6 +341,7 @@
 <span id="299">299</span>
 <span id="300">300</span>
 <span id="301">301</span>
+<span id="302">302</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! This crate parses and processes `hyper::server::Request` data</span>
 <span class='doccomment'>//! that contains `multipart/form-data` content.</span>
@@ -381,6 +382,7 @@
 <span class='doccomment'>/// This structure represents uploaded files which were received as</span>
 <span class='doccomment'>/// part of the `multipart/form-data` parsing.  They are streamed to</span>
 <span class='doccomment'>/// disk because they may not fit in memory.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>,<span class='ident'>PartialEq</span>,<span class='ident'>Clone</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>UploadedFile</span> {
     <span class='doccomment'>/// This is the temporary file where the data was saved.</span>
     <span class='kw'>pub</span> <span class='ident'>path</span>: <span class='ident'>PathBuf</span>,

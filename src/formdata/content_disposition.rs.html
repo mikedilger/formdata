@@ -141,6 +141,7 @@
 <span id="99"> 99</span>
 <span id="100">100</span>
 <span id="101">101</span>
+<span id="102">102</span>
 </pre><pre class='rust '>
 <span class='comment'>// Refer:</span>
 <span class='comment'>// https://www.ietf.org/rfc/rfc2388.txt:  Returning Values from Forms:  multipart/form-data</span>
@@ -153,7 +154,8 @@
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>HyperError</span>;
 
 <span class='doccomment'>/// We define a Content-Disposition form-data only header, which is found within</span>
-<span class='doccomment'>/// the mime multipart sections.  NOT FOR GENERAL USE</span>
+<span class='doccomment'>/// the mime multipart sections.  NOT FOR GENERAL USE, as it is very limited</span>
+<span class='doccomment'>/// in scope.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>,<span class='ident'>Clone</span>,<span class='ident'>PartialEq</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ContentDispositionFormData</span> {
     <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
