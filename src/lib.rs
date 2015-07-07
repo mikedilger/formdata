@@ -37,6 +37,7 @@ use std::net::SocketAddr;
 /// This structure represents uploaded files which were received as
 /// part of the `multipart/form-data` parsing.  They are streamed to
 /// disk because they may not fit in memory.
+#[derive(Debug,PartialEq,Clone)]
 pub struct UploadedFile {
     /// This is the temporary file where the data was saved.
     pub path: PathBuf,
