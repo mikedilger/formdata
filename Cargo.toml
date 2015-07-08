@@ -2,7 +2,7 @@
 name = "formdata"
 version = "0.3.1"
 description = "Parsing of multipart/form-data"
-authors = [ "Mike Dilger <mike@efx.co.nz>"  ]
+authors = ["Mike Dilger <mike@efx.co.nz>"]
 readme = "README.md"
 repository = "https://github.com/mikedilger/formdata"
 documentation = "https://mikedilger.github.io/formdata"
