@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-9597' class='srclink' href='../../src/hyper/header/common/authorization.rs.html#58' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-9701' class='srclink' href='../../src/hyper/header/common/authorization.rs.html#58' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Authorization&lt;S: <a class='trait' href='../../hyper/header/trait.Scheme.html' title='hyper::header::Scheme'>Scheme</a>&gt;(pub S);</pre><div class='docblock'><p><code>Authorization</code> header, defined in <a href="https://tools.ietf.org/html/rfc7235#section-4.2">RFC7235</a></p>
 
 <p>The <code>Authorization</code> header field allows a user agent to authenticate
@@ -67,13 +67,13 @@ agent for the realm of the resource being requested.</p>
 </ul>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
+                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>Authorization</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
 <span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>Authorization</span>(<span class='string'>&quot;let me in&quot;</span>.<span class='ident'>to_owned</span>()));
 </pre>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>Authorization</span>, <span class='ident'>Basic</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
@@ -86,7 +86,7 @@ agent for the realm of the resource being requested.</p>
    )
 );
 </pre>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>Authorization</span>, <span class='ident'>Bearer</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();

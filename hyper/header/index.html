@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-6119' class='srclink' href='../../src/hyper/header/mod.rs.html#1-724' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-6171' class='srclink' href='../../src/hyper/header/mod.rs.html#1-724' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Headers container, and common header fields.</p>
 
 <p>hyper has the opinion that Headers should be strongly-typed, because that&#39;s
@@ -68,7 +68,7 @@ are already provided, such as <code>Host</code>, <code>ContentType</code>, <code
 you need to define a custom header, it&#39;s easy to do while still taking
 advantage of the type system. Hyper includes a <code>header!</code> macro for defining
 many wrapper-style headers.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hyper</span>;
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::<span class='ident'>Headers</span>;
 <span class='macro'>header</span><span class='macro'>!</span> { (<span class='ident'>XRequestGuid</span>, <span class='string'>&quot;X-Request-Guid&quot;</span>) <span class='op'>=&gt;</span> [<span class='ident'>String</span>] }
@@ -88,7 +88,7 @@ customize either part, you can do so.</p>
                            href="#header-and-headerformat"><code>Header</code> and <code>HeaderFormat</code></a></h2>
 <p>Consider a Do Not Track header. It can be true or false, but it represents
 that via the numerals <code>1</code> and <code>0</code>.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Header</span>, <span class='ident'>HeaderFormat</span>};
 

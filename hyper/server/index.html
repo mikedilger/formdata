@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-38335' class='srclink' href='../../src/hyper/server/mod.rs.html#1-414' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-38751' class='srclink' href='../../src/hyper/server/mod.rs.html#1-414' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>HTTP Server</p>
 
 <h1 id="server" class='section-header'><a
@@ -59,7 +59,7 @@ threads, but that can be configured to a single thread if preferred.</p>
 <p>You must pass a <code>Handler</code> to the Server that will handle requests. There is
 a default implementation for <code>fn</code>s and closures, allowing you pass one of
 those easily.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::{<span class='ident'>Server</span>, <span class='ident'>Request</span>, <span class='ident'>Response</span>};
 
 <span class='kw'>fn</span> <span class='ident'>hello</span>(<span class='ident'>req</span>: <span class='ident'>Request</span>, <span class='ident'>res</span>: <span class='ident'>Response</span>) {
@@ -71,7 +71,7 @@ those easily.</p>
 
 <p>As with any trait, you can also define a struct and implement <code>Handler</code>
 directly on your own type, and pass that to the <code>Server</code> instead.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>Mutex</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>mpsc</span>::{<span class='ident'>channel</span>, <span class='ident'>Sender</span>};
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::{<span class='ident'>Handler</span>, <span class='ident'>Server</span>, <span class='ident'>Request</span>, <span class='ident'>Response</span>};
@@ -95,7 +95,7 @@ directly on your own type, and pass that to the <code>Server</code> instead.</p>
 
 <p>Since the <code>Server</code> will be listening on multiple threads, the <code>Handler</code>
 must implement <code>Sync</code>: any mutable state must be synchronized.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>atomic</span>::{<span class='ident'>AtomicUsize</span>, <span class='ident'>Ordering</span>};
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::{<span class='ident'>Server</span>, <span class='ident'>Request</span>, <span class='ident'>Response</span>};
 
@@ -114,7 +114,7 @@ read any body, such as with <code>POST</code> or <code>PUT</code> messages.</p>
 
 <p>Likewise, the <code>Response</code> includes ways to set the <code>status</code> and <code>headers</code>,
 and implements <code>std::io::Write</code> to allow writing the response body.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::{<span class='ident'>Server</span>, <span class='ident'>Request</span>, <span class='ident'>Response</span>};
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>status</span>::<span class='ident'>StatusCode</span>;
