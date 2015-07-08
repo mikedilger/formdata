@@ -107,7 +107,7 @@ It is the user’s responsibility to check the URL’s scheme before calling thi
 or <code>std::path::windows::Path</code>.
 (Use <code>std::path::Path</code> to pick one of them depending on the local system.)
 If the compiler can not infer the desired type from context, you may have to specifiy it:</p>
-<pre class='rust rust-example-rendered'>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>url</span>.<span class='ident'>to_file_path</span>::<span class='op'>&lt;</span><span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>posix</span>::<span class='ident'>Path</span><span class='op'>&gt;</span>();
 </pre>
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/openssl-0.6.3/src/bio/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.6.4/src/bio/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -144,8 +144,6 @@
 <span id="102">102</span>
 <span id="103">103</span>
 <span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>c_int</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -222,11 +220,10 @@
 
         <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>&lt;=</span> <span class='number'>0</span> {
             <span class='kw'>let</span> <span class='ident'>is_eof</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ffi</span>::<span class='ident'>BIO_eof</span>(<span class='self'>self</span>.<span class='ident'>bio</span>) };
-            <span class='kw'>if</span> <span class='ident'>is_eof</span> {
+            <span class='kw'>if</span> <span class='ident'>is_eof</span> <span class='op'>!=</span> <span class='number'>0</span> {
                 <span class='prelude-val'>Ok</span>(<span class='number'>0</span>)
             } <span class='kw'>else</span> {
-                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>,
-                                   <span class='ident'>SslError</span>::<span class='ident'>get</span>()))
+                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='ident'>SslError</span>::<span class='ident'>get</span>()))
             }
         } <span class='kw'>else</span> {
             <span class='prelude-val'>Ok</span>(<span class='ident'>ret</span> <span class='kw'>as</span> <span class='ident'>usize</span>)
@@ -242,8 +239,7 @@
         };
 
         <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>&lt;</span> <span class='number'>0</span> {
-                <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>,
-                                   <span class='ident'>SslError</span>::<span class='ident'>get</span>()))
+            <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='ident'>SslError</span>::<span class='ident'>get</span>()))
         } <span class='kw'>else</span> {
             <span class='prelude-val'>Ok</span>(<span class='ident'>ret</span> <span class='kw'>as</span> <span class='ident'>usize</span>)
         }

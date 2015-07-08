@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-17972' class='srclink' href='../../src/hyper/header/common/range.rs.html#59-65' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-17994' class='srclink' href='../../src/hyper/header/common/range.rs.html#59-65' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum Range {
     Bytes(<a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../hyper/header/enum.ByteRangeSpec.html' title='hyper::header::ByteRangeSpec'>ByteRangeSpec</a>&gt;),
     Unregistered(<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>),
@@ -83,7 +83,7 @@ last-byte-pos = 1*DIGIT
 </ul>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>Range</span>, <span class='ident'>ByteRangeSpec</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
@@ -94,7 +94,7 @@ last-byte-pos = 1*DIGIT
 <span class='ident'>headers</span>.<span class='ident'>clear</span>();
 <span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>Range</span>::<span class='ident'>Unregistered</span>(<span class='string'>&quot;letters&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;a-f&quot;</span>.<span class='ident'>to_owned</span>()));
 </pre>
-<pre class='rust rust-example-rendered'>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>Range</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();

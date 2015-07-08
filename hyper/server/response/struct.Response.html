@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-38407' class='srclink' href='../../../src/hyper/server/response.rs.html#29-40' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-38940' class='srclink' href='../../../src/hyper/server/response.rs.html#29-40' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Response&lt;'a, W: <a class='trait' href='http://doc.rust-lang.org/nightly/core/any/trait.Any.html' title='core::any::Any'>Any</a> = <a class='enum' href='../../../hyper/net/enum.Fresh.html' title='hyper::net::Fresh'>Fresh</a>&gt; {
     pub version: <a class='enum' href='../../../hyper/version/enum.HttpVersion.html' title='hyper::version::HttpVersion'>HttpVersion</a>,
     // some fields omitted
@@ -76,14 +76,14 @@ so that the server doesn&#39;t accidentally leave dangling requests.</p>
 size, and would only need a single <code>write</code> call normally.</p>
 
 <h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
+                           href="#example">Example</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>fn</span> <span class='ident'>handler</span>(<span class='ident'>res</span>: <span class='ident'>Response</span>) {
     <span class='ident'>res</span>.<span class='ident'>send</span>(<span class='string'>b&quot;Hello World!&quot;</span>).<span class='ident'>unwrap</span>();
 }
 </pre>
 
 <p>The above is the same, but shorter, than the longer:</p>
-<pre class='rust rust-example-rendered'>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Write</span>;
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::<span class='ident'>ContentLength</span>;
 <span class='kw'>fn</span> <span class='ident'>handler</span>(<span class='kw-2'>mut</span> <span class='ident'>res</span>: <span class='ident'>Response</span>) {
@@ -94,7 +94,8 @@ size, and would only need a single <code>write</code> call normally.</p>
 }
 </pre>
 </div><h4 id='method.start' class='method'><code>fn <a href='#method.start' class='fnname'>start</a>(self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../../../hyper/server/response/struct.Response.html' title='hyper::server::response::Response'>Response</a>&lt;'a, <a class='enum' href='../../../hyper/net/enum.Streaming.html' title='hyper::net::Streaming'>Streaming</a>&gt;&gt;</code></h4>
-<div class='docblock'><p>Consume this Response<Fresh>, writing the Headers and Status and creating a Response<Streaming></p>
+<div class='docblock'><p>Consume this Response<Fresh>, writing the Headers and Status and
+creating a Response<Streaming></p>
 </div><h4 id='method.status_mut' class='method'><code>fn <a href='#method.status_mut' class='fnname'>status_mut</a>(&amp;mut self) -&gt; &amp;mut <a class='enum' href='../../../hyper/status/enum.StatusCode.html' title='hyper::status::StatusCode'>StatusCode</a></code></h4>
 <div class='docblock'><p>Get a mutable reference to the status.</p>
 </div><h4 id='method.headers_mut' class='method'><code>fn <a href='#method.headers_mut' class='fnname'>headers_mut</a>(&amp;mut self) -&gt; &amp;mut <a class='struct' href='../../../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a></code></h4>

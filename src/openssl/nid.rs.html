@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/openssl-0.6.3/src/nid.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.6.4/src/nid.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>nid.rs.html -- source</title>
@@ -210,6 +210,9 @@
 <span id="168">168</span>
 <span id="169">169</span>
 <span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
 </pre><pre class='rust '>
 <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_camel_case_types</span>)]</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
@@ -250,6 +253,7 @@
     <span class='ident'>DES_EDE</span>,
     <span class='ident'>DES_EDE3</span>,
     <span class='ident'>IDEA_CBC</span>,
+    <span class='ident'>IDEA_CFB</span>,
     <span class='ident'>IDEA_ECB</span>,
     <span class='ident'>RC2_CBC</span>,
     <span class='ident'>RC2_ECB</span>,
@@ -268,6 +272,7 @@
     <span class='ident'>MessageDigest</span>,
     <span class='ident'>SigningTime</span>,
     <span class='ident'>CounterSignature</span>,
+    <span class='ident'>ChallengePassword</span>,
     <span class='ident'>UnstructuredAddress</span>,
     <span class='ident'>ExtendedCertificateAttributes</span>,
     <span class='ident'>Netscape</span>,
@@ -306,6 +311,7 @@
     <span class='ident'>AuthorityKeyIdentifier</span>,
     <span class='ident'>BF_CBC</span>,
     <span class='ident'>BF_ECB</span>,
+    <span class='ident'>BF_CFB</span>,
     <span class='ident'>BF_OFB</span>,
     <span class='ident'>MDC2</span>,
     <span class='ident'>RSA_MDC2</span>,
@@ -330,7 +336,8 @@
     <span class='ident'>RSA_SHA1_2</span>,
     <span class='ident'>DSA</span>,
     <span class='ident'>RIPEMD160</span>,
-    <span class='ident'>RSA_RIPEMD160</span>,
+    <span class='comment'>/* 118 missing */</span>
+    <span class='ident'>RSA_RIPEMD160</span><span class='op'>=</span><span class='number'>119</span>,
     <span class='ident'>RC5_CBC</span>,
     <span class='ident'>RC5_ECB</span>,
     <span class='ident'>RC5_CFB</span>,
@@ -355,7 +362,6 @@
     <span class='ident'>CRLReason</span>,
     <span class='ident'>InvalidityDate</span>,
     <span class='ident'>SXNetID</span>,
-    <span class='ident'>Pkcs12</span>,
     <span class='ident'>PBE_SHA1_RC4_128</span>,
     <span class='ident'>PBE_SHA1_RC4_40</span>,
     <span class='ident'>PBE_SHA1_3DES</span>,

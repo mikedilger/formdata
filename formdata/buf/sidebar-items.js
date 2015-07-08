@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["BufReadPlus","This trait extends any type that implements BufRead with a stream_until_token() function."]]});
+initSidebarItems({"trait":[["BufReadPlus","Extends any type that implements BufRead with a stream_until_token() function."]]});

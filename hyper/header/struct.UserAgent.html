@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-21361' class='srclink' href='../../src/hyper/header/common/mod.rs.html#223' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-21874' class='srclink' href='../../src/hyper/header/common/mod.rs.html#224' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct UserAgent(pub <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>);</pre><div class='docblock'><p><code>User-Agent</code> header, defined in
 <a href="http://tools.ietf.org/html/rfc7231#section-5.5.3">RFC7231</a></p>
 
@@ -78,7 +78,7 @@ product-version = token
 </ul>
 
 <h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust rust-example-rendered'>
+                           href="#example">Example</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>UserAgent</span>};
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
@@ -88,7 +88,7 @@ product-version = token
 <div class='docblock'><p>Returns the underlying byte buffer, encoded as UTF-8.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;hello&quot;</span>);
 <span class='kw'>let</span> <span class='ident'>bytes</span> <span class='op'>=</span> <span class='ident'>s</span>.<span class='ident'>into_bytes</span>();
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>bytes</span>, [<span class='number'>104</span>, <span class='number'>101</span>, <span class='number'>108</span>, <span class='number'>108</span>, <span class='number'>111</span>]);
@@ -100,7 +100,7 @@ product-version = token
 <div class='docblock'><p>Pushes the given string onto this string buffer.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;foo&quot;</span>);
 <span class='ident'>s</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;bar&quot;</span>);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>, <span class='string'>&quot;foobar&quot;</span>);
@@ -110,7 +110,7 @@ product-version = token
 reallocating.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>with_capacity</span>(<span class='number'>10</span>);
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>capacity</span>() <span class='op'>&gt;=</span> <span class='number'>10</span>);
 </pre>
@@ -124,7 +124,7 @@ frequent reallocations.</p>
 <p>Panics if the new capacity overflows <code>usize</code>.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
 <span class='ident'>s</span>.<span class='ident'>reserve</span>(<span class='number'>10</span>);
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>capacity</span>() <span class='op'>&gt;=</span> <span class='number'>10</span>);
@@ -143,7 +143,7 @@ minimal. Prefer <code>reserve</code> if future insertions are expected.</p>
 <p>Panics if the new capacity overflows <code>usize</code>.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
 <span class='ident'>s</span>.<span class='ident'>reserve_exact</span>(<span class='number'>10</span>);
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>capacity</span>() <span class='op'>&gt;=</span> <span class='number'>10</span>);
@@ -152,7 +152,7 @@ minimal. Prefer <code>reserve</code> if future insertions are expected.</p>
 <div class='docblock'><p>Shrinks the capacity of this string buffer to match its length.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;foo&quot;</span>);
 <span class='ident'>s</span>.<span class='ident'>reserve</span>(<span class='number'>100</span>);
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>capacity</span>() <span class='op'>&gt;=</span> <span class='number'>100</span>);
@@ -163,7 +163,7 @@ minimal. Prefer <code>reserve</code> if future insertions are expected.</p>
 <div class='docblock'><p>Adds the given character to the end of the string.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;abc&quot;</span>);
 <span class='ident'>s</span>.<span class='ident'>push</span>(<span class='string'>&#39;1&#39;</span>);
 <span class='ident'>s</span>.<span class='ident'>push</span>(<span class='string'>&#39;2&#39;</span>);
@@ -174,9 +174,10 @@ minimal. Prefer <code>reserve</code> if future insertions are expected.</p>
 <div class='docblock'><p>Works with the underlying buffer as a byte slice.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;hello&quot;</span>);
-<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>as_bytes</span>(), [<span class='number'>104</span>, <span class='number'>101</span>, <span class='number'>108</span>, <span class='number'>108</span>, <span class='number'>111</span>]);
+<span class='kw'>let</span> <span class='ident'>b</span>: <span class='kw-2'>&amp;</span>[_] <span class='op'>=</span> <span class='kw-2'>&amp;</span>[<span class='number'>104</span>, <span class='number'>101</span>, <span class='number'>108</span>, <span class='number'>108</span>, <span class='number'>111</span>];
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>as_bytes</span>(), <span class='ident'>b</span>);
 </pre>
 </div><h4 id='method.truncate' class='method'><code>fn <a href='#method.truncate' class='fnname'>truncate</a>(&amp;mut self, new_len: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
 <div class='docblock'><p>Shortens a string to the specified length.</p>
@@ -187,7 +188,7 @@ minimal. Prefer <code>reserve</code> if future insertions are expected.</p>
 or if <code>new_len</code> is not a character boundary.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;hello&quot;</span>);
 <span class='ident'>s</span>.<span class='ident'>truncate</span>(<span class='number'>2</span>);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>, <span class='string'>&quot;he&quot;</span>);
@@ -197,7 +198,7 @@ or if <code>new_len</code> is not a character boundary.</p>
 Returns <code>None</code> if this string buffer is empty.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;foo&quot;</span>);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>pop</span>(), <span class='prelude-val'>Some</span>(<span class='string'>&#39;o&#39;</span>));
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>pop</span>(), <span class='prelude-val'>Some</span>(<span class='string'>&#39;o&#39;</span>));
@@ -219,7 +220,7 @@ buffer.</p>
 bounds, then this function will panic.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;foo&quot;</span>);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>remove</span>(<span class='number'>0</span>), <span class='string'>&#39;f&#39;</span>);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>remove</span>(<span class='number'>1</span>), <span class='string'>&#39;o&#39;</span>);
@@ -244,7 +245,7 @@ this function will panic.</p>
 to ensure that the resulting string will be valid UTF-8.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;hello&quot;</span>);
 <span class='kw'>unsafe</span> {
     <span class='kw'>let</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>s</span>.<span class='ident'>as_mut_vec</span>();
@@ -257,7 +258,7 @@ to ensure that the resulting string will be valid UTF-8.</p>
 <div class='docblock'><p>Returns the number of bytes in this string.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>a</span> <span class='op'>=</span> <span class='string'>&quot;foo&quot;</span>.<span class='ident'>to_string</span>();
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>a</span>.<span class='ident'>len</span>(), <span class='number'>3</span>);
 </pre>
@@ -265,7 +266,7 @@ to ensure that the resulting string will be valid UTF-8.</p>
 <div class='docblock'><p>Returns true if the string contains no bytes</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>v</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v</span>.<span class='ident'>is_empty</span>());
 <span class='ident'>v</span>.<span class='ident'>push</span>(<span class='string'>&#39;a&#39;</span>);
@@ -275,7 +276,7 @@ to ensure that the resulting string will be valid UTF-8.</p>
 <div class='docblock'><p>Truncates the string, returning it to 0 length.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='string'>&quot;foo&quot;</span>.<span class='ident'>to_string</span>();
 <span class='ident'>s</span>.<span class='ident'>clear</span>();
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>is_empty</span>());
@@ -292,7 +293,7 @@ removed even if the iterator is not consumed until the end.</p>
 or if they are out of bounds.</p>
 
 <h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;α is alpha, β is beta&quot;</span>);
 <span class='kw'>let</span> <span class='ident'>beta_offset</span> <span class='op'>=</span> <span class='ident'>s</span>.<span class='ident'>find</span>(<span class='string'>&#39;β&#39;</span>).<span class='ident'>unwrap_or</span>(<span class='ident'>s</span>.<span class='ident'>len</span>());

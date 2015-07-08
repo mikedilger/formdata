@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.1/src/server/response.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.6.2/src/server/response.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>response.rs.html -- source</title>
@@ -401,6 +401,9 @@
 <span id="359">359</span>
 <span id="360">360</span>
 <span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Server Responses</span>
 <span class='doccomment'>//!</span>
@@ -485,7 +488,8 @@
 
     <span class='kw'>fn</span> <span class='ident'>write_head</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Body</span><span class='op'>&gt;</span> {
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;writing head: {:?} {:?}&quot;</span>, <span class='self'>self</span>.<span class='ident'>version</span>, <span class='self'>self</span>.<span class='ident'>status</span>);
-        <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>write</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>body</span>, <span class='string'>&quot;{} {}{}{}&quot;</span>, <span class='self'>self</span>.<span class='ident'>version</span>, <span class='self'>self</span>.<span class='ident'>status</span>, <span class='ident'>CR</span> <span class='kw'>as</span> <span class='ident'>char</span>, <span class='ident'>LF</span> <span class='kw'>as</span> <span class='ident'>char</span>));
+        <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>write</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>body</span>, <span class='string'>&quot;{} {}{}{}&quot;</span>, <span class='self'>self</span>.<span class='ident'>version</span>, <span class='self'>self</span>.<span class='ident'>status</span>,
+            <span class='ident'>CR</span> <span class='kw'>as</span> <span class='ident'>char</span>, <span class='ident'>LF</span> <span class='kw'>as</span> <span class='ident'>char</span>));
 
         <span class='kw'>if</span> <span class='op'>!</span><span class='self'>self</span>.<span class='ident'>headers</span>.<span class='ident'>has</span>::<span class='op'>&lt;</span><span class='ident'>header</span>::<span class='ident'>Date</span><span class='op'>&gt;</span>() {
             <span class='self'>self</span>.<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>header</span>::<span class='ident'>Date</span>(<span class='ident'>header</span>::<span class='ident'>HttpDate</span>(<span class='ident'>now_utc</span>())));
@@ -527,7 +531,8 @@
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Response</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>Fresh</span><span class='op'>&gt;</span> {
     <span class='doccomment'>/// Creates a new Response that can be used to write to a network stream.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> (<span class='ident'>Write</span> <span class='op'>+</span> <span class='lifetime'>&#39;a</span>), <span class='ident'>headers</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>header</span>::<span class='ident'>Headers</span>) <span class='op'>-&gt;</span> <span class='ident'>Response</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>Fresh</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> (<span class='ident'>Write</span> <span class='op'>+</span> <span class='lifetime'>&#39;a</span>), <span class='ident'>headers</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>header</span>::<span class='ident'>Headers</span>) <span class='op'>-&gt;</span>
+            <span class='ident'>Response</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>Fresh</span><span class='op'>&gt;</span> {
         <span class='ident'>Response</span> {
             <span class='ident'>status</span>: <span class='ident'>status</span>::<span class='ident'>StatusCode</span>::<span class='prelude-val'>Ok</span>,
             <span class='ident'>version</span>: <span class='ident'>version</span>::<span class='ident'>HttpVersion</span>::<span class='ident'>Http11</span>,
@@ -572,7 +577,8 @@
         <span class='ident'>stream</span>.<span class='ident'>end</span>()
     }
 
-    <span class='doccomment'>/// Consume this Response&lt;Fresh&gt;, writing the Headers and Status and creating a Response&lt;Streaming&gt;</span>
+    <span class='doccomment'>/// Consume this Response&lt;Fresh&gt;, writing the Headers and Status and</span>
+    <span class='doccomment'>/// creating a Response&lt;Streaming&gt;</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>start</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Response</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>Streaming</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>body_type</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>write_head</span>());
         <span class='kw'>let</span> (<span class='ident'>version</span>, <span class='ident'>body</span>, <span class='ident'>status</span>, <span class='ident'>headers</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>deconstruct</span>();

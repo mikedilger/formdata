@@ -45,16 +45,17 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-2254' class='srclink' href='../src/formdata/lib.rs.html#230-233' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait Request: <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a> {
+        </span><a id='src-2987' class='srclink' href='../src/formdata/lib.rs.html#293-299' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait Request {
     fn <a href='#tymethod.headers' class='fnname'>headers</a>(&amp;self) -&gt; &amp;<a class='struct' href='../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>;
-}</pre><div class='docblock'><p>A wrapper trait for <code>hyper::server::Request</code> data to provide parsing multipart requests to any
-front-end that provides a <code>hyper::header::Headers</code> and a <code>std::io::Read</code> of the request&#39;s
-entire body.</p>
+    fn <a href='#tymethod.read_mut' class='fnname'>read_mut</a>(&amp;mut self) -&gt; &amp;mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>;
+}</pre><div class='docblock'><p>A wrapper for request data to provide parsing multipart requests to any front-end that provides
+a <code>hyper::header::Headers</code> and a <code>std::io::Read</code> of the request&#39;s entire body.</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.headers' class='method stab '><code>fn <a href='#tymethod.headers' class='fnname'>headers</a>(&amp;self) -&gt; &amp;<a class='struct' href='../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a></code></h3><div class='docblock'><p>Returns a reference to the request&#39;s Hyper headers.</p>
+        <h3 id='tymethod.headers' class='method stab '><code>fn <a href='#tymethod.headers' class='fnname'>headers</a>(&amp;self) -&gt; &amp;<a class='struct' href='../hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a></code></h3><div class='docblock'><p>Returns a reference to the request&#39;s headers.</p>
+</div><h3 id='tymethod.read_mut' class='method stab '><code>fn <a href='#tymethod.read_mut' class='fnname'>read_mut</a>(&amp;mut self) -&gt; &amp;mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a></code></h3><div class='docblock'><p>Returns a mutable reference to the request&#39;s body reader.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>

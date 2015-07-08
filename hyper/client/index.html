@@ -54,7 +54,7 @@
 It utilizes the lower level <code>Request</code> API.</p>
 
 <h2 id="get" class='section-header'><a
-                           href="#get">GET</a></h2><pre class='rust rust-example-rendered'>
+                           href="#get">GET</a></h2><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>client</span> <span class='op'>=</span> <span class='ident'>Client</span>::<span class='ident'>new</span>();
 
 <span class='kw'>let</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>get</span>(<span class='string'>&quot;http://example.domain&quot;</span>).<span class='ident'>send</span>().<span class='ident'>unwrap</span>();
@@ -66,7 +66,7 @@ the <code>status</code>, the <code>headers</code>, and the response body via the
 trait.</p>
 
 <h2 id="post" class='section-header'><a
-                           href="#post">POST</a></h2><pre class='rust rust-example-rendered'>
+                           href="#post">POST</a></h2><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>client</span> <span class='op'>=</span> <span class='ident'>Client</span>::<span class='ident'>new</span>();
 
 <span class='kw'>let</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>post</span>(<span class='string'>&quot;http://example.domain&quot;</span>)
@@ -80,11 +80,11 @@ trait.</p>
                            href="#sync">Sync</a></h1>
 <p>The <code>Client</code> implements <code>Sync</code>, so you can share it among multiple threads
 and make multiple requests simultaneously.</p>
-<pre class='rust rust-example-rendered'>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>Arc</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>thread</span>;
 
-<span class='comment'>// Note: an Arc is used here because `thread::spawn` creates threads that </span>
+<span class='comment'>// Note: an Arc is used here because `thread::spawn` creates threads that</span>
 <span class='comment'>// can outlive the main thread, so we must use reference counting to keep</span>
 <span class='comment'>// the Client alive long enough. Scoped threads could skip the Arc.</span>
 <span class='kw'>let</span> <span class='ident'>client</span> <span class='op'>=</span> <span class='ident'>Arc</span>::<span class='ident'>new</span>(<span class='ident'>Client</span>::<span class='ident'>new</span>());

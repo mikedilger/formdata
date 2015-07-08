@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.1/src/header/common/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.6.2/src/header/common/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -402,6 +402,8 @@
 <span id="360">360</span>
 <span id="361">361</span>
 <span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! A Collection of Header implementations for common HTTP Headers.</span>
 <span class='doccomment'>//!</span>
@@ -449,6 +451,7 @@
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>referer</span>::<span class='ident'>Referer</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>server</span>::<span class='ident'>Server</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>set_cookie</span>::<span class='ident'>SetCookie</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>strict_transport_security</span>::<span class='ident'>StrictTransportSecurity</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>transfer_encoding</span>::<span class='ident'>TransferEncoding</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>upgrade</span>::{<span class='ident'>Upgrade</span>, <span class='ident'>Protocol</span>, <span class='ident'>ProtocolName</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>user_agent</span>::<span class='ident'>UserAgent</span>;
@@ -761,6 +764,7 @@
 <span class='kw'>mod</span> <span class='ident'>referer</span>;
 <span class='kw'>mod</span> <span class='ident'>server</span>;
 <span class='kw'>mod</span> <span class='ident'>set_cookie</span>;
+<span class='kw'>mod</span> <span class='ident'>strict_transport_security</span>;
 <span class='kw'>mod</span> <span class='ident'>transfer_encoding</span>;
 <span class='kw'>mod</span> <span class='ident'>upgrade</span>;
 <span class='kw'>mod</span> <span class='ident'>user_agent</span>;

@@ -56,7 +56,7 @@ servers typically parse it and ignore it
 (rather than having it be part of the path or query string.)</p>
 
 <p>On success, return <code>(path, query_string, fragment_identifier)</code></p>
-<pre class='rust rust-example-rendered'>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> (<span class='ident'>path</span>, <span class='ident'>query</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>url</span>::<span class='ident'>parse_path</span>(<span class='string'>&quot;/foo/bar/../baz?q=42&quot;</span>).<span class='ident'>unwrap</span>();
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>path</span>, <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>&quot;foo&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;baz&quot;</span>.<span class='ident'>to_string</span>()]);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>, <span class='prelude-val'>Some</span>(<span class='string'>&quot;q=42&quot;</span>.<span class='ident'>to_string</span>()));

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.1/src/error.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.6.2/src/error.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>error.rs.html -- source</title>
@@ -257,12 +257,21 @@
 <span id="215">215</span>
 <span id="216">216</span>
 <span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Error and Result module.</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>StdError</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>IoError</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>::<span class='ident'>Utf8Error</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>string</span>::<span class='ident'>FromUtf8Error</span>;
 
 <span class='kw'>use</span> <span class='ident'>httparse</span>;
 <span class='kw'>use</span> <span class='ident'>url</span>;
@@ -387,6 +396,12 @@
     }
 }
 
+<span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>FromUtf8Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
+    <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>err</span>: <span class='ident'>FromUtf8Error</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
+        <span class='ident'>Utf8</span>(<span class='ident'>err</span>.<span class='ident'>utf8_error</span>())
+    }
+}
+
 <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>httparse</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
     <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>err</span>: <span class='ident'>httparse</span>::<span class='ident'>Error</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
         <span class='kw'>match</span> <span class='ident'>err</span> {
@@ -471,7 +486,8 @@
     <span class='kw'>fn</span> <span class='ident'>test_from_ssl</span>() {
         <span class='kw'>use</span> <span class='ident'>openssl</span>::<span class='ident'>ssl</span>::<span class='ident'>error</span>::<span class='ident'>SslError</span>;
 
-        <span class='macro'>from</span><span class='macro'>!</span>(<span class='ident'>SslError</span>::<span class='ident'>StreamError</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='string'>&quot;ssl negotiation&quot;</span>)) <span class='op'>=&gt;</span> <span class='ident'>Io</span>(..));
+        <span class='macro'>from</span><span class='macro'>!</span>(<span class='ident'>SslError</span>::<span class='ident'>StreamError</span>(
+            <span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Other</span>, <span class='string'>&quot;ssl negotiation&quot;</span>)) <span class='op'>=&gt;</span> <span class='ident'>Io</span>(..));
         <span class='macro'>from_and_cause</span><span class='macro'>!</span>(<span class='ident'>SslError</span>::<span class='ident'>SslSessionClosed</span> <span class='op'>=&gt;</span> <span class='ident'>Ssl</span>(..));
     }
 }

@@ -45,13 +45,13 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/formdata/lib.rs.html#1-302' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>This crate parses and processes <code>hyper::server::Request</code> data
-that contains <code>multipart/form-data</code> content.</p>
+        </span><a id='src-0' class='srclink' href='../src/formdata/lib.rs.html#1-442' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>This crate parses and processes <code>hyper::server::Request</code> data that contains
+<code>multipart/form-data</code> content.</p>
 
 <p>The main entry point is <code>parse_multipart</code></p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
-<table><tr><td><code>pub use error::<a class='enum' href='../formdata/error/enum.Error.html' title='formdata::error::Error'>Error</a>;</code></td></tr><tr><td><code>pub use buf::<a class='trait' href='../formdata/buf/trait.BufReadPlus.html' title='formdata::buf::BufReadPlus'>BufReadPlus</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr><td><code>pub use error::<a class='enum' href='../formdata/error/enum.Error.html' title='formdata::error::Error'>Error</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
                         <td><a class='mod' href='buf/index.html'
@@ -71,12 +71,10 @@ that contains <code>multipart/form-data</code> content.</p>
                 </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='struct' href='struct.ContentDispositionFormData.html'
-                               title='formdata::ContentDispositionFormData'>ContentDispositionFormData</a></td>
+                        <td><a class='struct' href='struct.FormData.html'
+                               title='formdata::FormData'>FormData</a></td>
                         <td class='docblock short'>
-                             <p>We define a Content-Disposition form-data only header, which is found within
-the mime multipart sections.  NOT FOR GENERAL USE, as it is very limited
-in scope.</p>
+                             <p>The extracted text fields and uploaded files from a <code>multipart/form-data</code> request.</p>
 
                         </td>
                     </tr>
@@ -85,9 +83,7 @@ in scope.</p>
                         <td><a class='struct' href='struct.UploadedFile.html'
                                title='formdata::UploadedFile'>UploadedFile</a></td>
                         <td class='docblock short'>
-                             <p>This structure represents uploaded files which were received as
-part of the <code>multipart/form-data</code> parsing.  They are streamed to
-disk because they may not fit in memory.</p>
+                             <p>An uploaded file that was received as part of <code>multipart/form-data</code> parsing.</p>
 
                         </td>
                     </tr>
@@ -97,9 +93,8 @@ disk because they may not fit in memory.</p>
                         <td><a class='trait' href='trait.Request.html'
                                title='formdata::Request'>Request</a></td>
                         <td class='docblock short'>
-                             <p>A wrapper trait for <code>hyper::server::Request</code> data to provide parsing multipart requests to any
-front-end that provides a <code>hyper::header::Headers</code> and a <code>std::io::Read</code> of the request&#39;s
-entire body.</p>
+                             <p>A wrapper for request data to provide parsing multipart requests to any front-end that provides
+a <code>hyper::header::Headers</code> and a <code>std::io::Read</code> of the request&#39;s entire body.</p>
 
                         </td>
                     </tr>
@@ -109,10 +104,7 @@ entire body.</p>
                         <td><a class='fn' href='fn.parse_multipart.html'
                                title='formdata::parse_multipart'>parse_multipart</a></td>
                         <td class='docblock short'>
-                             <p>This function parses and processes <code>hyper::server::Request</code> data
-that contains <code>multipart/form-data</code> content.  It does this in a streaming
-fashion, saving embedded uploaded files to disk as they are encountered by
-the parser.</p>
+                             <p>Parses and processes <code>hyper::server::Request</code> data that is <code>multipart/form-data</code> content.</p>
 
                         </td>
                     </tr>

@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-24607' class='srclink' href='../../src/hyper/header/shared/entity.rs.html#43-48' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-25120' class='srclink' href='../../src/hyper/header/shared/entity.rs.html#43-48' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct EntityTag {
     pub weak: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
     // some fields omitted
@@ -111,6 +111,18 @@ both the weak and strong comparison function results:</p>
                                   <td id='structfield.weak'><code>weak</code></td><td><div class='docblock'><p>Weakness indicator for the tag</p>
 </div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(weak: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, tag: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>) -&gt; <a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a></code></h4>
 <div class='docblock'><p>Constructs a new EntityTag.</p>
+
+<h1 id="panics" class='section-header'><a
+                           href="#panics">Panics</a></h1>
+<p>If the tag contains invalid characters.</p>
+</div><h4 id='method.weak' class='method'><code>fn <a href='#method.weak' class='fnname'>weak</a>(tag: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>) -&gt; <a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a></code></h4>
+<div class='docblock'><p>Constructs a new weak EntityTag.</p>
+
+<h1 id="panics" class='section-header'><a
+                           href="#panics">Panics</a></h1>
+<p>If the tag contains invalid characters.</p>
+</div><h4 id='method.strong' class='method'><code>fn <a href='#method.strong' class='fnname'>strong</a>(tag: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>) -&gt; <a class='struct' href='../../hyper/header/struct.EntityTag.html' title='hyper::header::EntityTag'>EntityTag</a></code></h4>
+<div class='docblock'><p>Constructs a new strong EntityTag.</p>
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>

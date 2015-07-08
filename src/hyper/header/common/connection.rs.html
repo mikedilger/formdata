@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.1/src/header/common/connection.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-1ecc6299db9ec823/hyper-0.6.2/src/header/common/connection.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>connection.rs.html -- source</title>
@@ -176,6 +176,7 @@
 <span id="134">134</span>
 <span id="135">135</span>
 <span id="136">136</span>
+<span id="137">137</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>::{<span class='self'>self</span>, <span class='ident'>Display</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>::<span class='ident'>FromStr</span>;
@@ -310,7 +311,8 @@
     <span class='kw'>fn</span> <span class='ident'>test_parse</span>() {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>Connection</span>::<span class='ident'>close</span>(),<span class='ident'>parse_option</span>(<span class='string'>b&quot;close&quot;</span>.<span class='ident'>to_vec</span>()));
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>Connection</span>::<span class='ident'>keep_alive</span>(),<span class='ident'>parse_option</span>(<span class='string'>b&quot;keep-alive&quot;</span>.<span class='ident'>to_vec</span>()));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>Connection</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>ConnectionHeader</span>(<span class='ident'>UniCase</span>(<span class='string'>&quot;upgrade&quot;</span>.<span class='ident'>to_owned</span>()))]),<span class='ident'>parse_option</span>(<span class='string'>b&quot;upgrade&quot;</span>.<span class='ident'>to_vec</span>()));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>Connection</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>ConnectionHeader</span>(<span class='ident'>UniCase</span>(<span class='string'>&quot;upgrade&quot;</span>.<span class='ident'>to_owned</span>()))]),
+            <span class='ident'>parse_option</span>(<span class='string'>b&quot;upgrade&quot;</span>.<span class='ident'>to_vec</span>()));
     }
 }
 </pre>

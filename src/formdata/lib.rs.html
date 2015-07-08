@@ -342,306 +342,586 @@
 <span id="300">300</span>
 <span id="301">301</span>
 <span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
 </pre><pre class='rust '>
-<span class='doccomment'>//! This crate parses and processes `hyper::server::Request` data</span>
-<span class='doccomment'>//! that contains `multipart/form-data` content.</span>
+<span class='doccomment'>//! This crate parses and processes `hyper::server::Request` data that contains</span>
+<span class='doccomment'>//! `multipart/form-data` content.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! The main entry point is `parse_multipart`</span>
 
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hyper</span>;
-<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>mime</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>httparse</span>;
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hyper</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>mime</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>tempdir</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>textnonce</span>;
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>log</span>;
 
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>buf</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>error</span>;
+<span class='kw'>mod</span> <span class='ident'>headers</span>;
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>mock</span>;
-<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>buf</span>;
-<span class='kw'>mod</span> <span class='ident'>content_disposition</span>;
-<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>error</span>;
-
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>buf</span>::<span class='ident'>BufReadPlus</span>;
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>PathBuf</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='ident'>BufReader</span>,<span class='ident'>BufRead</span>,<span class='ident'>Read</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='ident'>BufRead</span>, <span class='ident'>BufReader</span>, <span class='ident'>Read</span>};
 
+<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>ContentType</span>, <span class='ident'>Headers</span>};
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Request</span> <span class='kw'>as</span> <span class='ident'>HyperRequest</span>;
-<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>,<span class='ident'>ContentType</span>};
-<span class='kw'>use</span> <span class='ident'>mime</span>::{<span class='ident'>Mime</span>,<span class='ident'>TopLevel</span>,<span class='ident'>SubLevel</span>,<span class='ident'>Attr</span>,<span class='ident'>Value</span>};
+<span class='kw'>use</span> <span class='ident'>mime</span>::{<span class='ident'>Attr</span>, <span class='ident'>Mime</span>, <span class='ident'>Param</span>, <span class='ident'>SubLevel</span>, <span class='ident'>TopLevel</span>, <span class='ident'>Value</span>};
 <span class='kw'>use</span> <span class='ident'>tempdir</span>::<span class='ident'>TempDir</span>;
 <span class='kw'>use</span> <span class='ident'>textnonce</span>::<span class='ident'>TextNonce</span>;
 
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>content_disposition</span>::<span class='ident'>ContentDispositionFormData</span>;
+<span class='kw'>use</span> <span class='ident'>buf</span>::<span class='ident'>BufReadPlus</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
+<span class='kw'>use</span> <span class='ident'>headers</span>::<span class='ident'>ContentDisposition</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::<span class='ident'>SocketAddr</span>;
-
-<span class='doccomment'>/// This structure represents uploaded files which were received as</span>
-<span class='doccomment'>/// part of the `multipart/form-data` parsing.  They are streamed to</span>
-<span class='doccomment'>/// disk because they may not fit in memory.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>,<span class='ident'>PartialEq</span>,<span class='ident'>Clone</span>)]</span>
+<span class='doccomment'>/// An uploaded file that was received as part of `multipart/form-data` parsing.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// Files are streamed to disk because they may not fit in memory.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>UploadedFile</span> {
-    <span class='doccomment'>/// This is the temporary file where the data was saved.</span>
+    <span class='doccomment'>/// The temporary file where the data was saved.</span>
     <span class='kw'>pub</span> <span class='ident'>path</span>: <span class='ident'>PathBuf</span>,
-    <span class='doccomment'>/// This is the filename that was specified in the data, unfiltered.  It may or may not</span>
-    <span class='doccomment'>/// be legal on the local filesystem.</span>
+    <span class='doccomment'>/// The filename that was specified in the data, unfiltered. It may or may not be legal on the</span>
+    <span class='doccomment'>/// local filesystem.</span>
     <span class='kw'>pub</span> <span class='ident'>filename</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// This is the content-type that was specified in the data, unvalidated.</span>
+    <span class='doccomment'>/// The unvalidated content-type that was specified in the data.</span>
     <span class='kw'>pub</span> <span class='ident'>content_type</span>: <span class='ident'>Mime</span>,
-    <span class='doccomment'>/// This is the actual size of the file received</span>
+    <span class='doccomment'>/// The size of the file.</span>
     <span class='kw'>pub</span> <span class='ident'>size</span>: <span class='ident'>usize</span>,
 }
 
-<span class='doccomment'>/// This function parses and processes `hyper::server::Request` data</span>
-<span class='doccomment'>/// that contains `multipart/form-data` content.  It does this in a streaming</span>
-<span class='doccomment'>/// fashion, saving embedded uploaded files to disk as they are encountered by</span>
-<span class='doccomment'>/// the parser.</span>
+<span class='doccomment'>/// The extracted text fields and uploaded files from a `multipart/form-data` request.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// It returns two sets of data.  The first, `Vec&lt;(String,String)&gt;`, are the</span>
-<span class='doccomment'>/// variable-value pairs from the POST-ed form.  The second</span>
-<span class='doccomment'>/// `Vec&lt;(String,UploadedFile)&gt;` are the variable-file pairs from the POST-ed</span>
-<span class='doccomment'>/// form, where `UploadedFile` structures describe the uploaded file.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_multipart</span>(
-    <span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Request</span>)
-    <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span> (<span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>,<span class='ident'>String</span>)<span class='op'>&gt;</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>,<span class='ident'>UploadedFile</span>)<span class='op'>&gt;</span>), <span class='ident'>Error</span> <span class='op'>&gt;</span>
-{
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>parameters</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>,<span class='ident'>String</span>)<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>files</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>,<span class='ident'>UploadedFile</span>)<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
+<span class='doccomment'>/// Use `parse_multipart` to devise this object from a request.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>FormData</span> {
+    <span class='doccomment'>/// Key-value pairs for plain text fields. Technically, these are form data parts with no</span>
+    <span class='doccomment'>/// filename specified in the part&#39;s `Content-Disposition`.</span>
+    <span class='kw'>pub</span> <span class='ident'>fields</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>, <span class='ident'>String</span>)<span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Key-value pairs for temporary files. Technically, these are form data parts with a filename</span>
+    <span class='doccomment'>/// specified in the part&#39;s `Content-Disposition`.</span>
+    <span class='kw'>pub</span> <span class='ident'>files</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>, <span class='ident'>UploadedFile</span>)<span class='op'>&gt;</span>,
+}
 
-    <span class='kw'>let</span> <span class='ident'>string_boundary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>get_boundary</span>(<span class='ident'>request</span>) );
-    <span class='kw'>let</span> <span class='ident'>boundary</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>string_boundary</span>.<span class='ident'>into_bytes</span>();
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>crlf_boundary</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='number'>2</span> <span class='op'>+</span> <span class='ident'>boundary</span>.<span class='ident'>len</span>());
-    <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>));
-    <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='ident'>boundary</span>.<span class='ident'>clone</span>());
-
-    <span class='comment'>// Request implements Read.  Internally it&#39;s a BufReader, but it&#39;s not</span>
-    <span class='comment'>// exposed that way.  We need to wrap it into a BufReader to get that</span>
-    <span class='comment'>// functionality ourselves.</span>
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>with_capacity</span>(<span class='number'>4096</span>,<span class='ident'>request</span>);
-
-    <span class='kw'>enum</span> <span class='ident'>State</span> {
-        <span class='ident'>Discarding</span>, <span class='comment'>// Discard until after initial boundary and CRLF</span>
-        <span class='ident'>CapturingValue</span>, <span class='comment'>// Capture value until boundary, then discard past CRLF</span>
-        <span class='ident'>CapturingFile</span>, <span class='comment'>// Capture file until boundary, then discard past CRLF</span>
-        <span class='ident'>ReadingHeaders</span>, <span class='comment'>// Capture headers to blank line</span>
+<span class='kw'>impl</span> <span class='ident'>FormData</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>FormData</span> {
+        <span class='ident'>FormData</span> { <span class='ident'>fields</span>: <span class='macro'>vec</span><span class='macro'>!</span>[], <span class='ident'>files</span>: <span class='macro'>vec</span><span class='macro'>!</span>[] }
     }
+}
 
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>State</span>::<span class='ident'>Discarding</span>;
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
+<span class='doccomment'>/// Parses and processes `hyper::server::Request` data that is `multipart/form-data` content.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The request is streamed, and this function saves embedded uploaded files to disk as they are</span>
+<span class='doccomment'>/// encountered by the parser.</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_multipart</span>(<span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Request</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>FormData</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_boundary</span>(<span class='ident'>request</span>));
+    <span class='macro'>trace</span><span class='macro'>!</span>(<span class='string'>&quot;Boundary is {}&quot;</span>, <span class='ident'>boundary</span>);
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>with_capacity</span>(<span class='number'>4096</span>, <span class='ident'>request</span>.<span class='ident'>read_mut</span>());
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>form_data</span> <span class='op'>=</span> <span class='ident'>FormData</span>::<span class='ident'>new</span>();
+    <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>run_state_machine</span>(<span class='ident'>boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>reader</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>form_data</span>, <span class='ident'>MultipartSubLevel</span>::<span class='ident'>FormData</span>));
+    <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>)
+}
+
+<span class='comment'>// A state in the parsing state machine.</span>
+<span class='kw'>enum</span> <span class='ident'>State</span> {
+    <span class='comment'>// Discard until after initial boundary and CRLF.</span>
+    <span class='ident'>Discarding</span>,
+    <span class='comment'>// Capture headers to blank line.</span>
+    <span class='ident'>ReadingHeaders</span>,
+    <span class='comment'>// Capture entire `multipart/mixed` body until boundary, then discard past CRLF.</span>
+    <span class='ident'>CapturingMixed</span>(<span class='ident'>ContentDisposition</span>, <span class='ident'>ContentType</span>),
+    <span class='comment'>// Capture value until boundary, then discard past CRLF.</span>
+    <span class='ident'>CapturingValue</span>(<span class='ident'>ContentDisposition</span>),
+    <span class='comment'>// Capture file until boundary, then discard past CRLF.</span>
+    <span class='ident'>CapturingFile</span>(<span class='ident'>ContentDisposition</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentType</span><span class='op'>&gt;</span>),
+}
+
+<span class='comment'>// A multipart MIME parsing mode.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>PartialEq</span>)]</span>
+<span class='kw'>enum</span> <span class='ident'>MultipartSubLevel</span> {
+    <span class='comment'>// Represents `multipart/form-data`.</span>
+    <span class='ident'>FormData</span>,
+    <span class='comment'>// Represents `multipart/mixed` with a `name` key.</span>
+    <span class='ident'>Mixed</span>(<span class='ident'>String</span>),
+}
+
+<span class='comment'>// Parse either a `multipart/form-data` or `multipart/mixed` MIME body.</span>
+<span class='kw'>fn</span> <span class='ident'>run_state_machine</span><span class='op'>&lt;</span><span class='ident'>R</span>: <span class='ident'>BufRead</span><span class='op'>&gt;</span>(<span class='ident'>boundary</span>: <span class='ident'>String</span>, <span class='ident'>reader</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>R</span>, <span class='ident'>form_data</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>FormData</span>,
+                                 <span class='ident'>mode</span>: <span class='ident'>MultipartSubLevel</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>use</span> <span class='ident'>State</span>::<span class='op'>*</span>;
+    <span class='kw'>use</span> <span class='ident'>MultipartSubLevel</span>::<span class='op'>*</span>;
+
+    <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='ident'>boundary</span>.<span class='ident'>into_bytes</span>();
+    <span class='kw'>let</span> <span class='ident'>crlf_boundary</span> <span class='op'>=</span> <span class='ident'>crlf_boundary</span>(<span class='kw-2'>&amp;</span><span class='ident'>boundary</span>);
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>Discarding</span>;
 
     <span class='kw'>loop</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>buf</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
 
         <span class='kw'>match</span> <span class='ident'>state</span> {
-            <span class='ident'>State</span>::<span class='ident'>Discarding</span> <span class='op'>=&gt;</span> {
-                <span class='comment'>// Read up to and including the boundary</span>
-                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>stream_until_token</span>( <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span> ) );
-                <span class='kw'>if</span> <span class='ident'>read</span><span class='op'>==</span><span class='number'>0</span> { <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>); }
+            <span class='ident'>Discarding</span> <span class='op'>=&gt;</span> {
+                <span class='comment'>// Read up to and including the boundary.</span>
+                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='kw-2'>&amp;</span><span class='ident'>boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span>));
+                <span class='kw'>if</span> <span class='ident'>read</span> <span class='op'>==</span> <span class='number'>0</span> {
+                    <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>);
+                }
 
-                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>State</span>::<span class='ident'>ReadingHeaders</span>;
+                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>ReadingHeaders</span>;
             },
-            <span class='ident'>State</span>::<span class='ident'>ReadingHeaders</span> <span class='op'>=&gt;</span> {
+            <span class='ident'>ReadingHeaders</span> <span class='op'>=&gt;</span> {
                 {
-                    <span class='comment'>// IF the next two characters are &#39;--&#39; (look ahead), then we are finished</span>
-                    <span class='kw'>let</span> <span class='ident'>peeker</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>fill_buf</span>() );
-                    <span class='kw'>if</span> <span class='ident'>peeker</span>.<span class='ident'>len</span>() <span class='op'>&gt;=</span> <span class='number'>2</span> <span class='op'>&amp;&amp;</span> <span class='kw-2'>&amp;</span><span class='ident'>peeker</span>[..<span class='number'>2</span>]<span class='op'>==</span><span class='string'>b&quot;--&quot;</span> {
-                        <span class='kw'>return</span> <span class='prelude-val'>Ok</span>((<span class='ident'>parameters</span>, <span class='ident'>files</span>))
+                    <span class='comment'>// If the next two lookahead characters are &#39;--&#39;, parsing is finished.</span>
+                    <span class='kw'>let</span> <span class='ident'>peeker</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>fill_buf</span>());
+                    <span class='kw'>if</span> <span class='ident'>peeker</span>.<span class='ident'>len</span>() <span class='op'>&gt;=</span> <span class='number'>2</span> <span class='op'>&amp;&amp;</span> <span class='kw-2'>&amp;</span><span class='ident'>peeker</span>[..<span class='number'>2</span>] <span class='op'>==</span> <span class='string'>b&quot;--&quot;</span> {
+                        <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(());
                     }
-                } <span class='comment'>// drop peeker</span>
+                }
 
-                <span class='comment'>// Read up to and including the CRLF after the boundary</span>
-                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>stream_until_token</span>( <span class='string'>b&quot;\r\n&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span> ) );
-                <span class='kw'>if</span> <span class='ident'>read</span><span class='op'>==</span><span class='number'>0</span> { <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>); }
+                <span class='comment'>// Read up to and including the CRLF after the boundary.</span>
+                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='string'>b&quot;\r\n&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span>));
+                <span class='kw'>if</span> <span class='ident'>read</span> <span class='op'>==</span> <span class='number'>0</span> {
+                    <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>);
+                }
 
                 <span class='ident'>buf</span>.<span class='ident'>truncate</span>(<span class='number'>0</span>);
-                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>stream_until_token</span>( <span class='string'>b&quot;\r\n\r\n&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span> ) );
-                <span class='kw'>if</span> <span class='ident'>read</span><span class='op'>==</span><span class='number'>0</span> { <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>); }
-                <span class='ident'>buf</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>)); <span class='comment'>// parse_headers() needs this token at the end</span>
+                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='string'>b&quot;\r\n\r\n&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span>));
+                <span class='kw'>if</span> <span class='ident'>read</span> <span class='op'>==</span> <span class='number'>0</span> {
+                    <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Eof</span>);
+                }
+                <span class='comment'>// `parse_headers` requires this token at the end:</span>
+                <span class='ident'>buf</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>));
 
-                <span class='comment'>// Parse the headers</span>
+                <span class='comment'>// Parse the headers.</span>
                 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>header_memory</span> <span class='op'>=</span> [<span class='ident'>httparse</span>::<span class='ident'>EMPTY_HEADER</span>; <span class='number'>4</span>];
-                <span class='kw'>match</span> <span class='ident'>httparse</span>::<span class='ident'>parse_headers</span>( <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>buf</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>header_memory</span>) {
-                    <span class='prelude-val'>Ok</span>(<span class='ident'>httparse</span>::<span class='ident'>Status</span>::<span class='ident'>Complete</span>((_,<span class='ident'>raw_headers</span>))) <span class='op'>=&gt;</span> {
-                        <span class='comment'>// Turn raw headers into hyper headers</span>
-                        <span class='ident'>headers</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>Headers</span>::<span class='ident'>from_raw</span>(<span class='ident'>raw_headers</span>) );
+                <span class='kw'>match</span> <span class='ident'>httparse</span>::<span class='ident'>parse_headers</span>(<span class='kw-2'>&amp;</span><span class='ident'>buf</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>header_memory</span>) {
+                    <span class='prelude-val'>Ok</span>(<span class='ident'>httparse</span>::<span class='ident'>Status</span>::<span class='ident'>Complete</span>((_, <span class='ident'>raw_headers</span>))) <span class='op'>=&gt;</span> {
+                        <span class='comment'>// Turn raw headers into hyper headers.</span>
+                        <span class='kw'>let</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Headers</span>::<span class='ident'>from_raw</span>(<span class='ident'>raw_headers</span>));
 
-                        <span class='kw'>let</span> <span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDispositionFormData</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span>.<span class='ident'>get</span>() {
-                            <span class='prelude-val'>Some</span>(<span class='ident'>x</span>) <span class='op'>=&gt;</span> <span class='ident'>x</span>,
+                        <span class='kw'>let</span> <span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDisposition</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span>.<span class='ident'>get</span>() {
+                            <span class='prelude-val'>Some</span>(<span class='ident'>cd</span>) <span class='op'>=&gt;</span> <span class='ident'>cd</span>,
                             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>MissingDisposition</span>),
                         };
+
                         <span class='kw'>let</span> <span class='ident'>ct</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>ContentType</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>headers</span>.<span class='ident'>get</span>();
 
-                        <span class='ident'>state</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>ct</span>.<span class='ident'>is_some</span>() <span class='op'>||</span> <span class='ident'>cd</span>.<span class='ident'>filename</span>.<span class='ident'>is_some</span>() {
-                            <span class='ident'>State</span>::<span class='ident'>CapturingFile</span>
-                        } <span class='kw'>else</span> {
-                            <span class='ident'>State</span>::<span class='ident'>CapturingValue</span>
-                        };
+                        <span class='kw'>match</span> <span class='ident'>mode</span> {
+                            <span class='ident'>FormData</span> <span class='kw'>if</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span> <span class='string'>&quot;form-data&quot;</span> <span class='op'>=&gt;</span> {
+                                <span class='ident'>state</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>is_multipart_mixed</span>(<span class='ident'>ct</span>) {
+                                    <span class='ident'>CapturingMixed</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>(), <span class='ident'>ct</span>.<span class='ident'>unwrap</span>().<span class='ident'>clone</span>())
+                                } <span class='kw'>else</span> <span class='kw'>if</span> <span class='ident'>ct</span>.<span class='ident'>is_some</span>() <span class='op'>||</span> <span class='ident'>cd</span>.<span class='ident'>filename</span>.<span class='ident'>is_some</span>() {
+                                    <span class='ident'>CapturingFile</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>(), <span class='ident'>ct</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>ct</span><span class='op'>|</span> <span class='ident'>ct</span>.<span class='ident'>clone</span>()))
+                                } <span class='kw'>else</span> {
+                                    <span class='ident'>CapturingValue</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>())
+                                };
+                            },
+                            <span class='ident'>Mixed</span>(_) <span class='kw'>if</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span> <span class='string'>&quot;file&quot;</span> <span class='op'>=&gt;</span> {
+                                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>CapturingFile</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>(), <span class='ident'>ct</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>ct</span><span class='op'>|</span> <span class='ident'>ct</span>.<span class='ident'>clone</span>()));
+                            },
+                            _ <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>InvalidDisposition</span>),
+                        }
                     },
-                    <span class='prelude-val'>Ok</span>(<span class='ident'>httparse</span>::<span class='ident'>Status</span>::<span class='ident'>Partial</span>) <span class='op'>=&gt;</span> {
-                        <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Header Parsing was Partial&quot;</span>);
-                        <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>PartialHeaders</span>);
-                    },
-                    <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>( <span class='ident'>From</span>::<span class='ident'>from</span>(<span class='ident'>e</span>) ),
+                    <span class='prelude-val'>Ok</span>(<span class='ident'>httparse</span>::<span class='ident'>Status</span>::<span class='ident'>Partial</span>) <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>PartialHeaders</span>),
+                    <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>From</span>::<span class='ident'>from</span>(<span class='ident'>err</span>)),
                 }
             },
-            <span class='ident'>State</span>::<span class='ident'>CapturingValue</span> <span class='op'>=&gt;</span> {
-                <span class='ident'>buf</span>.<span class='ident'>truncate</span>(<span class='number'>0</span>);
-                <span class='kw'>let</span> _ <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>stream_until_token</span>( <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>crlf_boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span> ) );
-
-                <span class='kw'>let</span> <span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDispositionFormData</span> <span class='op'>=</span> <span class='ident'>headers</span>.<span class='ident'>get</span>().<span class='ident'>unwrap</span>();
-
-                <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>cd</span>.<span class='ident'>name</span> {
-                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>),
-                    <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>name</span>.<span class='ident'>clone</span>()
-                };
-                <span class='kw'>let</span> <span class='ident'>value</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>String</span>::<span class='ident'>from_utf8</span>(<span class='ident'>buf</span>) );
-
-                <span class='ident'>parameters</span>.<span class='ident'>push</span>( (<span class='ident'>key</span>,<span class='ident'>value</span>) );
-
-                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>State</span>::<span class='ident'>ReadingHeaders</span>;
+            <span class='ident'>CapturingMixed</span>(<span class='ident'>cd</span>, <span class='ident'>ct</span>) <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_boundary_token</span>(<span class='kw-2'>&amp;</span>(<span class='ident'>ct</span>.<span class='number'>0</span>).<span class='number'>2</span>));
+                <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>Mixed</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd</span>.<span class='ident'>name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>)));
+                <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>run_state_machine</span>(<span class='ident'>boundary</span>, <span class='ident'>reader</span>, <span class='ident'>form_data</span>, <span class='ident'>mode</span>));
+                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>Discarding</span>;
             },
-            <span class='ident'>State</span>::<span class='ident'>CapturingFile</span> <span class='op'>=&gt;</span> {
-                <span class='comment'>// Setup a file to capture the contents</span>
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>temp</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>TempDir</span>::<span class='ident'>new</span>(<span class='string'>&quot;formdata&quot;</span>) ).<span class='ident'>into_path</span>();
-                <span class='ident'>temp</span>.<span class='ident'>push</span>( <span class='ident'>TextNonce</span>::<span class='ident'>sized_urlsafe</span>(<span class='number'>32</span>).<span class='ident'>unwrap</span>().<span class='ident'>into_string</span>() );
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>tmpfile</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>File</span>::<span class='ident'>create</span>(<span class='ident'>temp</span>.<span class='ident'>clone</span>()) );
+            <span class='ident'>CapturingValue</span>(_) <span class='kw'>if</span> <span class='ident'>mode</span> <span class='op'>!=</span> <span class='ident'>FormData</span> <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>(),
+            <span class='ident'>CapturingValue</span>(<span class='ident'>cd</span>) <span class='op'>=&gt;</span> {
+                <span class='ident'>buf</span>.<span class='ident'>truncate</span>(<span class='number'>0</span>);
+                <span class='kw'>let</span> _ <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='kw-2'>&amp;</span><span class='ident'>crlf_boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span>));
 
-                <span class='comment'>// Stream out the file</span>
-                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>( <span class='ident'>r</span>.<span class='ident'>stream_until_token</span>( <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>crlf_boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>tmpfile</span> ) );
+                <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd</span>.<span class='ident'>name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>));
+                <span class='kw'>let</span> <span class='ident'>val</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>String</span>::<span class='ident'>from_utf8</span>(<span class='ident'>buf</span>));
 
-                <span class='kw'>let</span> <span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDispositionFormData</span> <span class='op'>=</span> <span class='ident'>headers</span>.<span class='ident'>get</span>().<span class='ident'>unwrap</span>();
-                <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>cd</span>.<span class='ident'>name</span> {
-                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>),
-                    <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>name</span>.<span class='ident'>clone</span>()
+                <span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>push</span>((<span class='ident'>key</span>, <span class='ident'>val</span>));
+
+                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>ReadingHeaders</span>;
+            },
+            <span class='ident'>CapturingFile</span>(<span class='ident'>cd</span>, <span class='ident'>ct</span>) <span class='op'>=&gt;</span> {
+                <span class='comment'>// Setup a file to capture the contents.</span>
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>TempDir</span>::<span class='ident'>new</span>(<span class='string'>&quot;formdata&quot;</span>)).<span class='ident'>into_path</span>();
+                <span class='ident'>path</span>.<span class='ident'>push</span>(<span class='ident'>TextNonce</span>::<span class='ident'>sized_urlsafe</span>(<span class='number'>32</span>).<span class='ident'>unwrap</span>().<span class='ident'>into_string</span>());
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>File</span>::<span class='ident'>create</span>(<span class='ident'>path</span>.<span class='ident'>clone</span>()));
+
+                <span class='comment'>// Stream out the file.</span>
+                <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='kw-2'>&amp;</span><span class='ident'>crlf_boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>file</span>));
+
+                <span class='comment'>// TODO: Handle Content-Transfer-Encoding.</span>
+
+                <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>mode</span> {
+                    <span class='ident'>Mixed</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>name</span>.<span class='ident'>clone</span>(),
+                    <span class='ident'>FormData</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd</span>.<span class='ident'>name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>)),
                 };
 
-                <span class='kw'>let</span> <span class='ident'>content_type</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span>.<span class='ident'>get</span>::<span class='op'>&lt;</span><span class='ident'>ContentType</span><span class='op'>&gt;</span>() {
-                    <span class='prelude-val'>Some</span>(<span class='ident'>ct</span>) <span class='op'>=&gt;</span> (<span class='op'>*</span><span class='op'>*</span><span class='ident'>ct</span>).<span class='ident'>clone</span>(),
-                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>)
-                };
-
-                <span class='comment'>// FIXME: handle content-type: multipart/mixed as multiple files</span>
-                <span class='comment'>// FIXME: handle content-transfer-encoding</span>
-
-                <span class='kw'>let</span> <span class='ident'>ufile</span> <span class='op'>=</span> <span class='ident'>UploadedFile</span> {
-                    <span class='ident'>path</span>: <span class='ident'>temp</span>,
+                <span class='kw'>let</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>UploadedFile</span> {
+                    <span class='ident'>path</span>: <span class='ident'>path</span>,
                     <span class='ident'>filename</span>: <span class='ident'>cd</span>.<span class='ident'>filename</span>.<span class='ident'>clone</span>(),
-                    <span class='ident'>content_type</span>: <span class='ident'>content_type</span>,
+                    <span class='ident'>content_type</span>: <span class='ident'>ct</span>.<span class='ident'>map_or</span>(<span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>), <span class='op'>|</span><span class='ident'>ct</span><span class='op'>|</span> <span class='ident'>ct</span>.<span class='number'>0</span>),
                     <span class='ident'>size</span>: <span class='ident'>read</span> <span class='op'>-</span> <span class='ident'>crlf_boundary</span>.<span class='ident'>len</span>()
                 };
-                <span class='ident'>files</span>.<span class='ident'>push</span>( (<span class='ident'>key</span>,<span class='ident'>ufile</span>) );
 
-                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>State</span>::<span class='ident'>ReadingHeaders</span>;
+                <span class='ident'>form_data</span>.<span class='ident'>files</span>.<span class='ident'>push</span>((<span class='ident'>key</span>, <span class='ident'>file</span>));
+                <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>ReadingHeaders</span>;
             },
         }
     }
 }
 
-<span class='kw'>fn</span> <span class='ident'>get_boundary</span>(<span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='ident'>Request</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>,<span class='ident'>Error</span><span class='op'>&gt;</span>
-{
-    <span class='comment'>// Verify that the request is &#39;content-type: multipart/form-data&#39;</span>
-    <span class='kw'>let</span> <span class='ident'>content_type</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentType</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>request</span>.<span class='ident'>headers</span>().<span class='ident'>get</span>() {
-        <span class='prelude-val'>Some</span>(<span class='ident'>h</span>) <span class='op'>=&gt;</span> <span class='ident'>h</span>,
+<span class='kw'>fn</span> <span class='ident'>is_multipart_mixed</span>(<span class='ident'>ct</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>ContentType</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+    <span class='kw'>let</span> <span class='ident'>ct</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>ct</span> {
+        <span class='prelude-val'>Some</span>(<span class='ident'>ct</span>) <span class='op'>=&gt;</span> <span class='ident'>ct</span>,
+        <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='boolval'>false</span>,
+    };
+
+    <span class='kw'>let</span> <span class='ident'>ContentType</span>(<span class='kw-2'>ref</span> <span class='ident'>mime</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>ct</span>;
+    <span class='kw'>let</span> <span class='ident'>Mime</span>(<span class='kw-2'>ref</span> <span class='ident'>top_level</span>, <span class='kw-2'>ref</span> <span class='ident'>sub_level</span>, _) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>mime</span>;
+
+    <span class='kw'>if</span> <span class='op'>*</span><span class='ident'>top_level</span> <span class='op'>!=</span> <span class='ident'>TopLevel</span>::<span class='ident'>Multipart</span> {
+        <span class='kw'>return</span> <span class='boolval'>false</span>;
+    }
+
+    <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>sub_level</span> {
+        <span class='ident'>SubLevel</span>::<span class='ident'>Ext</span>(<span class='kw-2'>ref</span> <span class='ident'>ext</span>) <span class='op'>=&gt;</span> <span class='ident'>ext</span> <span class='op'>==</span> <span class='string'>&quot;mixed&quot;</span>,
+        _ <span class='op'>=&gt;</span> <span class='boolval'>false</span>,
+    }
+}
+
+<span class='kw'>fn</span> <span class='ident'>get_boundary</span>(<span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='ident'>Request</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
+    <span class='comment'>// Verify that the request is &#39;Content-Type: multipart/form-data&#39;.</span>
+    <span class='kw'>let</span> <span class='ident'>ct</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentType</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>request</span>.<span class='ident'>headers</span>().<span class='ident'>get</span>() {
+        <span class='prelude-val'>Some</span>(<span class='ident'>ct</span>) <span class='op'>=&gt;</span> <span class='ident'>ct</span>,
         <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NoRequestContentType</span>),
     };
-    <span class='kw'>let</span> <span class='ident'>ContentType</span>(<span class='kw-2'>ref</span> <span class='ident'>mime</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>content_type</span>;
+    <span class='kw'>let</span> <span class='ident'>ContentType</span>(<span class='kw-2'>ref</span> <span class='ident'>mime</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>ct</span>;
     <span class='kw'>let</span> <span class='ident'>Mime</span>(<span class='kw-2'>ref</span> <span class='ident'>top_level</span>, <span class='kw-2'>ref</span> <span class='ident'>sub_level</span>, <span class='kw-2'>ref</span> <span class='ident'>params</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>mime</span>;
+
     <span class='kw'>if</span> <span class='op'>*</span><span class='ident'>top_level</span> <span class='op'>!=</span> <span class='ident'>TopLevel</span>::<span class='ident'>Multipart</span> {
         <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NotMultipart</span>);
     }
+
     <span class='kw'>if</span> <span class='op'>*</span><span class='ident'>sub_level</span> <span class='op'>!=</span> <span class='ident'>SubLevel</span>::<span class='ident'>FormData</span> {
         <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NotFormData</span>);
     }
 
-    <span class='comment'>// Get the boundary token</span>
-    <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>attr</span>,<span class='kw-2'>ref</span> <span class='ident'>value</span>) <span class='kw'>in</span> <span class='ident'>params</span>.<span class='ident'>iter</span>() {
-        <span class='kw'>match</span> (<span class='ident'>attr</span>,<span class='ident'>value</span>) {
-            (<span class='kw-2'>&amp;</span><span class='ident'>Attr</span>::<span class='ident'>Boundary</span>, <span class='kw-2'>&amp;</span><span class='ident'>Value</span>::<span class='ident'>Ext</span>(<span class='kw-2'>ref</span> <span class='ident'>v</span>)) <span class='op'>=&gt;</span> {
-                <span class='kw'>return</span> <span class='prelude-val'>Ok</span>( <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;--{}&quot;</span>,<span class='ident'>v</span>.<span class='ident'>clone</span>()) )
-            }
-            _ <span class='op'>=&gt;</span> {}
-        }
-    }
-    <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>BoundaryNotSpecified</span>)
-
+    <span class='ident'>get_boundary_token</span>(<span class='ident'>params</span>)
 }
 
-<span class='doccomment'>/// A wrapper trait for `hyper::server::Request` data to provide parsing multipart requests to any</span>
-<span class='doccomment'>/// front-end that provides a `hyper::header::Headers` and a `std::io::Read` of the request&#39;s</span>
-<span class='doccomment'>/// entire body.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Request</span>: <span class='ident'>Read</span> {
-    <span class='doccomment'>/// Returns a reference to the request&#39;s Hyper headers.</span>
+<span class='kw'>fn</span> <span class='ident'>get_boundary_token</span>(<span class='ident'>params</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>Param</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>attr</span>, <span class='kw-2'>ref</span> <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>params</span>.<span class='ident'>iter</span>() {
+        <span class='kw'>if</span> <span class='kw'>let</span> (<span class='kw-2'>&amp;</span><span class='ident'>Attr</span>::<span class='ident'>Boundary</span>, <span class='kw-2'>&amp;</span><span class='ident'>Value</span>::<span class='ident'>Ext</span>(<span class='kw-2'>ref</span> <span class='ident'>val</span>)) <span class='op'>=</span> (<span class='ident'>attr</span>, <span class='ident'>val</span>) {
+            <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(<span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;--{}&quot;</span>, <span class='ident'>val</span>.<span class='ident'>clone</span>()));
+        }
+    }
+
+    <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>BoundaryNotSpecified</span>)
+}
+
+<span class='kw'>fn</span> <span class='ident'>crlf_boundary</span>(<span class='ident'>boundary</span>: <span class='kw-2'>&amp;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>crlf_boundary</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='number'>2</span> <span class='op'>+</span> <span class='ident'>boundary</span>.<span class='ident'>len</span>());
+    <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>));
+    <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='ident'>boundary</span>.<span class='ident'>clone</span>());
+    <span class='ident'>crlf_boundary</span>
+}
+
+<span class='doccomment'>/// A wrapper for request data to provide parsing multipart requests to any front-end that provides</span>
+<span class='doccomment'>/// a `hyper::header::Headers` and a `std::io::Read` of the request&#39;s entire body.</span>
+<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Request</span> {
+    <span class='doccomment'>/// Returns a reference to the request&#39;s headers.</span>
     <span class='kw'>fn</span> <span class='ident'>headers</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>Headers</span>;
+
+    <span class='doccomment'>/// Returns a mutable reference to the request&#39;s body reader.</span>
+    <span class='kw'>fn</span> <span class='ident'>read_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Read</span>;
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> <span class='ident'>Request</span> <span class='kw'>for</span> <span class='ident'>HyperRequest</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> {
     <span class='kw'>fn</span> <span class='ident'>headers</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>Headers</span> {
         <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>headers</span>
     }
+
+    <span class='kw'>fn</span> <span class='ident'>read_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Read</span> {
+        <span class='self'>self</span>
+    }
 }
 
-<span class='attribute'>#[<span class='ident'>test</span>]</span>
-<span class='kw'>fn</span> <span class='ident'>test1</span>() {
-    <span class='kw'>use</span> <span class='ident'>mock</span>::<span class='ident'>MockStream</span>;
-    <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>net</span>::<span class='ident'>NetworkStream</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
+<span class='kw'>mod</span> <span class='ident'>tests</span> {
+    <span class='kw'>use</span> <span class='ident'>super</span>::<span class='op'>*</span>;
+
+    <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::<span class='ident'>SocketAddr</span>;
+
     <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>buffer</span>::<span class='ident'>BufReader</span>;
+    <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>net</span>::<span class='ident'>NetworkStream</span>;
+    <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Request</span> <span class='kw'>as</span> <span class='ident'>HyperRequest</span>;
 
-    <span class='kw'>let</span> <span class='ident'>input</span><span class='op'>=</span><span class='string'>b&quot;POST / HTTP/1.1\r\n\
-                Host: example.domain\r\n\
-                Content-Type: multipart/form-data; boundary=\&quot;abcdefg\&quot;\r\n\
-                Content-Length: 217\r\n\
-                \r\n\
-                --abcdefg\r\n\
-                Content-Disposition: form-data; name=\&quot;field1\&quot;\r\n\
-                \r\n\
-                data1\r\n\
-                --abcdefg\r\n\
-                Content-Disposition: form-data; name=\&quot;field2\&quot;; filename=\&quot;image.gif\&quot;\r\n\
-                Content-Type: image/gif\r\n\
-                \r\n\
-                This is a file\r\n\
-                with two lines\r\n\
-                --abcdefg\r\n\
-                Content-Disposition: form-data; name=\&quot;field3\&quot;; filename=\&quot;file.txt\&quot;\r\n\
-                \r\n\
-                This is a file\r\n\
-                --abcdefg--&quot;</span>;
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>mock</span> <span class='op'>=</span> <span class='ident'>MockStream</span>::<span class='ident'>with_input</span>(<span class='ident'>input</span>);
+    <span class='kw'>use</span> <span class='ident'>mock</span>::<span class='ident'>MockStream</span>;
 
-    <span class='kw'>let</span> <span class='ident'>mock</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>NetworkStream</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>mock</span>;
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>mock</span>);
-    <span class='kw'>let</span> <span class='ident'>sock</span>: <span class='ident'>SocketAddr</span> <span class='op'>=</span> <span class='string'>&quot;127.0.0.1:80&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>();
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>parser</span>() {
+        <span class='kw'>let</span> <span class='ident'>input</span> <span class='op'>=</span> <span class='string'>b&quot;POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=\&quot;abcdefg\&quot;\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\&quot;field1\&quot;\r\n\
+                      \r\n\
+                      data1\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\&quot;field2\&quot;; filename=\&quot;image.gif\&quot;\r\n\
+                      Content-Type: image/gif\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      with two lines\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\&quot;field3\&quot;; filename=\&quot;file.txt\&quot;\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      --abcdefg--&quot;</span>;
 
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>req</span> <span class='op'>=</span> <span class='ident'>HyperRequest</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='ident'>sock</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>mock</span> <span class='op'>=</span> <span class='ident'>MockStream</span>::<span class='ident'>with_input</span>(<span class='ident'>input</span>);
 
-    <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>) {
-        <span class='prelude-val'>Ok</span>((<span class='ident'>fields</span>,<span class='ident'>files</span>)) <span class='op'>=&gt;</span> {
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>fields</span>.<span class='ident'>len</span>(),<span class='number'>1</span>);
-            <span class='kw'>for</span> (<span class='ident'>k</span>,<span class='ident'>v</span>) <span class='kw'>in</span> <span class='ident'>fields</span> {
-                <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>k</span><span class='op'>==</span><span class='string'>&quot;field1&quot;</span> { <span class='macro'>assert_eq</span><span class='macro'>!</span>( <span class='kw-2'>&amp;</span><span class='ident'>v</span>, <span class='string'>&quot;data1&quot;</span> ) }
-            }
-            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>files</span>.<span class='ident'>len</span>(),<span class='number'>2</span>);
-            <span class='kw'>for</span> (<span class='ident'>k</span>,<span class='ident'>file</span>) <span class='kw'>in</span> <span class='ident'>files</span> {
-                <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>k</span><span class='op'>==</span><span class='string'>&quot;field2&quot;</span> {
-                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>30</span>);
-                    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>is_some</span>());
-                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>unwrap</span>(), <span class='string'>&quot;image.gif&quot;</span>);
-                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Image</span><span class='op'>/</span><span class='ident'>Gif</span>));
-                } <span class='kw'>else</span> <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>k</span><span class='op'>==</span><span class='string'>&quot;field3&quot;</span> {
-                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>14</span>);
-                    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>is_some</span>());
-                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>unwrap</span>(), <span class='string'>&quot;file.txt&quot;</span>);
-                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>));
+        <span class='kw'>let</span> <span class='ident'>mock</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>NetworkStream</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>mock</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>mock</span>);
+        <span class='kw'>let</span> <span class='ident'>sock</span>: <span class='ident'>SocketAddr</span> <span class='op'>=</span> <span class='string'>&quot;127.0.0.1:80&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>req</span> <span class='op'>=</span> <span class='ident'>HyperRequest</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='ident'>sock</span>).<span class='ident'>unwrap</span>();
+
+        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>) {
+            <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>) <span class='op'>=&gt;</span> {
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>len</span>(), <span class='number'>1</span>);
+                <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>fields</span> {
+                    <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>key</span> <span class='op'>==</span> <span class='string'>&quot;field1&quot;</span> {
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>val</span>, <span class='string'>&quot;data1&quot;</span>);
+                    }
                 }
-            }
 
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>files</span>.<span class='ident'>len</span>(), <span class='number'>2</span>);
+                <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>file</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>files</span> {
+                    <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>key</span> <span class='op'>==</span> <span class='string'>&quot;field2&quot;</span> {
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>30</span>);
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>unwrap</span>(), <span class='string'>&quot;image.gif&quot;</span>);
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Image</span><span class='op'>/</span><span class='ident'>Gif</span>));
+                    } <span class='kw'>else</span> <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>key</span> <span class='op'>==</span> <span class='string'>&quot;field3&quot;</span> {
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>14</span>);
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>unwrap</span>(), <span class='string'>&quot;file.txt&quot;</span>);
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>));
+                    }
+                }
+            },
+            <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>err</span>),
         }
-        <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> {
-            <span class='kw'>let</span> <span class='ident'>msg</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;FAILED ON: {:?}&quot;</span>,<span class='ident'>e</span>);
-            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='boolval'>false</span>, <span class='ident'>msg</span>);
+    }
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>mixed_parser</span>() {
+        <span class='kw'>let</span> <span class='ident'>input</span> <span class='op'>=</span> <span class='string'>b&quot;POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=AaB03x\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --AaB03x\r\n\
+                      Content-Disposition: form-data; name=\&quot;submit-name\&quot;\r\n\
+                      \r\n\
+                      Larry\r\n\
+                      --AaB03x\r\n\
+                      Content-Disposition: form-data; name=\&quot;files\&quot;\r\n\
+                      Content-Type: multipart/mixed; boundary=BbC04y\r\n\
+                      \r\n\
+                      --BbC04y\r\n\
+                      Content-Disposition: file; filename=\&quot;file1.txt\&quot;\r\n\
+                      \r\n\
+                      ... contents of file1.txt ...\r\n\
+                      --BbC04y\r\n\
+                      Content-Disposition: file; filename=\&quot;awesome_image.gif\&quot;\r\n\
+                      Content-Type: image/gif\r\n\
+                      Content-Transfer-Encoding: binary\r\n\
+                      \r\n\
+                      ... contents of awesome_image.gif ...\r\n\
+                      --BbC04y--\r\n\
+                      --AaB03x--&quot;</span>;
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>mock</span> <span class='op'>=</span> <span class='ident'>MockStream</span>::<span class='ident'>with_input</span>(<span class='ident'>input</span>);
+
+        <span class='kw'>let</span> <span class='ident'>mock</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>NetworkStream</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>mock</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>mock</span>);
+        <span class='kw'>let</span> <span class='ident'>sock</span>: <span class='ident'>SocketAddr</span> <span class='op'>=</span> <span class='string'>&quot;127.0.0.1:80&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>req</span> <span class='op'>=</span> <span class='ident'>HyperRequest</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='ident'>sock</span>).<span class='ident'>unwrap</span>();
+
+        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>) {
+            <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>) <span class='op'>=&gt;</span> {
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>len</span>(), <span class='number'>1</span>);
+                <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>fields</span> {
+                    <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>key</span> <span class='op'>==</span> <span class='string'>&quot;submit-name&quot;</span> {
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>val</span>, <span class='string'>&quot;Larry&quot;</span>);
+                    }
+                }
+
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>files</span>.<span class='ident'>len</span>(), <span class='number'>2</span>);
+                <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>file</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>files</span> {
+                    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>key</span>, <span class='string'>&quot;files&quot;</span>);
+                    <span class='kw'>match</span> <span class='kw-2'>&amp;</span><span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>unwrap</span>()[..] {
+                        <span class='string'>&quot;file1.txt&quot;</span> <span class='op'>=&gt;</span> {
+                            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>29</span>);
+                            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>));
+                        }
+                        <span class='string'>&quot;awesome_image.gif&quot;</span> <span class='op'>=&gt;</span> {
+                            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>37</span>);
+                            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Image</span><span class='op'>/</span><span class='ident'>Gif</span>));
+                        },
+                        _ <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>(),
+                    }
+                }
+            },
+            <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>err</span>),
         }
     }
 }
