@@ -9,6 +9,7 @@ extern crate httparse;
 extern crate libc;
 extern crate tempdir;
 extern crate textnonce;
+#[macro_use] extern crate log;
 
 #[cfg(test)]
 mod mock;
@@ -136,7 +137,7 @@ pub fn parse_multipart(
                         };
                     },
                     Ok(httparse::Status::Partial) => {
-                        println!("Header Parsing was Partial");
+                        error!("Header Parsing was Partial");
                         return Err(Error::PartialHeaders);
                     },
                     Err(e) => return Err( From::from(e) ),
