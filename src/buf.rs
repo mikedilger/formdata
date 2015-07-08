@@ -69,18 +69,20 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(r: &mut R, token: &[u8], mu
                     },
                     None => {
                         // Check for partial matches at the end of the buffer
-                        partial = if available.len() > token.len() - 1 {
-                            match (1..(token.len()-1))
-                                .rev()
-                                .filter(|&width| {
-                                    token[..width] == available[available.len() - width..]
-                                })
-                                .next()
-                            {
-                                Some(width) => width,
-                                None => 0
-                            }
-                        } else { 0 };
+                        let mut window = token.len() - 1;
+                        if available.len() < window { window = available.len(); }
+
+                        partial = match (1..window+1)
+                            .rev()
+                            .filter(|&width| {
+                                token[..width] == available[available.len() - width..]
+                            })
+                            .next()
+                        {
+                            Some(width) => width,
+                            None => 0
+                        };
+
                         // Push all except the partial token at the end (if any)
                         try!( out.write_all(&available[..available.len()-partial]) );
                         (false, available.len()) // But mark it all consumed
