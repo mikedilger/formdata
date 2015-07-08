@@ -150,4 +150,24 @@ mod tests {
         assert_eq!(buf.stream_until_token(b"TOKEN", &mut v).unwrap(), 22);
         assert_eq!(v, b"12345TOKE23456781");
     }
+
+    #[test]
+    fn stream_until_token_large_token_test() {
+        let cursor = Cursor::new(&b"IAMALARGETOKEN7812345678"[..]);
+        let mut buf = BufReader::with_capacity(8, cursor);
+        let mut v: Vec<u8> = Vec::new();
+        assert_eq!(buf.stream_until_token(b"IAMALARGETOKEN", &mut v).unwrap(), 14);
+        assert_eq!(v, b"");
+        assert_eq!(buf.stream_until_token(b"IAMALARGETOKEN", &mut v).unwrap(), 10);
+        assert_eq!(v, b"7812345678");
+
+        let cursor = Cursor::new(&b"0IAMALARGERTOKEN12345678"[..]);
+        let mut buf = BufReader::with_capacity(8, cursor);
+        let mut v: Vec<u8> = Vec::new();
+        assert_eq!(buf.stream_until_token(b"IAMALARGERTOKEN", &mut v).unwrap(), 16);
+        assert_eq!(v, b"0");
+        v.truncate(0);
+        assert_eq!(buf.stream_until_token(b"IAMALARGERTOKEN", &mut v).unwrap(), 8);
+        assert_eq!(v, b"12345678");
+    }
 }
