@@ -31,12 +31,14 @@ impl<T: BufRead> BufReadPlus for T {}
 fn stream_until_token<R: BufRead + ?Sized, W: Write>(r: &mut R, token: &[u8], mut out: &mut W)
                                                      -> Result<usize> {
     let mut read = 0;
+
     // Partial represents the size of a token prefix found at the end of a buffer,
     // usually 0.  If not zero, the beginning of the next buffer is checked for the
     // suffix to find matches that straddle two buffers
     let mut partial: usize = 0;
+
     loop {
-        let (done,used) = {
+        let (found,used) = {
             let available = match r.fill_buf() {
                 Ok(n) => n,
                 Err(ref e) if e.kind() == ErrorKind::Interrupted => continue,
@@ -88,7 +90,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(r: &mut R, token: &[u8], mu
         };
         r.consume(used);
         read += used;
-        if done || used == 0 {
+        if found || used == 0 {
             return Ok(read);
         }
     }
