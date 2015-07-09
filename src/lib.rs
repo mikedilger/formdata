@@ -29,7 +29,7 @@ use mime::{Attr, Mime, Param, SubLevel, TopLevel, Value};
 use tempdir::TempDir;
 use textnonce::TextNonce;
 
-use buf::BufReadPlus;
+use buf::BufReadExt;
 pub use error::Error;
 use headers::ContentDisposition;
 

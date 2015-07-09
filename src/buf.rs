@@ -1,7 +1,7 @@
 use std::io::{BufRead, ErrorKind, Result, Write};
 
 /// Extends any type that implements BufRead with a stream_until_token() function.
-pub trait BufReadPlus: BufRead {
+pub trait BufReadExt: BufRead {
     /// Streams all bytes to `out` until the `token` delimiter is reached.
     ///
     /// This function will continue to read (and stream) bytes from the underlying stream until the
@@ -22,8 +22,8 @@ pub trait BufReadPlus: BufRead {
     }
 }
 
-// Implement BufReadPlus for everything that implements BufRead.
-impl<T: BufRead> BufReadPlus for T { }
+// Implement BufReadExt for everything that implements BufRead.
+impl<T: BufRead> BufReadExt for T { }
 
 fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8], mut out: &mut W)
                                                      -> Result<usize> {
