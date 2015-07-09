@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/mikedilger/formdata.svg?branch=master)](https://travis-ci.org/mikedilger/formdata)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![crates.io](http://meritbadge.herokuapp.com/formdata)](https://crates.io/crates/formdata)
 
 Documentation is available at https://mikedilger.github.io/formdata
 
