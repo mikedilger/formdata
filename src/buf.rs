@@ -35,7 +35,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
 
     loop {
         let (found, used) = {
-            let available = match stream.fill_buf() {
+            let buffer = match stream.fill_buf() {
                 Ok(n) => n,
                 Err(ref err) if err.kind() == ErrorKind::Interrupted => continue,
                 Err(err) => return Err(err)
@@ -43,7 +43,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
 
             // If last buffer ended in a token prefix, check if this one starts with the matching
             // suffix.
-            if partial > 0 && available[..token.len() - partial] == token[partial..] {
+            if partial > 0 && buffer[..token.len() - partial] == token[partial..] {
                 (true, token.len() - partial)
             } else {
                 if partial > 0 {
@@ -52,7 +52,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
                     try!( out.write_all(&token[..partial]) );
                 }
 
-                let index = available
+                let index = buffer
                     .windows(token.len())
                     .enumerate()
                     .filter(|&(_, t)| t == token)
@@ -62,26 +62,26 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
                 // Search for the token.
                 match index {
                     Some(index) => {
-                        try!(out.write_all(&available[..index]));
+                        try!(out.write_all(&buffer[..index]));
                         (true, index + token.len())
                     },
                     None => {
                         // Check for partial matches at the end of the buffer
                         let mut window = token.len() - 1;
-                        if available.len() < window {
-                            window = available.len();
+                        if buffer.len() < window {
+                            window = buffer.len();
                         }
 
                         partial = (1..window+1)
                             .rev()
-                            .filter(|&w| token[..w] == available[available.len() - w..])
+                            .filter(|&w| token[..w] == buffer[buffer.len() - w..])
                             .next()
                             .unwrap_or(0);
 
                         // Push all except the partial token at the end (if any)
-                        try!(out.write_all(&available[..available.len()-partial]));
+                        try!(out.write_all(&buffer[..buffer.len()-partial]));
                         // Mark it all as consumed.
-                        (false, available.len())
+                        (false, buffer.len())
                     }
                 }
             }
