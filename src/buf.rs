@@ -28,64 +28,108 @@ impl<T: BufRead> BufReadExt for T { }
 fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8], mut out: &mut W)
                                                      -> Result<usize> {
     let mut read = 0;
-    // Represents the size of a token prefix found at the end of a buffer, usually 0. If not 0, the
-    // beginning of the next buffer is checked for the suffix to find matches that straddle two
-    // buffers.
-    let mut partial: usize = 0;
+    // Represents the sizes of possible token prefixes found at the end of the last buffer, usually
+    // empty. If not empty, the beginning of this buffer is checked for the matching suffixes to
+    // to find tokens that straddle two buffers. Entries should be in longest prefix to shortest
+    // prefix order.
+    let mut prefix_lengths: Vec<usize> = Vec::new();
 
+    'stream:
     loop {
-        let (found, used) = {
+        let mut found = false;
+        let mut used: usize = 0;
+
+        // This is not actually meant to repeat, we only need the break functionality of a loop.
+        // The reader is encouraged to try their hand at coding this better, noting that buffer must
+        // drop out of scope before stream can be used again.
+        let mut do_once = true;
+        'buffer:
+        while do_once {
+            do_once = false;
+
+            // Fill the buffer (without consuming)
             let buffer = match stream.fill_buf() {
                 Ok(n) => n,
                 Err(ref err) if err.kind() == ErrorKind::Interrupted => continue,
                 Err(err) => return Err(err)
             };
+            if buffer.len() == 0 {
+                break 'stream;
+            }
 
-            // If last buffer ended in a token prefix, check if this one starts with the matching
-            // suffix.
-            if partial > 0 && buffer[..token.len() - partial] == token[partial..] {
-                (true, token.len() - partial)
-            } else {
-                if partial > 0 {
-                    // Last buffer ended in a token prefix, but it didn't pan out, so we need to
-                    // push it along.
-                    try!( out.write_all(&token[..partial]) );
-                }
+            // If the buffer starts with a token suffix matching a token prefix from the end of the
+            // previous buffer, then we have found a token.
+            if prefix_lengths.len() > 0 {
+                let largest_prefix_len = prefix_lengths[0];
 
-                let index = buffer
-                    .windows(token.len())
-                    .enumerate()
-                    .filter(|&(_, t)| t == token)
-                    .map(|(i, _)| i)
-                    .next();
+                // FIXME: once Vec::drain() stabilizes, use that instead
+                let drain = prefix_lengths.clone();
+                prefix_lengths.truncate(0);
 
-                // Search for the token.
-                match index {
-                    Some(index) => {
-                        try!(out.write_all(&buffer[..index]));
-                        (true, index + token.len())
-                    },
-                    None => {
-                        // Check for partial matches at the end of the buffer
-                        let mut window = token.len() - 1;
-                        if buffer.len() < window {
-                            window = buffer.len();
+                let mut partmatch = false;
+                for &prefix_len in drain.iter() {
+                    // If the buffer is too small to fit an entire suffix
+                    if buffer.len() < token.len() - prefix_len {
+                        if buffer[..] == token[prefix_len..prefix_len + buffer.len()] {
+                            // that prefix just got bigger and needs to be preserved
+                            prefix_lengths.push(prefix_len + buffer.len());
+                            partmatch = true;
                         }
-
-                        partial = (1..window+1)
-                            .rev()
-                            .filter(|&w| token[..w] == buffer[buffer.len() - w..])
-                            .next()
-                            .unwrap_or(0);
-
-                        // Push all except the partial token at the end (if any)
-                        try!(out.write_all(&buffer[..buffer.len()-partial]));
-                        // Mark it all as consumed.
-                        (false, buffer.len())
+                    } else {
+                        if buffer[..token.len() - prefix_len] == token[prefix_len..] {
+                            try!(out.write_all(&token[..largest_prefix_len - prefix_len]));
+                            found = true;
+                            used = token.len() - prefix_len;
+                            break 'buffer;
+                        }
                     }
                 }
+
+                if ! partmatch {
+                    // No prefix matched, so we should write the largest prefix length, since we
+                    // didn't write it when we first saw it
+                    try!(out.write_all(&token[..largest_prefix_len]));
+                }
             }
-        };
+
+            // Get the index index of the first token in the middle of the buffer, if any
+            let index = buffer
+                .windows(token.len())
+                .enumerate()
+                .filter(|&(_, t)| t == token)
+                .map(|(i, _)| i)
+                .next();
+
+            if let Some(index) = index {
+                try!(out.write_all(&buffer[..index]));
+                found = true;
+                used = index + token.len();
+                break 'buffer;
+            }
+
+            // Check for token prefixes at the end of the buffer.
+            let mut window = token.len() - 1;
+            if buffer.len() < window {
+                window = buffer.len();
+            }
+            // Remember the largest prefix for writing later if it didn't match
+            let mut reserve = if prefix_lengths.len() > 0 {
+                buffer.len()
+            } else {
+                0
+            };
+            for prefix in (1..window+1).rev()
+                .filter(|&w| token[..w] == buffer[buffer.len() - w..])
+            {
+                if reserve == 0 {
+                    reserve = prefix;
+                }
+                prefix_lengths.push(prefix)
+            }
+
+            try!(out.write_all(&buffer[..buffer.len()-reserve]));
+            used = buffer.len();
+        }
 
         stream.consume(used);
         read += used;
