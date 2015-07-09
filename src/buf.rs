@@ -154,6 +154,7 @@ mod tests {
         assert_eq!(result, b"12345TOKE23456781");
     }
 
+    // This tests against github issue #1
     #[test]
     fn stream_until_token_large_token_test() {
         let cursor = Cursor::new(&b"IAMALARGETOKEN7812345678"[..]);
@@ -172,5 +173,34 @@ mod tests {
         v.truncate(0);
         assert_eq!(buf.stream_until_token(b"IAMALARGERTOKEN", &mut v).unwrap(), 8);
         assert_eq!(v, b"12345678");
+    }
+
+    // This tests against github issue #11
+    #[test]
+    fn stream_until_token_double_straddle_test() {
+        let cursor = Cursor::new(&b"12345IAMALARGETOKEN4567"[..]);
+        let mut buf = BufReader::with_capacity(8, cursor);
+        let mut v: Vec<u8> = Vec::new();
+        assert_eq!(buf.stream_until_token(b"IAMALARGETOKEN", &mut v).unwrap(), 5+14);
+        assert_eq!(v, b"12345");
+        v.truncate(0);
+        assert_eq!(buf.stream_until_token(b"IAMALARGETOKEN", &mut v).unwrap(), 4);
+        assert_eq!(v, b"4567");
+    }
+
+    // This tests against github issue #12
+    #[test]
+    fn stream_until_token_multiple_prefix_text() {
+        let cursor = Cursor::new(&b"12barbarian4567"[..]);
+        let mut buf = BufReader::with_capacity(8, cursor);
+        let mut v: Vec<u8> = Vec::new();
+        assert_eq!(buf.stream_until_token(b"barbarian", &mut v).unwrap(), 2+9);
+        assert_eq!(v, b"12");
+
+        let cursor = Cursor::new(&b"12barbarbarian7812"[..]);
+        let mut buf = BufReader::with_capacity(8, cursor);
+        let mut v: Vec<u8> = Vec::new();
+        assert_eq!(buf.stream_until_token(b"barbarian", &mut v).unwrap(), 5+9);
+        assert_eq!(v, b"12bar");
     }
 }
