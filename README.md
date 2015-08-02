@@ -16,7 +16,7 @@ uploads.
 ## Example
 
 ```rust
-// request is your `hyper::server::Request` or any type that implements
+// request is your `hyper::server::Request`, `iron::Request` or any type that implements
 // the `formdata::Request` trait
 
 let form_data = try!(parse_multipart(&mut request));

@@ -5,6 +5,7 @@
 
 extern crate httparse;
 extern crate hyper;
+extern crate iron;
 extern crate libc;
 #[macro_use]
 extern crate mime;
@@ -28,6 +29,7 @@ use hyper::server::Request as HyperRequest;
 use mime::{Attr, Mime, Param, SubLevel, TopLevel, Value};
 use tempdir::TempDir;
 use textnonce::TextNonce;
+use iron::Request as IronRequest;
 
 use buf::BufReadExt;
 pub use error::Error;
@@ -308,11 +310,23 @@ impl<'a,'b> Request for HyperRequest<'a,'b> {
     }
 }
 
+impl<'a,'b> Request for IronRequest<'a,'b> {
+    fn headers(&self) -> &Headers {
+        &self.headers
+    }
+
+    fn read_mut(&mut self) -> &mut Read {
+        &mut self.body
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    use std;
     use std::net::SocketAddr;
+    use iron;
 
     use hyper::buffer::BufReader;
     use hyper::net::NetworkStream;
@@ -410,6 +424,139 @@ mod tests {
         let mut stream = BufReader::new(mock);
         let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
         let mut req = HyperRequest::new(&mut stream, sock).unwrap();
+
+        match parse_multipart(&mut req) {
+            Ok(form_data) => {
+                assert_eq!(form_data.fields.len(), 1);
+                for (key, val) in form_data.fields {
+                    if &key == "submit-name" {
+                        assert_eq!(&val, "Larry");
+                    }
+                }
+
+                assert_eq!(form_data.files.len(), 2);
+                for (key, file) in form_data.files {
+                    assert_eq!(&key, "files");
+                    match &file.filename.unwrap()[..] {
+                        "file1.txt" => {
+                            assert_eq!(file.size, 29);
+                            assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
+                        }
+                        "awesome_image.gif" => {
+                            assert_eq!(file.size, 37);
+                            assert_eq!(file.content_type, mime!(Image/Gif));
+                        },
+                        _ => unreachable!(),
+                    }
+                }
+            },
+            Err(err) => panic!("{}", err),
+        }
+    }
+
+    #[test]
+    fn parser_iron() {
+        let input = b"POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=\"abcdefg\"\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field1\"\r\n\
+                      \r\n\
+                      data1\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field2\"; filename=\"image.gif\"\r\n\
+                      Content-Type: image/gif\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      with two lines\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field3\"; filename=\"file.txt\"\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      --abcdefg--";
+
+        let mut mock = MockStream::with_input(input);
+
+        let mock: &mut NetworkStream = &mut mock;
+        let mut stream = BufReader::new(mock);
+        let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
+        let mut _req = HyperRequest::new(&mut stream, sock).unwrap();
+        let mut req = iron::Request::from_http(
+            _req,
+            SocketAddr::V4(
+                std::net::SocketAddrV4::new(std::net::Ipv4Addr::new(127, 0, 0, 1), 11218),
+            ),
+            &iron::Protocol::Http
+        ).unwrap();
+        match parse_multipart(&mut req) {
+            Ok(form_data) => {
+                assert_eq!(form_data.fields.len(), 1);
+                for (key, val) in form_data.fields {
+                    if &key == "field1" {
+                        assert_eq!(&val, "data1");
+                    }
+                }
+
+                assert_eq!(form_data.files.len(), 2);
+                for (key, file) in form_data.files {
+                    if &key == "field2" {
+                        assert_eq!(file.size, 30);
+                        assert_eq!(&file.filename.unwrap(), "image.gif");
+                        assert_eq!(file.content_type, mime!(Image/Gif));
+                    } else if &key == "field3" {
+                        assert_eq!(file.size, 14);
+                        assert_eq!(&file.filename.unwrap(), "file.txt");
+                        assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
+                    }
+                }
+            },
+            Err(err) => panic!("{}", err),
+        }
+    }
+
+    #[test]
+    fn mixed_parser_iron() {
+        let input = b"POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=AaB03x\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --AaB03x\r\n\
+                      Content-Disposition: form-data; name=\"submit-name\"\r\n\
+                      \r\n\
+                      Larry\r\n\
+                      --AaB03x\r\n\
+                      Content-Disposition: form-data; name=\"files\"\r\n\
+                      Content-Type: multipart/mixed; boundary=BbC04y\r\n\
+                      \r\n\
+                      --BbC04y\r\n\
+                      Content-Disposition: file; filename=\"file1.txt\"\r\n\
+                      \r\n\
+                      ... contents of file1.txt ...\r\n\
+                      --BbC04y\r\n\
+                      Content-Disposition: file; filename=\"awesome_image.gif\"\r\n\
+                      Content-Type: image/gif\r\n\
+                      Content-Transfer-Encoding: binary\r\n\
+                      \r\n\
+                      ... contents of awesome_image.gif ...\r\n\
+                      --BbC04y--\r\n\
+                      --AaB03x--";
+
+        let mut mock = MockStream::with_input(input);
+
+        let mock: &mut NetworkStream = &mut mock;
+        let mut stream = BufReader::new(mock);
+        let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
+        let mut _req = HyperRequest::new(&mut stream, sock).unwrap();
+        let mut req = iron::Request::from_http(
+            _req,
+            SocketAddr::V4(
+                std::net::SocketAddrV4::new(std::net::Ipv4Addr::new(127, 0, 0, 1), 12321),
+            ),
+            &iron::Protocol::Http
+        ).unwrap();
 
         match parse_multipart(&mut req) {
             Ok(form_data) => {
