@@ -1,4 +1,4 @@
-//! This crate parses and processes `hyper::server::Request` data that contains
+//! This crate parses and processes a stream of data that contains
 //! `multipart/form-data` content.
 //!
 //! The main entry point is `parse_multipart`
@@ -24,7 +24,6 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Read};
 
 use hyper::header::{ContentType, Headers};
-use hyper::server::Request as HyperRequest;
 use mime::{Attr, Mime, Param, SubLevel, TopLevel, Value};
 use tempdir::TempDir;
 use textnonce::TextNonce;
@@ -68,14 +67,12 @@ impl FormData {
     }
 }
 
-/// Parses and processes `hyper::server::Request` data that is `multipart/form-data` content.
+/// Parses and processes a stream of `multipart/form-data` content.
 ///
 /// The request is streamed, and this function saves embedded uploaded files to disk as they are
 /// encountered by the parser.
-pub fn parse_multipart(request: &mut Request) -> Result<FormData, Error> {
-    let boundary = try!(get_boundary(request));
-    trace!("Boundary is {}", boundary);
-    let mut reader = BufReader::with_capacity(4096, request.read_mut());
+pub fn parse_multipart<S: Read>(stream: &mut S, boundary: String) -> Result<FormData, Error> {
+    let mut reader = BufReader::with_capacity(4096, stream);
     let mut form_data = FormData::new();
     try!(run_state_machine(boundary, &mut reader, &mut form_data, MultipartSubLevel::FormData));
     Ok(form_data)
@@ -251,9 +248,10 @@ fn is_multipart_mixed(ct: Option<&ContentType>) -> bool {
     }
 }
 
-fn get_boundary(request: &Request) -> Result<String, Error> {
+/// Get the `multipart/form-data` boundary string from hyper::Headers
+pub fn get_multipart_boundary(headers: &Headers) -> Result<String, Error> {
     // Verify that the request is 'Content-Type: multipart/form-data'.
-    let ct: &ContentType = match request.headers().get() {
+    let ct: &ContentType = match headers.get() {
         Some(ct) => ct,
         None => return Err(Error::NoRequestContentType),
     };
@@ -286,26 +284,6 @@ fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
     crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
     crlf_boundary.extend(boundary.clone());
     crlf_boundary
-}
-
-/// A wrapper for request data to provide parsing multipart requests to any front-end that provides
-/// a `hyper::header::Headers` and a `std::io::Read` of the request's entire body.
-pub trait Request {
-    /// Returns a reference to the request's headers.
-    fn headers(&self) -> &Headers;
-
-    /// Returns a mutable reference to the request's body reader.
-    fn read_mut(&mut self) -> &mut Read;
-}
-
-impl<'a,'b> Request for HyperRequest<'a,'b> {
-    fn headers(&self) -> &Headers {
-        &self.headers
-    }
-
-    fn read_mut(&mut self) -> &mut Read {
-        self
-    }
 }
 
 #[cfg(test)]
@@ -349,8 +327,9 @@ mod tests {
         let mut stream = BufReader::new(mock);
         let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
         let mut req = HyperRequest::new(&mut stream, sock).unwrap();
+        let boundary = get_multipart_boundary(&req.headers).unwrap();
 
-        match parse_multipart(&mut req) {
+        match parse_multipart(&mut req, boundary) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
                 for (key, val) in form_data.fields {
@@ -410,8 +389,9 @@ mod tests {
         let mut stream = BufReader::new(mock);
         let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
         let mut req = HyperRequest::new(&mut stream, sock).unwrap();
+        let boundary = get_multipart_boundary(&req.headers).unwrap();
 
-        match parse_multipart(&mut req) {
+        match parse_multipart(&mut req, boundary) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
                 for (key, val) in form_data.fields {
