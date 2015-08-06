@@ -16,10 +16,11 @@ uploads.
 ## Example
 
 ```rust
-// request is your `hyper::server::Request` or any type that implements
-// the `formdata::Request` trait
+// `headers` is your `hyper::headers::Headers` from your hyper or iron request.
+// `request` is the readable stream, and can be the hyper or iron request itself.
 
-let form_data = try!(parse_multipart(&mut request));
+let boundary = try!(get_multipart_boundary(&headers));
+let form_data = try!(parse_multipart(&mut request, boundary));
 
 for (name, value) in form_data.fields {
     println!("Posted field name={} value={}",name,value);
