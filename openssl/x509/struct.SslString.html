@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-17101' class='srclink' href='../../src/openssl/x509/mod.rs.html#27-29' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-17112' class='srclink' href='../../src/openssl/x509/mod.rs.html#27-29' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct SslString {
     // some fields omitted
 }</pre><h2 id='deref-methods'>Methods from <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</h2><div class='impl-items'><h4 id='method.len' class='method'><code>fn <a href='#method.len' class='fnname'>len</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
@@ -87,9 +87,7 @@ UTF-8 code point sequence.</p>
 considered to be
 boundaries.</p>
 
-<h1 id="panics" class='section-header'><a
-                           href="#panics">Panics</a></h1>
-<p>Panics if <code>index</code> is greater than <code>self.len()</code>.</p>
+<p>Returns <code>false</code> if <code>index</code> is greater than <code>self.len()</code>.</p>
 
 <h1 id="examples" class='section-header'><a
                            href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
@@ -1089,8 +1087,6 @@ replace it with. If the original <code>&amp;str</code> isn&#39;t found, no chang
 
 <h1 id="examples" class='section-header'><a
                            href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>str_casing</span>)]</span>
-
 <span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='string'>&quot;HELLO&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>to_lowercase</span>(), <span class='string'>&quot;hello&quot;</span>);
 </pre>
@@ -1099,8 +1095,6 @@ replace it with. If the original <code>&amp;str</code> isn&#39;t found, no chang
 
 <h1 id="examples" class='section-header'><a
                            href="#examples">Examples</a></h1><pre class='rust rust-example-rendered'>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>str_casing</span>)]</span>
-
 <span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='string'>&quot;hello&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>s</span>.<span class='ident'>to_uppercase</span>(), <span class='string'>&quot;HELLO&quot;</span>);
 </pre>
@@ -1122,7 +1116,7 @@ replace it with. If the original <code>&amp;str</code> isn&#39;t found, no chang
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -1137,7 +1131,7 @@ replace it with. If the original <code>&amp;str</code> isn&#39;t found, no chang
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

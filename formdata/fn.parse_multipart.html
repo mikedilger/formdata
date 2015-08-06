@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,8 +45,8 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-1884' class='srclink' href='../src/formdata/lib.rs.html#75-82' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn parse_multipart(request: &amp;mut <a class='trait' href='../formdata/trait.Request.html' title='formdata::Request'>Request</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>, <a class='enum' href='../formdata/error/enum.Error.html' title='formdata::error::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parses and processes <code>hyper::server::Request</code> data that is <code>multipart/form-data</code> content.</p>
+        </span><a id='src-1883' class='srclink' href='../src/formdata/lib.rs.html#74-79' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn parse_multipart&lt;S: <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(stream: &amp;mut S, boundary: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>, <a class='enum' href='../formdata/error/enum.Error.html' title='formdata::error::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parses and processes a stream of <code>multipart/form-data</code> content.</p>
 
 <p>The request is streamed, and this function saves embedded uploaded files to disk as they are
 encountered by the parser.</p>
@@ -57,7 +57,7 @@ encountered by the parser.</p>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -72,7 +72,7 @@ encountered by the parser.</p>
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

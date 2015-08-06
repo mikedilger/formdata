@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.3/src/client/pool.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.8/src/client/pool.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>pool.rs.html -- source</title>
@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -258,6 +258,21 @@
 <span id="216">216</span>
 <span id="217">217</span>
 <span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Client Connection Pooling</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>ToOwned</span>;
@@ -265,6 +280,9 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='self'>self</span>, <span class='ident'>Read</span>, <span class='ident'>Write</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::{<span class='ident'>SocketAddr</span>, <span class='ident'>Shutdown</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::{<span class='ident'>Arc</span>, <span class='ident'>Mutex</span>};
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Duration</span>;
 
 <span class='kw'>use</span> <span class='ident'>net</span>::{<span class='ident'>NetworkConnector</span>, <span class='ident'>NetworkStream</span>, <span class='ident'>DefaultConnector</span>};
 
@@ -414,6 +432,18 @@
         <span class='self'>self</span>.<span class='ident'>inner</span>.<span class='ident'>as_mut</span>().<span class='ident'>unwrap</span>().<span class='number'>1</span>.<span class='ident'>peer_addr</span>()
     }
 
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_read_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='self'>self</span>.<span class='ident'>inner</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>().<span class='number'>1</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>)
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_write_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='self'>self</span>.<span class='ident'>inner</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>().<span class='number'>1</span>.<span class='ident'>set_write_timeout</span>(<span class='ident'>dur</span>)
+    }
+
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>close</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>how</span>: <span class='ident'>Shutdown</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
         <span class='self'>self</span>.<span class='ident'>is_closed</span> <span class='op'>=</span> <span class='boolval'>true</span>;
@@ -485,7 +515,7 @@
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -500,7 +530,7 @@
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

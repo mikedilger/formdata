@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.3/src/net.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.8/src/net.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>net.rs.html -- source</title>
@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -537,6 +537,136 @@
 <span id="495">495</span>
 <span id="496">496</span>
 <span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! A collection of traits abstracting over Listeners and Streams.</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::{<span class='ident'>Any</span>, <span class='ident'>TypeId</span>};
@@ -547,6 +677,9 @@
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;openssl&quot;</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>openssl</span>::<span class='ident'>Openssl</span>;
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Duration</span>;
 
 <span class='kw'>use</span> <span class='ident'>typeable</span>::<span class='ident'>Typeable</span>;
 <span class='kw'>use</span> <span class='ident'>traitobject</span>;
@@ -561,17 +694,12 @@
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>NetworkListener</span>: <span class='ident'>Clone</span> {
     <span class='doccomment'>/// The stream produced for each connection.</span>
     <span class='kw'>type</span> <span class='ident'>Stream</span>: <span class='ident'>NetworkStream</span> <span class='op'>+</span> <span class='ident'>Send</span> <span class='op'>+</span> <span class='ident'>Clone</span>;
-    <span class='doccomment'>/// Listens on a socket.</span>
-    <span class='comment'>//fn listen&lt;To: ToSocketAddrs&gt;(&amp;mut self, addr: To) -&gt; io::Result&lt;Self::Acceptor&gt;;</span>
 
     <span class='doccomment'>/// Returns an iterator of streams.</span>
     <span class='kw'>fn</span> <span class='ident'>accept</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> ::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Self</span>::<span class='ident'>Stream</span><span class='op'>&gt;</span>;
 
     <span class='doccomment'>/// Get the address this Listener ended up listening on.</span>
     <span class='kw'>fn</span> <span class='ident'>local_addr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SocketAddr</span><span class='op'>&gt;</span>;
-
-    <span class='doccomment'>/// Closes the Acceptor, so no more incoming connections will be handled.</span>
-<span class='comment'>//    fn close(&amp;mut self) -&gt; io::Result&lt;()&gt;;</span>
 
     <span class='doccomment'>/// Returns an iterator over incoming connections.</span>
     <span class='kw'>fn</span> <span class='ident'>incoming</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>NetworkConnections</span><span class='op'>&lt;</span><span class='kw'>Self</span><span class='op'>&gt;</span> {
@@ -593,6 +721,12 @@
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>NetworkStream</span>: <span class='ident'>Read</span> <span class='op'>+</span> <span class='ident'>Write</span> <span class='op'>+</span> <span class='ident'>Any</span> <span class='op'>+</span> <span class='ident'>Send</span> <span class='op'>+</span> <span class='ident'>Typeable</span> {
     <span class='doccomment'>/// Get the remote address of the underlying connection.</span>
     <span class='kw'>fn</span> <span class='ident'>peer_addr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SocketAddr</span><span class='op'>&gt;</span>;
+    <span class='doccomment'>/// Set the maximum time to wait for a read to complete.</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_read_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>;
+    <span class='doccomment'>/// Set the maximum time to wait for a write to complete.</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_write_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>;
     <span class='doccomment'>/// This will be called when Stream should no longer be kept alive.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>close</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_how</span>: <span class='ident'>Shutdown</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
@@ -708,6 +842,34 @@
     }
 }
 
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>windows</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>AsRawSocket</span> <span class='kw'>for</span> <span class='ident'>HttpListener</span> {
+    <span class='kw'>fn</span> <span class='ident'>as_raw_socket</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>RawSocket</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_raw_socket</span>()
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>windows</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>FromRawSocket</span> <span class='kw'>for</span> <span class='ident'>HttpListener</span> {
+    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_raw_socket</span>(<span class='ident'>sock</span>: ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>RawSocket</span>) <span class='op'>-&gt;</span> <span class='ident'>HttpListener</span> {
+        <span class='ident'>HttpListener</span>(<span class='ident'>TcpListener</span>::<span class='ident'>from_raw_socket</span>(<span class='ident'>sock</span>))
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>unix</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>AsRawFd</span> <span class='kw'>for</span> <span class='ident'>HttpListener</span> {
+    <span class='kw'>fn</span> <span class='ident'>as_raw_fd</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_raw_fd</span>()
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>unix</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>FromRawFd</span> <span class='kw'>for</span> <span class='ident'>HttpListener</span> {
+    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_raw_fd</span>(<span class='ident'>fd</span>: ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>) <span class='op'>-&gt;</span> <span class='ident'>HttpListener</span> {
+        <span class='ident'>HttpListener</span>(<span class='ident'>TcpListener</span>::<span class='ident'>from_raw_fd</span>(<span class='ident'>fd</span>))
+    }
+}
+
 <span class='doccomment'>/// A wrapper around a TcpStream.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>HttpStream</span>(<span class='kw'>pub</span> <span class='ident'>TcpStream</span>);
 
@@ -742,10 +904,50 @@
     }
 }
 
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>windows</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>AsRawSocket</span> <span class='kw'>for</span> <span class='ident'>HttpStream</span> {
+    <span class='kw'>fn</span> <span class='ident'>as_raw_socket</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>RawSocket</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_raw_socket</span>()
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>windows</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>FromRawSocket</span> <span class='kw'>for</span> <span class='ident'>HttpStream</span> {
+    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_raw_socket</span>(<span class='ident'>sock</span>: ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>windows</span>::<span class='ident'>io</span>::<span class='ident'>RawSocket</span>) <span class='op'>-&gt;</span> <span class='ident'>HttpStream</span> {
+        <span class='ident'>HttpStream</span>(<span class='ident'>TcpStream</span>::<span class='ident'>from_raw_socket</span>(<span class='ident'>sock</span>))
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>unix</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>AsRawFd</span> <span class='kw'>for</span> <span class='ident'>HttpStream</span> {
+    <span class='kw'>fn</span> <span class='ident'>as_raw_fd</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>as_raw_fd</span>()
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>unix</span>)]</span>
+<span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>FromRawFd</span> <span class='kw'>for</span> <span class='ident'>HttpStream</span> {
+    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_raw_fd</span>(<span class='ident'>fd</span>: ::<span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>) <span class='op'>-&gt;</span> <span class='ident'>HttpStream</span> {
+        <span class='ident'>HttpStream</span>(<span class='ident'>TcpStream</span>::<span class='ident'>from_raw_fd</span>(<span class='ident'>fd</span>))
+    }
+}
+
 <span class='kw'>impl</span> <span class='ident'>NetworkStream</span> <span class='kw'>for</span> <span class='ident'>HttpStream</span> {
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>peer_addr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SocketAddr</span><span class='op'>&gt;</span> {
             <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>peer_addr</span>()
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_read_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>)
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_write_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>set_write_timeout</span>(<span class='ident'>dur</span>)
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
@@ -781,6 +983,34 @@
     }
 }
 
+<span class='doccomment'>/// A closure as a connector used to generate TcpStreams per request</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Example</span>
+<span class='doccomment'>/// </span>
+<span class='doccomment'>/// Basic example:</span>
+<span class='doccomment'>/// </span>
+<span class='doccomment'>/// ```norun</span>
+<span class='doccomment'>/// Client::with_connector(|addr: &amp;str, port: u16, scheme: &amp;str| {</span>
+<span class='doccomment'>///     TcpStream::connect(&amp;(addr, port))</span>
+<span class='doccomment'>/// });</span>
+<span class='doccomment'>/// ```</span>
+<span class='doccomment'>/// </span>
+<span class='doccomment'>/// Example using TcpBuilder from the net2 crate if you want to configure your source socket:</span>
+<span class='doccomment'>/// </span>
+<span class='doccomment'>/// ```norun</span>
+<span class='doccomment'>/// Client::with_connector(|addr: &amp;str, port: u16, scheme: &amp;str| {</span>
+<span class='doccomment'>///     let b = try!(TcpBuilder::new_v4());</span>
+<span class='doccomment'>///     try!(b.bind(&quot;127.0.0.1:0&quot;));</span>
+<span class='doccomment'>///     b.connect(&amp;(addr, port))</span>
+<span class='doccomment'>/// });</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> <span class='ident'>NetworkConnector</span> <span class='kw'>for</span> <span class='ident'>F</span> <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>Fn</span>(<span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>u16</span>, <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>TcpStream</span><span class='op'>&gt;</span> {
+    <span class='kw'>type</span> <span class='ident'>Stream</span> <span class='op'>=</span> <span class='ident'>HttpStream</span>;
+
+    <span class='kw'>fn</span> <span class='ident'>connect</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>host</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>port</span>: <span class='ident'>u16</span>, <span class='ident'>scheme</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> ::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>HttpStream</span><span class='op'>&gt;</span> {
+        <span class='prelude-val'>Ok</span>(<span class='ident'>HttpStream</span>(<span class='macro'>try</span><span class='macro'>!</span>((<span class='op'>*</span><span class='self'>self</span>)(<span class='ident'>host</span>, <span class='ident'>port</span>, <span class='ident'>scheme</span>))))
+    }
+}
 
 <span class='doccomment'>/// An abstraction to allow any SSL implementation to be used with HttpsStreams.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Ssl</span> {
@@ -835,6 +1065,24 @@
         <span class='kw'>match</span> <span class='op'>*</span><span class='self'>self</span> {
             <span class='ident'>HttpsStream</span>::<span class='ident'>Http</span>(<span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>s</span>) <span class='op'>=&gt;</span> <span class='ident'>s</span>.<span class='ident'>peer_addr</span>(),
             <span class='ident'>HttpsStream</span>::<span class='ident'>Https</span>(<span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>s</span>) <span class='op'>=&gt;</span> <span class='ident'>s</span>.<span class='ident'>peer_addr</span>()
+        }
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_read_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='kw'>match</span> <span class='op'>*</span><span class='self'>self</span> {
+            <span class='ident'>HttpsStream</span>::<span class='ident'>Http</span>(<span class='kw-2'>ref</span> <span class='ident'>inner</span>) <span class='op'>=&gt;</span> <span class='ident'>inner</span>.<span class='number'>0</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>),
+            <span class='ident'>HttpsStream</span>::<span class='ident'>Https</span>(<span class='kw-2'>ref</span> <span class='ident'>inner</span>) <span class='op'>=&gt;</span> <span class='ident'>inner</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>)
+        }
+    }
+
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>set_write_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+        <span class='kw'>match</span> <span class='op'>*</span><span class='self'>self</span> {
+            <span class='ident'>HttpsStream</span>::<span class='ident'>Http</span>(<span class='kw-2'>ref</span> <span class='ident'>inner</span>) <span class='op'>=&gt;</span> <span class='ident'>inner</span>.<span class='number'>0</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>),
+            <span class='ident'>HttpsStream</span>::<span class='ident'>Https</span>(<span class='kw-2'>ref</span> <span class='ident'>inner</span>) <span class='op'>=&gt;</span> <span class='ident'>inner</span>.<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>)
         }
     }
 
@@ -923,6 +1171,9 @@
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::{<span class='ident'>SocketAddr</span>, <span class='ident'>Shutdown</span>};
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>Arc</span>;
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+    <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Duration</span>;
+
     <span class='kw'>use</span> <span class='ident'>openssl</span>::<span class='ident'>ssl</span>::{<span class='ident'>Ssl</span>, <span class='ident'>SslContext</span>, <span class='ident'>SslStream</span>, <span class='ident'>SslMethod</span>, <span class='ident'>SSL_VERIFY_NONE</span>};
     <span class='kw'>use</span> <span class='ident'>openssl</span>::<span class='ident'>ssl</span>::<span class='ident'>error</span>::<span class='ident'>StreamError</span> <span class='kw'>as</span> <span class='ident'>SslIoError</span>;
     <span class='kw'>use</span> <span class='ident'>openssl</span>::<span class='ident'>ssl</span>::<span class='ident'>error</span>::<span class='ident'>SslError</span>;
@@ -979,16 +1230,13 @@
         <span class='kw'>type</span> <span class='ident'>Stream</span> <span class='op'>=</span> <span class='ident'>SslStream</span><span class='op'>&lt;</span><span class='ident'>HttpStream</span><span class='op'>&gt;</span>;
 
         <span class='kw'>fn</span> <span class='ident'>wrap_client</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>stream</span>: <span class='ident'>HttpStream</span>, <span class='ident'>host</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> ::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Self</span>::<span class='ident'>Stream</span><span class='op'>&gt;</span> {
-            <span class='comment'>//if let Some(ref verifier) = self.verifier {</span>
-            <span class='comment'>//    verifier(&amp;mut context);</span>
-            <span class='comment'>//}</span>
             <span class='kw'>let</span> <span class='ident'>ssl</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Ssl</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>context</span>));
             <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ssl</span>.<span class='ident'>set_hostname</span>(<span class='ident'>host</span>));
-            <span class='ident'>SslStream</span>::<span class='ident'>new_from</span>(<span class='ident'>ssl</span>, <span class='ident'>stream</span>).<span class='ident'>map_err</span>(<span class='ident'>From</span>::<span class='ident'>from</span>)
+            <span class='ident'>SslStream</span>::<span class='ident'>connect</span>(<span class='ident'>ssl</span>, <span class='ident'>stream</span>).<span class='ident'>map_err</span>(<span class='ident'>From</span>::<span class='ident'>from</span>)
         }
 
         <span class='kw'>fn</span> <span class='ident'>wrap_server</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>stream</span>: <span class='ident'>HttpStream</span>) <span class='op'>-&gt;</span> ::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Self</span>::<span class='ident'>Stream</span><span class='op'>&gt;</span> {
-            <span class='kw'>match</span> <span class='ident'>SslStream</span>::<span class='ident'>new_server</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>context</span>, <span class='ident'>stream</span>) {
+            <span class='kw'>match</span> <span class='ident'>SslStream</span>::<span class='ident'>accept</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='self'>self</span>.<span class='ident'>context</span>, <span class='ident'>stream</span>) {
                 <span class='prelude-val'>Ok</span>(<span class='ident'>ssl_stream</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>ssl_stream</span>),
                 <span class='prelude-val'>Err</span>(<span class='ident'>SslIoError</span>(<span class='ident'>e</span>)) <span class='op'>=&gt;</span> {
                     <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>new</span>(<span class='ident'>io</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>ConnectionAborted</span>, <span class='ident'>e</span>).<span class='ident'>into</span>())
@@ -1002,6 +1250,18 @@
         <span class='attribute'>#[<span class='ident'>inline</span>]</span>
         <span class='kw'>fn</span> <span class='ident'>peer_addr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SocketAddr</span><span class='op'>&gt;</span> {
             <span class='self'>self</span>.<span class='ident'>get_mut</span>().<span class='ident'>peer_addr</span>()
+        }
+
+        <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+        <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+        <span class='kw'>fn</span> <span class='ident'>set_read_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+            <span class='self'>self</span>.<span class='ident'>get_ref</span>().<span class='ident'>set_read_timeout</span>(<span class='ident'>dur</span>)
+        }
+
+        <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;timeouts&quot;</span>)]</span>
+        <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+        <span class='kw'>fn</span> <span class='ident'>set_write_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>dur</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+            <span class='self'>self</span>.<span class='ident'>get_ref</span>().<span class='ident'>set_write_timeout</span>(<span class='ident'>dur</span>)
         }
 
         <span class='kw'>fn</span> <span class='ident'>close</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>how</span>: <span class='ident'>Shutdown</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
@@ -1043,7 +1303,7 @@
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -1058,7 +1318,7 @@
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

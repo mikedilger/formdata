@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-32004' class='srclink' href='../../../src/hyper/http/h1.rs.html#309-333' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-32126' class='srclink' href='../../../src/hyper/http/h1.rs.html#338-362' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum HttpReader&lt;R&gt; {
     SizedReader(R, <a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>),
     ChunkedReader(R, <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>&gt;),
@@ -79,6 +79,8 @@ status code and then close the connection.</p>
 <p>See <a href="https://tools.ietf.org/html/rfc7230#section-3.3.3">https://tools.ietf.org/html/rfc7230#section-3.3.3</a></p>
 </div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;R: <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt; <a class='enum' href='../../../hyper/http/h1/enum.HttpReader.html' title='hyper::http::h1::HttpReader'>HttpReader</a>&lt;R&gt;</code></h3><div class='impl-items'><h4 id='method.into_inner' class='method'><code>fn <a href='#method.into_inner' class='fnname'>into_inner</a>(self) -&gt; R</code></h4>
 <div class='docblock'><p>Unwraps this HttpReader and returns the underlying Reader.</p>
+</div><h4 id='method.get_ref' class='method'><code>fn <a href='#method.get_ref' class='fnname'>get_ref</a>(&amp;self) -&gt; &amp;R</code></h4>
+<div class='docblock'><p>Gets a borrowed reference to the underlying Reader.</p>
 </div><h4 id='method.get_mut' class='method'><code>fn <a href='#method.get_mut' class='fnname'>get_mut</a>(&amp;mut self) -&gt; &amp;mut R</code></h4>
 <div class='docblock'><p>Gets a mutable reference to the underlying Reader.</p>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;R&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../../hyper/http/h1/enum.HttpReader.html' title='hyper::http::h1::HttpReader'>HttpReader</a>&lt;R&gt;</code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, fmt: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
@@ -98,7 +100,7 @@ status code and then close the connection.</p>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -113,7 +115,7 @@ status code and then close the connection.</p>
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

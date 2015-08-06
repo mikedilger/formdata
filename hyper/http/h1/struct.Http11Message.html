@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,13 +45,16 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-30273' class='srclink' href='../../../src/hyper/http/h1.rs.html#36-40' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-30313' class='srclink' href='../../../src/hyper/http/h1.rs.html#38-42' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Http11Message {
     // some fields omitted
 }</pre><div class='docblock'><p>An implementation of the <code>HttpMessage</code> trait for HTTP/1.1.</p>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../../hyper/http/h1/struct.Http11Message.html' title='hyper::http::h1::Http11Message'>Http11Message</a></code></h3><div class='impl-items'><h4 id='method.into_inner' class='method'><code>fn <a href='#method.into_inner' class='fnname'>into_inner</a>(self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt;</code></h4>
 <div class='docblock'><p>Consumes the <code>Http11Message</code> and returns the underlying <code>NetworkStream</code>.</p>
-</div><h4 id='method.get_mut' class='method'><code>fn <a href='#method.get_mut' class='fnname'>get_mut</a>(&amp;mut self) -&gt; &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt;</code></h4>
+</div><h4 id='method.get_ref' class='method'><code>fn <a href='#method.get_ref' class='fnname'>get_ref</a>(&amp;self) -&gt; &amp;<a class='trait' href='../../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></code></h4>
+<div class='docblock'><p>Gets a mutable reference to the underlying <code>NetworkStream</code>, regardless of the state of the
+<code>Http11Message</code>.</p>
+</div><h4 id='method.get_mut' class='method'><code>fn <a href='#method.get_mut' class='fnname'>get_mut</a>(&amp;mut self) -&gt; &amp;mut <a class='trait' href='../../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a></code></h4>
 <div class='docblock'><p>Gets a mutable reference to the underlying <code>NetworkStream</code>, regardless of the state of the
 <code>Http11Message</code>.</p>
 </div><h4 id='method.with_stream' class='method'><code>fn <a href='#method.with_stream' class='fnname'>with_stream</a>(stream: <a class='struct' href='http://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a>&gt;) -&gt; <a class='struct' href='../../../hyper/http/h1/struct.Http11Message.html' title='hyper::http::h1::Http11Message'>Http11Message</a></code></h4>
@@ -87,7 +90,7 @@ the peer.</p>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -102,7 +105,7 @@ the peer.</p>
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

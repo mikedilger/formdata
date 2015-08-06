@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-36940' class='srclink' href='../../src/hyper/net.rs.html#21-40' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-37087' class='srclink' href='../../src/hyper/net.rs.html#24-38' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait NetworkListener: <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> {
     type Stream: <a class='trait' href='../../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a>;
     fn <a href='#tymethod.accept' class='fnname'>accept</a>(&amp;mut self) -&gt; <a class='type' href='../../hyper/error/type.Result.html' title='hyper::error::Result'>Result</a>&lt;Self::<a class='trait' href='../../hyper/net/trait.NetworkListener.html' title='hyper::net::NetworkListener'>Stream</a>&gt;;
@@ -60,14 +60,12 @@
 </div></div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.accept' class='method stab '><code>fn <a href='#tymethod.accept' class='fnname'>accept</a>(&amp;mut self) -&gt; <a class='type' href='../../hyper/error/type.Result.html' title='hyper::error::Result'>Result</a>&lt;Self::<a class='trait' href='../../hyper/net/trait.NetworkListener.html' title='hyper::net::NetworkListener'>Stream</a>&gt;</code></h3><div class='docblock'><p>Listens on a socket.
-Returns an iterator of streams.</p>
+        <h3 id='tymethod.accept' class='method stab '><code>fn <a href='#tymethod.accept' class='fnname'>accept</a>(&amp;mut self) -&gt; <a class='type' href='../../hyper/error/type.Result.html' title='hyper::error::Result'>Result</a>&lt;Self::<a class='trait' href='../../hyper/net/trait.NetworkListener.html' title='hyper::net::NetworkListener'>Stream</a>&gt;</code></h3><div class='docblock'><p>Returns an iterator of streams.</p>
 </div><h3 id='tymethod.local_addr' class='method stab '><code>fn <a href='#tymethod.local_addr' class='fnname'>local_addr</a>(&amp;mut self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='enum' href='http://doc.rust-lang.org/nightly/std/net/addr/enum.SocketAddr.html' title='std::net::addr::SocketAddr'>SocketAddr</a>&gt;</code></h3><div class='docblock'><p>Get the address this Listener ended up listening on.</p>
 </div></div>
             <h2 id='provided-methods'>Provided Methods</h2>
             <div class='methods'>
-        <h3 id='method.incoming' class='method stab '><code>fn <a href='#method.incoming' class='fnname'>incoming</a>(&amp;mut self) -&gt; <a class='struct' href='../../hyper/net/struct.NetworkConnections.html' title='hyper::net::NetworkConnections'>NetworkConnections</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Closes the Acceptor, so no more incoming connections will be handled.
-Returns an iterator over incoming connections.</p>
+        <h3 id='method.incoming' class='method stab '><code>fn <a href='#method.incoming' class='fnname'>incoming</a>(&amp;mut self) -&gt; <a class='struct' href='../../hyper/net/struct.NetworkConnections.html' title='hyper::net::NetworkConnections'>NetworkConnections</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Returns an iterator over incoming connections.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
@@ -82,7 +80,7 @@ Returns an iterator over incoming connections.</p>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -97,7 +95,7 @@ Returns an iterator over incoming connections.</p>
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-47060' class='srclink' href='../src/hyper/header/common/mod.rs.html#162-319' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-48212' class='srclink' href='../src/hyper/header/common/mod.rs.html#187-349' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>header</span> {
     <span class='comment'>// $a:meta: Attributes associated with the header item (usually docs)</span>
@@ -78,6 +78,8 @@
                 <span class='self'>self</span>.<span class='ident'>fmt_header</span>(<span class='ident'>f</span>)
             }
         }
+
+        <span class='macro'>__hyper_generate_header_serialization</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>);
     };
     <span class='comment'>// List header, one or more items</span>
     ($(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>meta</span>]</span>)<span class='op'>*</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>item</span>:<span class='ident'>ty</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> {
@@ -104,6 +106,7 @@
                 <span class='self'>self</span>.<span class='ident'>fmt_header</span>(<span class='ident'>f</span>)
             }
         }
+        <span class='macro'>__hyper_generate_header_serialization</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>);
     };
     <span class='comment'>// Single value header</span>
     ($(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>meta</span>]</span>)<span class='op'>*</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> [<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>:<span class='ident'>ty</span>]) <span class='op'>=&gt;</span> {
@@ -129,6 +132,7 @@
                 ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Display</span>::<span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='op'>*</span><span class='self'>self</span>, <span class='ident'>f</span>)
             }
         }
+        <span class='macro'>__hyper_generate_header_serialization</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>);
     };
     <span class='comment'>// List header, one or more items with &quot;*&quot; option</span>
     ($(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>meta</span>]</span>)<span class='op'>*</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>n</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> {<span class='ident'>Any</span> <span class='op'>/</span> (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>item</span>:<span class='ident'>ty</span>)<span class='op'>+</span>}) <span class='op'>=&gt;</span> {
@@ -169,6 +173,7 @@
                 <span class='self'>self</span>.<span class='ident'>fmt_header</span>(<span class='ident'>f</span>)
             }
         }
+        <span class='macro'>__hyper_generate_header_serialization</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>id</span>);
     };
 
     <span class='comment'>// optional test module</span>
@@ -213,7 +218,7 @@
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -228,7 +233,7 @@
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

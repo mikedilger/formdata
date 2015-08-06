@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -462,28 +462,8 @@
 <span id="420">420</span>
 <span id="421">421</span>
 <span id="422">422</span>
-<span id="423">423</span>
-<span id="424">424</span>
-<span id="425">425</span>
-<span id="426">426</span>
-<span id="427">427</span>
-<span id="428">428</span>
-<span id="429">429</span>
-<span id="430">430</span>
-<span id="431">431</span>
-<span id="432">432</span>
-<span id="433">433</span>
-<span id="434">434</span>
-<span id="435">435</span>
-<span id="436">436</span>
-<span id="437">437</span>
-<span id="438">438</span>
-<span id="439">439</span>
-<span id="440">440</span>
-<span id="441">441</span>
-<span id="442">442</span>
 </pre><pre class='rust '>
-<span class='doccomment'>//! This crate parses and processes `hyper::server::Request` data that contains</span>
+<span class='doccomment'>//! This crate parses and processes a stream of data that contains</span>
 <span class='doccomment'>//! `multipart/form-data` content.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! The main entry point is `parse_multipart`</span>
@@ -509,7 +489,6 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='ident'>BufRead</span>, <span class='ident'>BufReader</span>, <span class='ident'>Read</span>};
 
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>ContentType</span>, <span class='ident'>Headers</span>};
-<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Request</span> <span class='kw'>as</span> <span class='ident'>HyperRequest</span>;
 <span class='kw'>use</span> <span class='ident'>mime</span>::{<span class='ident'>Attr</span>, <span class='ident'>Mime</span>, <span class='ident'>Param</span>, <span class='ident'>SubLevel</span>, <span class='ident'>TopLevel</span>, <span class='ident'>Value</span>};
 <span class='kw'>use</span> <span class='ident'>tempdir</span>::<span class='ident'>TempDir</span>;
 <span class='kw'>use</span> <span class='ident'>textnonce</span>::<span class='ident'>TextNonce</span>;
@@ -553,14 +532,12 @@
     }
 }
 
-<span class='doccomment'>/// Parses and processes `hyper::server::Request` data that is `multipart/form-data` content.</span>
+<span class='doccomment'>/// Parses and processes a stream of `multipart/form-data` content.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// The request is streamed, and this function saves embedded uploaded files to disk as they are</span>
 <span class='doccomment'>/// encountered by the parser.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_multipart</span>(<span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Request</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>FormData</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_boundary</span>(<span class='ident'>request</span>));
-    <span class='macro'>trace</span><span class='macro'>!</span>(<span class='string'>&quot;Boundary is {}&quot;</span>, <span class='ident'>boundary</span>);
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>with_capacity</span>(<span class='number'>4096</span>, <span class='ident'>request</span>.<span class='ident'>read_mut</span>());
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_multipart</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>Read</span><span class='op'>&gt;</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>S</span>, <span class='ident'>boundary</span>: <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>FormData</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>with_capacity</span>(<span class='number'>4096</span>, <span class='ident'>stream</span>);
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>form_data</span> <span class='op'>=</span> <span class='ident'>FormData</span>::<span class='ident'>new</span>();
     <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>run_state_machine</span>(<span class='ident'>boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>reader</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>form_data</span>, <span class='ident'>MultipartSubLevel</span>::<span class='ident'>FormData</span>));
     <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>)
@@ -736,9 +713,10 @@
     }
 }
 
-<span class='kw'>fn</span> <span class='ident'>get_boundary</span>(<span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='ident'>Request</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
+<span class='doccomment'>/// Get the `multipart/form-data` boundary string from hyper::Headers</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_multipart_boundary</span>(<span class='ident'>headers</span>: <span class='kw-2'>&amp;</span><span class='ident'>Headers</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
     <span class='comment'>// Verify that the request is &#39;Content-Type: multipart/form-data&#39;.</span>
-    <span class='kw'>let</span> <span class='ident'>ct</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentType</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>request</span>.<span class='ident'>headers</span>().<span class='ident'>get</span>() {
+    <span class='kw'>let</span> <span class='ident'>ct</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentType</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span>.<span class='ident'>get</span>() {
         <span class='prelude-val'>Some</span>(<span class='ident'>ct</span>) <span class='op'>=&gt;</span> <span class='ident'>ct</span>,
         <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NoRequestContentType</span>),
     };
@@ -771,26 +749,6 @@
     <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>));
     <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='ident'>boundary</span>.<span class='ident'>clone</span>());
     <span class='ident'>crlf_boundary</span>
-}
-
-<span class='doccomment'>/// A wrapper for request data to provide parsing multipart requests to any front-end that provides</span>
-<span class='doccomment'>/// a `hyper::header::Headers` and a `std::io::Read` of the request&#39;s entire body.</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Request</span> {
-    <span class='doccomment'>/// Returns a reference to the request&#39;s headers.</span>
-    <span class='kw'>fn</span> <span class='ident'>headers</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>Headers</span>;
-
-    <span class='doccomment'>/// Returns a mutable reference to the request&#39;s body reader.</span>
-    <span class='kw'>fn</span> <span class='ident'>read_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Read</span>;
-}
-
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> <span class='ident'>Request</span> <span class='kw'>for</span> <span class='ident'>HyperRequest</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> {
-    <span class='kw'>fn</span> <span class='ident'>headers</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>Headers</span> {
-        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>headers</span>
-    }
-
-    <span class='kw'>fn</span> <span class='ident'>read_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Read</span> {
-        <span class='self'>self</span>
-    }
 }
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
@@ -834,8 +792,9 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>mock</span>);
         <span class='kw'>let</span> <span class='ident'>sock</span>: <span class='ident'>SocketAddr</span> <span class='op'>=</span> <span class='string'>&quot;127.0.0.1:80&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>();
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>req</span> <span class='op'>=</span> <span class='ident'>HyperRequest</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='ident'>sock</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='ident'>get_multipart_boundary</span>(<span class='kw-2'>&amp;</span><span class='ident'>req</span>.<span class='ident'>headers</span>).<span class='ident'>unwrap</span>();
 
-        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>) {
+        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>, <span class='ident'>boundary</span>) {
             <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>) <span class='op'>=&gt;</span> {
                 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>len</span>(), <span class='number'>1</span>);
                 <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>fields</span> {
@@ -895,8 +854,9 @@
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>mock</span>);
         <span class='kw'>let</span> <span class='ident'>sock</span>: <span class='ident'>SocketAddr</span> <span class='op'>=</span> <span class='string'>&quot;127.0.0.1:80&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>();
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>req</span> <span class='op'>=</span> <span class='ident'>HyperRequest</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='ident'>sock</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='ident'>get_multipart_boundary</span>(<span class='kw-2'>&amp;</span><span class='ident'>req</span>.<span class='ident'>headers</span>).<span class='ident'>unwrap</span>();
 
-        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>) {
+        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>, <span class='ident'>boundary</span>) {
             <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>) <span class='op'>=&gt;</span> {
                 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>len</span>(), <span class='number'>1</span>);
                 <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>fields</span> {
@@ -933,7 +893,7 @@
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -948,7 +908,7 @@
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

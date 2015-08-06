@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/lazy_static/lib.rs.html#1-124' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/lazy_static/lib.rs.html#1-156' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>A macro for declaring lazily evaluated statics.</p>
 
 <p>Using this macro, it is possible to have <code>static</code>s that require code to be
@@ -63,10 +63,13 @@ as well as anything that requires function calls to be computed.</p>
 }
 </pre>
 
+<p>Metadata (such as doc comments) is allowed on each ref.</p>
+
 <h1 id="semantic" class='section-header'><a
                            href="#semantic">Semantic</a></h1>
-<p>For a given <code>static ref NAME: TYPE = EXPR;</code>, the macro generates a
-unique type that implements <code>Deref&lt;TYPE&gt;</code> and stores it in a static with name <code>NAME</code>.</p>
+<p>For a given <code>static ref NAME: TYPE = EXPR;</code>, the macro generates a unique type that
+implements <code>Deref&lt;TYPE&gt;</code> and stores it in a static with name <code>NAME</code>. (Metadata ends up
+attaching to this type.)</p>
 
 <p>On first deref, <code>EXPR</code> gets evaluated and stored internally, such that all further derefs
 can return a reference to the same object.</p>
@@ -106,10 +109,7 @@ trait.</p>
 
 <h1 id="implementation-details" class='section-header'><a
                            href="#implementation-details">Implementation details</a></h1>
-<p>The <code>Deref</code> implementation uses a hidden <code>static mut</code> that is guarded by a atomic check
-using the <code>sync::Once</code> abstraction. All lazily evaluated values are currently
-put in a heap allocated box, due to the Rust language currently not providing any way to
-define uninitialized <code>static mut</code> values.</p>
+<p>The <code>Deref</code> implementation uses a hidden static variable that is guarded by a atomic check on each access. On stable Rust, the macro may need to allocate each static on the heap.</p>
 </div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                     <tr class=' module-item'>
@@ -126,7 +126,7 @@ define uninitialized <code>static mut</code> values.</p>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -141,7 +141,7 @@ define uninitialized <code>static mut</code> values.</p>
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/rand/lib.rs.html#11-1177' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/rand/lib.rs.html#11-1141' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Utilities for random number generation</p>
 
 <p>The key functions are <code>random()</code> and <code>Rng::gen()</code>. These are polymorphic and
@@ -56,6 +56,20 @@ suffice, but sometimes an annotation is required, e.g.
 
 <p>See the <code>distributions</code> submodule for sampling random numbers from
 distributions like normal and exponential.</p>
+
+<h1 id="usage" class='section-header'><a
+                           href="#usage">Usage</a></h1>
+<p>This crate is <a href="https://crates.io/crates/rand">on crates.io</a> and can be
+used by adding <code>rand</code> to the dependencies in your project&#39;s <code>Cargo.toml</code>.</p>
+
+<pre><code class="language-toml">[dependencies]
+rand = &quot;0.3&quot;
+</code></pre>
+
+<p>and this to your crate root:</p>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>rand</span>;
+</pre>
 
 <h1 id="thread-local-rng" class='section-header'><a
                            href="#thread-local-rng">Thread-local RNG</a></h1>
@@ -466,7 +480,7 @@ chaining style, e.g. <code>thread_rng().gen::&lt;i32&gt;()</code>.</p>
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -481,7 +495,7 @@ chaining style, e.g. <code>thread_rng().gen::&lt;i32&gt;()</code>.</p>
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.3/src/status.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.8/src/status.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>status.rs.html -- source</title>
@@ -34,7 +34,7 @@
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -802,7 +802,7 @@
 <span class='doccomment'>/// Registry](http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) which is</span>
 <span class='doccomment'>/// the source for this enum (with one exception, 418 I&#39;m a teapot, which is</span>
 <span class='doccomment'>/// inexplicably not in the register).</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Hash</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>StatusCode</span> {
     <span class='doccomment'>/// 100 Continue</span>
     <span class='doccomment'>/// [[RFC7231, Section 6.2.1](https://tools.ietf.org/html/rfc7231#section-6.2.1)]</span>
@@ -1511,7 +1511,7 @@
 
     <div id="help" class="hidden">
         <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
+            <h1>Keyboard Shortcuts</h1>
             <dl>
                 <dt>?</dt>
                 <dd>Show this help dialog</dd>
@@ -1526,7 +1526,7 @@
             </dl>
         </div>
         <div class="infos">
-            <h1>Search tricks</h1>
+            <h1>Search Tricks</h1>
             <p>
                 Prefix searches with a type followed by a colon (e.g.
                 <code>fn:</code>) to restrict the search to a given type.
