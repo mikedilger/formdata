@@ -27,7 +27,7 @@ for (name, value) in form_data.fields {
 }
 
 for (name, file) in form_data.files {
-    println!("Posted file name={} filename={} content_type={} size={} temporary_path={}",
+    println!("Posted file name={} filename={:?} content_type={} size={} temporary_path={:?}",
              name, file.filename, file.content_type, file.size, file.path);
 }
 
