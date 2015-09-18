@@ -10,8 +10,8 @@ license = "MIT"
 keywords = ["multipart", "form-data", "hyper", "http", "mime"]
 
 [dependencies]
-hyper = "*"
-httparse = "*"
+hyper = "^0.6"
+httparse = "^0.1"
 mime = "*"
 libc = "*"
 tempdir = "*"
