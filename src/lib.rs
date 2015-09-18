@@ -53,10 +53,10 @@ pub struct UploadedFile {
 /// Use `parse_multipart` to devise this object from a request.
 #[derive(Clone, Debug, PartialEq)]
 pub struct FormData {
-    /// Key-value pairs for plain text fields. Technically, these are form data parts with no
+    /// Name-value pairs for plain text fields. Technically, these are form data parts with no
     /// filename specified in the part's `Content-Disposition`.
     pub fields: Vec<(String, String)>,
-    /// Key-value pairs for temporary files. Technically, these are form data parts with a filename
+    /// Name-value pairs for temporary files. Technically, these are form data parts with a filename
     /// specified in the part's `Content-Disposition`.
     pub files: Vec<(String, UploadedFile)>,
 }
