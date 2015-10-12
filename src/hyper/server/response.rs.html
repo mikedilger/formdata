@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-0a35038f75765ae4/hyper-0.6.8/src/server/response.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-121aea75f9ef2ce2/hyper-0.6.15/src/server/response.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>response.rs.html -- source</title>
@@ -24,10 +24,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -404,6 +404,31 @@
 <span id="362">362</span>
 <span id="363">363</span>
 <span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Server Responses</span>
 <span class='doccomment'>//!</span>
@@ -419,7 +444,7 @@
 
 <span class='kw'>use</span> <span class='ident'>header</span>;
 <span class='kw'>use</span> <span class='ident'>http</span>::<span class='ident'>h1</span>::{<span class='ident'>CR</span>, <span class='ident'>LF</span>, <span class='ident'>LINE_ENDING</span>, <span class='ident'>HttpWriter</span>};
-<span class='kw'>use</span> <span class='ident'>http</span>::<span class='ident'>h1</span>::<span class='ident'>HttpWriter</span>::{<span class='ident'>ThroughWriter</span>, <span class='ident'>ChunkedWriter</span>, <span class='ident'>SizedWriter</span>};
+<span class='kw'>use</span> <span class='ident'>http</span>::<span class='ident'>h1</span>::<span class='ident'>HttpWriter</span>::{<span class='ident'>ThroughWriter</span>, <span class='ident'>ChunkedWriter</span>, <span class='ident'>SizedWriter</span>, <span class='ident'>EmptyWriter</span>};
 <span class='kw'>use</span> <span class='ident'>status</span>;
 <span class='kw'>use</span> <span class='ident'>net</span>::{<span class='ident'>Fresh</span>, <span class='ident'>Streaming</span>};
 <span class='kw'>use</span> <span class='ident'>version</span>;
@@ -495,11 +520,14 @@
             <span class='self'>self</span>.<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>header</span>::<span class='ident'>Date</span>(<span class='ident'>header</span>::<span class='ident'>HttpDate</span>(<span class='ident'>now_utc</span>())));
         }
 
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>body_type</span> <span class='op'>=</span> <span class='ident'>Body</span>::<span class='ident'>Chunked</span>;
-
-        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>cl</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>headers</span>.<span class='ident'>get</span>::<span class='op'>&lt;</span><span class='ident'>header</span>::<span class='ident'>ContentLength</span><span class='op'>&gt;</span>() {
-            <span class='ident'>body_type</span> <span class='op'>=</span> <span class='ident'>Body</span>::<span class='ident'>Sized</span>(<span class='op'>*</span><span class='op'>*</span><span class='ident'>cl</span>);
+        <span class='kw'>let</span> <span class='ident'>body_type</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>status</span> {
+            <span class='ident'>status</span>::<span class='ident'>StatusCode</span>::<span class='ident'>NoContent</span> <span class='op'>|</span> <span class='ident'>status</span>::<span class='ident'>StatusCode</span>::<span class='ident'>NotModified</span> <span class='op'>=&gt;</span> <span class='ident'>Body</span>::<span class='ident'>Empty</span>,
+            <span class='ident'>c</span> <span class='kw'>if</span> <span class='ident'>c</span>.<span class='ident'>class</span>() <span class='op'>==</span> <span class='ident'>status</span>::<span class='ident'>StatusClass</span>::<span class='ident'>Informational</span> <span class='op'>=&gt;</span> <span class='ident'>Body</span>::<span class='ident'>Empty</span>,
+            _ <span class='op'>=&gt;</span> <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>cl</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>headers</span>.<span class='ident'>get</span>::<span class='op'>&lt;</span><span class='ident'>header</span>::<span class='ident'>ContentLength</span><span class='op'>&gt;</span>() {
+                <span class='ident'>Body</span>::<span class='ident'>Sized</span>(<span class='op'>*</span><span class='op'>*</span><span class='ident'>cl</span>)
+            } <span class='kw'>else</span> {
+                <span class='ident'>Body</span>::<span class='ident'>Chunked</span>
+            }
         };
 
         <span class='comment'>// can&#39;t do in match above, thanks borrowck</span>
@@ -584,7 +612,8 @@
         <span class='kw'>let</span> (<span class='ident'>version</span>, <span class='ident'>body</span>, <span class='ident'>status</span>, <span class='ident'>headers</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>deconstruct</span>();
         <span class='kw'>let</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>body_type</span> {
             <span class='ident'>Body</span>::<span class='ident'>Chunked</span> <span class='op'>=&gt;</span> <span class='ident'>ChunkedWriter</span>(<span class='ident'>body</span>.<span class='ident'>into_inner</span>()),
-            <span class='ident'>Body</span>::<span class='ident'>Sized</span>(<span class='ident'>len</span>) <span class='op'>=&gt;</span> <span class='ident'>SizedWriter</span>(<span class='ident'>body</span>.<span class='ident'>into_inner</span>(), <span class='ident'>len</span>)
+            <span class='ident'>Body</span>::<span class='ident'>Sized</span>(<span class='ident'>len</span>) <span class='op'>=&gt;</span> <span class='ident'>SizedWriter</span>(<span class='ident'>body</span>.<span class='ident'>into_inner</span>(), <span class='ident'>len</span>),
+            <span class='ident'>Body</span>::<span class='ident'>Empty</span> <span class='op'>=&gt;</span> <span class='ident'>EmptyWriter</span>(<span class='ident'>body</span>.<span class='ident'>into_inner</span>()),
         };
 
         <span class='comment'>// &quot;copy&quot; to change the phantom type</span>
@@ -634,6 +663,7 @@
 <span class='kw'>enum</span> <span class='ident'>Body</span> {
     <span class='ident'>Chunked</span>,
     <span class='ident'>Sized</span>(<span class='ident'>u64</span>),
+    <span class='ident'>Empty</span>,
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span>: <span class='ident'>Any</span><span class='op'>&gt;</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>Response</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span><span class='op'>&gt;</span> {
@@ -642,6 +672,7 @@
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>body</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>write_head</span>() {
                 <span class='prelude-val'>Ok</span>(<span class='ident'>Body</span>::<span class='ident'>Chunked</span>) <span class='op'>=&gt;</span> <span class='ident'>ChunkedWriter</span>(<span class='self'>self</span>.<span class='ident'>body</span>.<span class='ident'>get_mut</span>()),
                 <span class='prelude-val'>Ok</span>(<span class='ident'>Body</span>::<span class='ident'>Sized</span>(<span class='ident'>len</span>)) <span class='op'>=&gt;</span> <span class='ident'>SizedWriter</span>(<span class='self'>self</span>.<span class='ident'>body</span>.<span class='ident'>get_mut</span>(), <span class='ident'>len</span>),
+                <span class='prelude-val'>Ok</span>(<span class='ident'>Body</span>::<span class='ident'>Empty</span>) <span class='op'>=&gt;</span> <span class='ident'>EmptyWriter</span>(<span class='self'>self</span>.<span class='ident'>body</span>.<span class='ident'>get_mut</span>()),
                 <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> {
                     <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;error dropping request: {:?}&quot;</span>, <span class='ident'>e</span>);
                     <span class='kw'>return</span>;
@@ -768,6 +799,25 @@
             <span class='string'>&quot;&quot;</span> <span class='comment'>// empty zero body</span>
         }
     }
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>test_no_content</span>() {
+        <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Write</span>;
+        <span class='kw'>use</span> <span class='ident'>status</span>::<span class='ident'>StatusCode</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>MockStream</span>::<span class='ident'>new</span>();
+        {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='ident'>Response</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>headers</span>);
+            <span class='op'>*</span><span class='ident'>res</span>.<span class='ident'>status_mut</span>() <span class='op'>=</span> <span class='ident'>StatusCode</span>::<span class='ident'>NoContent</span>;
+            <span class='ident'>res</span>.<span class='ident'>start</span>().<span class='ident'>unwrap</span>();
+        }
+
+        <span class='macro'>lines</span><span class='macro'>!</span> { <span class='ident'>stream</span> <span class='op'>=</span>
+            <span class='string'>&quot;HTTP/1.1 204 No Content&quot;</span>,
+            <span class='ident'>_date</span>,
+            <span class='string'>&quot;&quot;</span>
+        }
+    }
 }
 </pre>
 </section>
@@ -775,40 +825,49 @@
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard Shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search Tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 

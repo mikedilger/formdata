@@ -12,12 +12,14 @@
 /*globals $: true, rootPath: true */
 
 document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
+
     if (!window.playgroundUrl) {
         return;
     }
 
     var featureRegexp = new RegExp('^\s*#!\\[feature\\(\.*?\\)\\]');
-    var elements = document.querySelectorAll('pre.rust');
+    var elements = document.querySelectorAll('pre.rust-example-rendered');
 
     Array.prototype.forEach.call(elements, function(el) {
         el.onmouseover = function(e) {

@@ -24,10 +24,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='../index.html'>hyper</a></p><script>window.sidebarCurrent = {name: 'header', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-6242' class='srclink' href='../../src/hyper/header/mod.rs.html#1-785' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-875' class='srclink' href='../../src/hyper/header/mod.rs.html#1-808' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Headers container, and common header fields.</p>
 
 <p>hyper has the opinion that Headers should be strongly-typed, because that&#39;s
@@ -53,8 +53,7 @@ why we&#39;re using Rust in the first place. To set or get any header, an object
 must implement the <code>Header</code> trait from this module. Several common headers
 are already provided, such as <code>Host</code>, <code>ContentType</code>, <code>UserAgent</code>, and others.</p>
 
-<h1 id="why-typed?" class='section-header'><a
-                           href="#why-typed?">Why Typed?</a></h1>
+<h1 id='why-typed' class='section-header'><a href='#why-typed'>Why Typed?</a></h1>
 <p>Or, why not stringly-typed? Types give the following advantages:</p>
 
 <ul>
@@ -62,8 +61,7 @@ are already provided, such as <code>Host</code>, <code>ContentType</code>, <code
 <li>Parsing to a proper type by default</li>
 </ul>
 
-<h1 id="defining-custom-headers" class='section-header'><a
-                           href="#defining-custom-headers">Defining Custom Headers</a></h1>
+<h1 id='defining-custom-headers' class='section-header'><a href='#defining-custom-headers'>Defining Custom Headers</a></h1>
 <p>Hyper provides many of the most commonly used headers in HTTP. If
 you need to define a custom header, it&#39;s easy to do while still taking
 advantage of the type system. Hyper includes a <code>header!</code> macro for defining
@@ -77,15 +75,13 @@ many wrapper-style headers.</p>
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
 
     <span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>XRequestGuid</span>(<span class='string'>&quot;a proper guid&quot;</span>.<span class='ident'>to_owned</span>()))
-}
-</pre>
+}</pre>
 
 <p>This works well for simple &quot;string&quot; headers. But the header system
 actually involves 2 parts: parsing, and formatting. If you need to
 customize either part, you can do so.</p>
 
-<h2 id="header-and-headerformat" class='section-header'><a
-                           href="#header-and-headerformat"><code>Header</code> and <code>HeaderFormat</code></a></h2>
+<h2 id='header-and-headerformat' class='section-header'><a href='#header-and-headerformat'><code>Header</code> and <code>HeaderFormat</code></a></h2>
 <p>Consider a Do Not Track header. It can be true or false, but it represents
 that via the numerals <code>1</code> and <code>0</code>.</p>
 <pre class='rust rust-example-rendered'>
@@ -124,8 +120,7 @@ that via the numerals <code>1</code> and <code>0</code>.</p>
             <span class='ident'>f</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;0&quot;</span>)
         }
     }
-}
-</pre>
+}</pre>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
@@ -318,6 +313,16 @@ that via the numerals <code>1</code> and <code>0</code>.</p>
                         <td class='docblock short'>
                              <p><code>Content-Length</code> header, defined in
 <a href="http://tools.ietf.org/html/rfc7230#section-3.3.2">RFC7230</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.ContentRange.html'
+                               title='hyper::header::ContentRange'>ContentRange</a></td>
+                        <td class='docblock short'>
+                             <p><code>Content-Range</code> header, defined in
+<a href="http://tools.ietf.org/html/rfc7233#section-4.2">RFC7233</a></p>
 
                         </td>
                     </tr>
@@ -623,6 +628,15 @@ Each ByteRangeSpec defines a range of bytes to fetch</p>
                     </tr>
                 
                     <tr class=' module-item'>
+                        <td><a class='enum' href='enum.ContentRangeSpec.html'
+                               title='hyper::header::ContentRangeSpec'>ContentRangeSpec</a></td>
+                        <td class='docblock short'>
+                             <p>Content-Range, described in <a href="https://tools.ietf.org/html/rfc7233#section-4.2">RFC7233</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
                         <td><a class='enum' href='enum.Encoding.html'
                                title='hyper::header::Encoding'>Encoding</a></td>
                         <td class='docblock short'>
@@ -768,40 +782,49 @@ Sets <code>q</code> to the default 1.0</p>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard Shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search Tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
