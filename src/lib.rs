@@ -22,6 +22,7 @@ mod mock;
 use std::path::PathBuf;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read};
+use std::ops::Drop;
 
 use hyper::header::{ContentType, Headers};
 use mime::{Attr, Mime, Param, SubLevel, TopLevel, Value};
@@ -46,6 +47,32 @@ pub struct UploadedFile {
     pub content_type: Mime,
     /// The size of the file.
     pub size: usize,
+    // The temporary directory the upload was put into, saved for the Drop trait
+    tempdir: PathBuf,
+}
+
+impl UploadedFile {
+    pub fn new(content_type: Mime) -> Result<UploadedFile,Error> {
+        // Setup a file to capture the contents.
+        let tempdir = try!(TempDir::new("formdata")).into_path();
+        let mut path = tempdir.clone();
+        path.push(TextNonce::sized_urlsafe(32).unwrap().into_string());
+        Ok(UploadedFile {
+            path: path,
+            filename: None,
+            content_type: content_type,
+            size: 0,
+            tempdir: tempdir,
+        })
+    }
+}
+
+impl Drop for UploadedFile {
+    fn drop(&mut self) {
+        if ::std::fs::remove_file(&self.path).is_ok() {
+            let _ = ::std::fs::remove_dir(&self.tempdir);
+        }
+    }
 }
 
 /// The extracted text fields and uploaded files from a `multipart/form-data` request.
@@ -201,12 +228,14 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
             },
             CapturingFile(cd, ct) => {
                 // Setup a file to capture the contents.
-                let mut path = try!(TempDir::new("formdata")).into_path();
-                path.push(TextNonce::sized_urlsafe(32).unwrap().into_string());
-                let mut file = try!(File::create(path.clone()));
+                let mut uploaded_file = try!(UploadedFile::new(
+                    ct.map_or(mime!(Text/Plain; Charset=Utf8), |ct| ct.0)));
+                uploaded_file.filename = cd.filename.clone();
+                let mut file = try!(File::create(uploaded_file.path.clone()));
 
                 // Stream out the file.
                 let read = try!(reader.stream_until_token(&crlf_boundary, &mut file));
+                uploaded_file.size = read - crlf_boundary.len();
 
                 // TODO: Handle Content-Transfer-Encoding.
 
@@ -215,14 +244,7 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
                     FormData => try!(cd.name.ok_or(Error::NoName)),
                 };
 
-                let file = UploadedFile {
-                    path: path,
-                    filename: cd.filename.clone(),
-                    content_type: ct.map_or(mime!(Text/Plain; Charset=Utf8), |ct| ct.0),
-                    size: read - crlf_boundary.len()
-                };
-
-                form_data.files.push((key, file));
+                form_data.files.push((key, uploaded_file));
                 state = ReadingHeaders;
             },
         }
@@ -342,11 +364,11 @@ mod tests {
                 for (key, file) in form_data.files {
                     if &key == "field2" {
                         assert_eq!(file.size, 30);
-                        assert_eq!(&file.filename.unwrap(), "image.gif");
+                        assert_eq!(file.filename.as_ref().unwrap(), "image.gif");
                         assert_eq!(file.content_type, mime!(Image/Gif));
                     } else if &key == "field3" {
                         assert_eq!(file.size, 14);
-                        assert_eq!(&file.filename.unwrap(), "file.txt");
+                        assert_eq!(file.filename.as_ref().unwrap(), "file.txt");
                         assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
                     }
                 }
@@ -403,7 +425,7 @@ mod tests {
                 assert_eq!(form_data.files.len(), 2);
                 for (key, file) in form_data.files {
                     assert_eq!(&key, "files");
-                    match &file.filename.unwrap()[..] {
+                    match &file.filename.as_ref().unwrap()[..] {
                         "file1.txt" => {
                             assert_eq!(file.size, 29);
                             assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
