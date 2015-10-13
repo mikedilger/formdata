@@ -69,9 +69,8 @@ impl UploadedFile {
 
 impl Drop for UploadedFile {
     fn drop(&mut self) {
-        if ::std::fs::remove_file(&self.path).is_ok() {
-            let _ = ::std::fs::remove_dir(&self.tempdir);
-        }
+        let _ = ::std::fs::remove_file(&self.path);
+        let _ = ::std::fs::remove_dir(&self.tempdir);
     }
 }
 
