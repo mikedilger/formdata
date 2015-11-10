@@ -5,7 +5,6 @@
 
 extern crate httparse;
 extern crate hyper;
-extern crate libc;
 #[macro_use]
 extern crate mime;
 extern crate tempdir;

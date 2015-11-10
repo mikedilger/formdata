@@ -16,7 +16,6 @@ keywords = ["multipart", "form-data", "hyper", "http", "mime"]
 hyper = "^0.6"
 httparse = "^1.0"
 mime = "^0.1"
-libc = "^0.1"
 tempdir = "^0.3"
 textnonce = "^0.1"
 log = "^0.3"
