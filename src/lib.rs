@@ -1,3 +1,6 @@
+// Copyright © 2015 by Michael Dilger (of New Zealand)
+// This code is licensed under the MIT license (see LICENSE-MIT for details)
+
 //! This crate parses and processes a stream of data that contains
 //! `multipart/form-data` content.
 //!
