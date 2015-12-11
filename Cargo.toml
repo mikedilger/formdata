@@ -1,6 +1,6 @@
 [package]
 name = "formdata"
-version = "0.7.3"
+version = "0.7.4"
 description = "Parsing of multipart/form-data"
 authors = [
         "Mike Dilger <mike@optcomp.nz>",
