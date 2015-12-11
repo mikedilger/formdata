@@ -14,6 +14,12 @@ HTML forms with enctype=`multipart/form-data` `POST` their data in this format.
 This `enctype` is typically used whenever a form has file upload input fields,
 as the default `application/x-www-form-urlencoded` cannot handle file uploads.
 
+## Usage in Iron
+
+Iron users are directed to consider using the https://crates.io/crates/params crate,
+which is an Iron plugin that works at a higher level and gives a broader scope than
+this crate does.
+
 ## Example
 
 ```rust
