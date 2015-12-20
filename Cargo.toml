@@ -11,6 +11,11 @@ repository = "https://github.com/mikedilger/formdata"
 documentation = "https://mikedilger.github.io/formdata"
 license = "MIT"
 keywords = ["multipart", "form-data", "hyper", "http", "mime"]
+build = "build.rs"
+
+[build-dependencies]
+serde_codegen = "*"
+syntex = "*"
 
 [dependencies]
 hyper = "^0.7"
@@ -19,3 +24,5 @@ mime = "^0.1"
 tempdir = "^0.3"
 textnonce = "^0.1"
 log = "^0.3"
+serde = "*"
+
