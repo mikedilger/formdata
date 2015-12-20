@@ -15,6 +15,8 @@ extern crate textnonce;
 #[macro_use]
 extern crate log;
 extern crate serde;
+#[cfg(test)]
+extern crate serde_json;
 
 pub mod buf;
 pub mod error;
@@ -301,6 +303,8 @@ mod tests {
 
     use mock::MockStream;
 
+    use serde_json;
+
     #[test]
     fn parser() {
         let input = b"POST / HTTP/1.1\r\n\
@@ -421,5 +425,32 @@ mod tests {
             },
             Err(err) => panic!("{}", err),
         }
+    }
+
+    #[test]
+    fn test_serde_uploaded_file() {
+        let uploaded_file = UploadedFile::new(
+            "text/html; charset=utf-8".parse().unwrap() ).unwrap();
+        let serialized = serde_json::to_string(&uploaded_file).unwrap();
+        let deserialized: UploadedFile = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(uploaded_file, deserialized);
+    }
+
+    #[test]
+    fn test_serde_form_data() {
+        let form_data = FormData {
+            fields: vec![
+                ("name".to_owned(), "Betty".to_owned()),
+                ("age".to_owned(), "32".to_owned()) ],
+            files: vec![
+                ("test.txt".to_owned(), UploadedFile::new(
+                    "text/html; charset=utf-8".parse().unwrap()).unwrap()),
+                ("test.txt".to_owned(), UploadedFile::new(
+                    "text/html; charset=utf-8".parse().unwrap()).unwrap()),
+                ],
+        };
+        let serialized = serde_json::to_string(&form_data).unwrap();
+        let deserialized: FormData = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(form_data, deserialized);
     }
 }

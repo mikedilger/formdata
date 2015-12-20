@@ -17,6 +17,9 @@ build = "build.rs"
 serde_codegen = "^0.6"
 syntex = "^0"
 
+[dev-dependencies]
+serde_json = "^0.6"
+
 [dependencies]
 hyper = "^0.7"
 httparse = "^1.0"
