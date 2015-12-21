@@ -58,6 +58,7 @@ enum State {
     // Capture headers to blank line.
     ReadingHeaders,
     // Capture entire `multipart/mixed` body until boundary, then discard past CRLF.
+    // "Content Disposition Header for Each Part" https://tools.ietf.org/html/rfc7578#section-4.2
     CapturingMixed(ContentDisposition, ContentType),
     // Capture value until boundary, then discard past CRLF.
     CapturingValue(ContentDisposition),
@@ -127,6 +128,8 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
                         // Turn raw headers into hyper headers.
                         let headers = try!(Headers::from_raw(raw_headers));
 
+                        // Each part must contain a Content Disposition Header field
+                        // https://tools.ietf.org/html/rfc7578#section-4.2
                         let cd: &ContentDisposition = match headers.get() {
                             Some(cd) => cd,
                             None => return Err(Error::MissingDisposition),
@@ -289,6 +292,7 @@ fn get_boundary_token(params: &[Param]) -> Result<String, Error> {
     Err(Error::BoundaryNotSpecified)
 }
 
+// https://tools.ietf.org/html/rfc7578#section-4.1 (`--` is included in the boundary param)
 fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
     let mut crlf_boundary = Vec::with_capacity(2 + boundary.len());
     crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
@@ -397,6 +401,65 @@ mod tests {
                         assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
                     }
                 }
+            },
+            Err(err) => panic!("{}", err),
+        }
+    }
+
+    #[test]
+    fn multi_file_parser() {
+        let input = b"POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=\"abcdefg\"\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field1\"\r\n\
+                      \r\n\
+                      data1\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field2\"; filename=\"image.gif\"\r\n\
+                      Content-Type: image/gif\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      with two lines\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\"field2\"; filename=\"file.txt\"\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      --abcdefg--";
+
+        let mut mock = MockStream::with_input(input);
+
+        let mock: &mut NetworkStream = &mut mock;
+        let mut stream = BufReader::new(mock);
+        let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
+        let mut req = HyperRequest::new(&mut stream, sock).unwrap();
+        let boundary = get_multipart_boundary(&req.headers).unwrap();
+
+        match parse_multipart(&mut req, boundary) {
+            Ok(form_data) => {
+                assert_eq!(form_data.fields.len(), 1);
+                for (key, val) in form_data.fields {
+                    if &key == "field1" {
+                        assert_eq!(&val, "data1");
+                    }
+                }
+
+                assert_eq!(form_data.files.len(), 2);
+                let (ref key, ref file) = form_data.files[0];
+
+                assert_eq!(key, "field2");
+                assert_eq!(file.size, 30);
+                assert_eq!(file.filename.as_ref().unwrap(), "image.gif");
+                assert_eq!(file.content_type, mime!(Image/Gif));
+
+                let (ref key, ref file) = form_data.files[1];
+                assert!(key == "field2");
+                assert_eq!(file.size, 14);
+                assert_eq!(file.filename.as_ref().unwrap(), "file.txt");
+                assert_eq!(file.content_type, mime!(Text/Plain; Charset=Utf8));
+
             },
             Err(err) => panic!("{}", err),
         }
