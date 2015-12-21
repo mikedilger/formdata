@@ -437,8 +437,6 @@ mod tests {
         let mut req = HyperRequest::new(&mut stream, sock).unwrap();
         let boundary = get_multipart_boundary(&req.headers).unwrap();
 
-        // println!("{:?}", boundary);
-
         match parse_multipart(&mut req, boundary) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
