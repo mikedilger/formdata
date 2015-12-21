@@ -305,7 +305,7 @@ fn get_boundary_token(params: &[Param]) -> Result<String, Error> {
     Err(Error::BoundaryNotSpecified)
 }
 
-// https://tools.ietf.org/html/rfc7578#section-4.1
+// https://tools.ietf.org/html/rfc7578#section-4.1 (`--` is included in the boundary param)
 fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
     let mut crlf_boundary = Vec::with_capacity(2 + boundary.len());
     crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
