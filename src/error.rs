@@ -1,3 +1,7 @@
+// Copyright © 2015 by Michael Dilger (of New Zealand)
+// This code is licensed under the MIT license (see LICENSE-MIT for details)
+
+use std::borrow::Cow;
 use std::error::Error as StdError;
 use std::fmt::{self, Display};
 use std::io;
@@ -34,6 +38,8 @@ pub enum Error {
     Hyper(hyper::Error),
     /// An error occurred during UTF-8 processing.
     Utf8(FromUtf8Error),
+    /// An error occurred during character decoding
+    Decoding(Cow<'static, str>),
 }
 
 impl From<io::Error> for Error {
@@ -71,6 +77,8 @@ impl Display for Error {
                 format!("{}: {}", self.description(), e).fmt(f),
             Error::Utf8(ref e) =>
                 format!("{}: {}", self.description(), e).fmt(f),
+            Error::Decoding(ref e) =>
+                format!("{}: {}", self.description(), e).fmt(f),
             _ => format!("{}", self.description()).fmt(f),
         }
     }
@@ -100,6 +108,7 @@ impl StdError for Error {
             Error::Io(_) => "An I/O error occurred.",
             Error::Hyper(_) => "A Hyper error occurred.",
             Error::Utf8(_) => "A UTF-8 error occurred.",
+            Error::Decoding(_) => "A decoding error occurred.",
         }
     }
 }

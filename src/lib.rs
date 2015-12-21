@@ -17,26 +17,28 @@ extern crate log;
 extern crate serde;
 #[cfg(test)]
 extern crate serde_json;
+extern crate encoding;
 
 pub mod buf;
 pub mod error;
 #[cfg(test)]
 mod mock;
+pub mod uploaded_file;
+pub mod form_data;
 
+pub use error::Error;
+pub use uploaded_file::UploadedFile;
+pub use form_data::FormData;
+
+use encoding::all;
+use encoding::{Encoding, DecoderTrap};
+use std::borrow::Cow;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read};
-
-use hyper::header::{ContentType, Headers, ContentDisposition, DispositionType, DispositionParam};
+use hyper::header::{ContentType, Headers, ContentDisposition, DispositionType,
+                    DispositionParam, Charset};
 use mime::{Attr, Mime, Param, SubLevel, TopLevel, Value};
-
 use buf::BufReadExt;
-pub use error::Error;
-
-pub mod uploaded_file;
-pub use uploaded_file::UploadedFile;
-
-pub mod form_data;
-pub use form_data::FormData;
 
 /// Parses and processes a stream of `multipart/form-data` content.
 ///
@@ -129,7 +131,8 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
                             Some(cd) => cd,
                             None => return Err(Error::MissingDisposition),
                         };
-                        let cd_filename: Option<String> = get_content_disposition_filename(cd);
+                        let cd_filename: Option<String> =
+                            try!(get_content_disposition_filename(cd));
 
                         let ct: Option<&ContentType> = headers.get();
 
@@ -177,12 +180,12 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
             },
             CapturingFile(cd, ct) => {
                 let cd_name: Option<String> = get_content_disposition_name(&cd);
-                let cd_filename: Option<String> = get_content_disposition_filename(&cd);
+                let cd_filename: Option<String> = try!(get_content_disposition_filename(&cd));
 
                 // Setup a file to capture the contents.
                 let mut uploaded_file = try!(UploadedFile::new(
                     ct.map_or(mime!(Text/Plain; Charset=Utf8), |ct| ct.0)));
-                uploaded_file.filename = cd_filename.clone();
+                uploaded_file.filename = cd_filename;
                 let mut file = try!(File::create(uploaded_file.path.clone()));
 
                 // Stream out the file.
@@ -260,17 +263,19 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
 }
 
 #[inline]
-fn get_content_disposition_filename(cd: &ContentDisposition) -> Option<String> {
-    if let Some(&DispositionParam::Filename(ref _charset, _, ref bytes)) =
+fn get_content_disposition_filename(cd: &ContentDisposition) -> Result<Option<String>, Error> {
+    if let Some(&DispositionParam::Filename(ref charset, _, ref bytes)) =
         cd.parameters.iter().find(|&x| match *x {
             DispositionParam::Filename(_,_,_) => true,
             _ => false,
         })
     {
-        // FIXME: Translate bytes from _charset to utf-8
-        Some(String::from_utf8_lossy(&*bytes).into_owned())
+        match charset_decode(charset, bytes) {
+            Ok(filename) => Ok(Some(filename)),
+            Err(e) => Err(Error::Decoding(e)),
+        }
     } else {
-        None
+        Ok(None)
     }
 }
 
@@ -289,6 +294,41 @@ fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
     crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
     crlf_boundary.extend(boundary.clone());
     crlf_boundary
+}
+
+// This decodes bytes encoded according to a hyper::header::Charset encoding, using the
+// rust-encoding crate.  Only supports encodings defined in both crates.
+fn charset_decode(charset: &Charset, bytes: &Vec<u8>) -> Result<String, Cow<'static, str>> {
+    Ok(match *charset {
+        Charset::Us_Ascii => try!(all::ASCII.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_1 => try!(all::ISO_8859_1.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_2 => try!(all::ISO_8859_2.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_3 => try!(all::ISO_8859_3.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_4 => try!(all::ISO_8859_4.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_5 => try!(all::ISO_8859_5.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_6 => try!(all::ISO_8859_6.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_7 => try!(all::ISO_8859_7.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_8 => try!(all::ISO_8859_8.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_8859_9 => return Err("ISO_8859_9 is not supported".into()),
+        Charset::Iso_8859_10 => try!(all::ISO_8859_10.decode(bytes, DecoderTrap::Strict)),
+        Charset::Shift_Jis => return Err("Shift_Jis is not supported".into()),
+        Charset::Euc_Jp => try!(all::EUC_JP.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_2022_Kr => return Err("Iso_2022_Kr is not supported".into()),
+        Charset::Euc_Kr => return Err("Euc_Kr is not supported".into()),
+        Charset::Iso_2022_Jp => try!(all::ISO_2022_JP.decode(bytes, DecoderTrap::Strict)),
+        Charset::Iso_2022_Jp_2 => return Err("Iso_2022_Jp_2 is not supported".into()),
+        Charset::Iso_8859_6_E => return Err("Iso_8859_6_E is not supported".into()),
+        Charset::Iso_8859_6_I => return Err("Iso_8859_6_I is not supported".into()),
+        Charset::Iso_8859_8_E => return Err("Iso_8859_8_E is not supported".into()),
+        Charset::Iso_8859_8_I => return Err("Iso_8859_8_I is not supported".into()),
+        Charset::Gb2312 => return Err("Gb2312 is not supported".into()),
+        Charset::Big5 => try!(all::BIG5_2003.decode(bytes, DecoderTrap::Strict)),
+        Charset::Koi8_R => try!(all::KOI8_R.decode(bytes, DecoderTrap::Strict)),
+        Charset::Ext(ref s) => match &**s {
+            "UTF-8" => try!(all::UTF_8.decode(bytes, DecoderTrap::Strict)),
+            _ => return Err("Encoding is not supported".into()),
+        },
+    })
 }
 
 #[cfg(test)]
