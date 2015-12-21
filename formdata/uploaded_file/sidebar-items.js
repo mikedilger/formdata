@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["UploadedFile","An uploaded file that was received as part of `multipart/form-data` parsing."]]});

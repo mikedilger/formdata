@@ -9,6 +9,7 @@
 
     <title>lib.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -484,7 +485,125 @@
 <span id="442">442</span>
 <span id="443">443</span>
 <span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
 </pre><pre class='rust '>
+<span class='comment'>// Copyright © 2015 by Michael Dilger (of New Zealand)</span>
+<span class='comment'>// This code is licensed under the MIT license (see LICENSE-MIT for details)</span>
+
 <span class='doccomment'>//! This crate parses and processes a stream of data that contains</span>
 <span class='doccomment'>//! `multipart/form-data` content.</span>
 <span class='doccomment'>//!</span>
@@ -492,94 +611,37 @@
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>httparse</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>hyper</span>;
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>mime</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>tempdir</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>textnonce</span>;
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>log</span>;
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>serde</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>serde_json</span>;
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>encoding</span>;
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>buf</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>error</span>;
-<span class='kw'>mod</span> <span class='ident'>headers</span>;
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>mock</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>uploaded_file</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>form_data</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>PathBuf</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>uploaded_file</span>::<span class='ident'>UploadedFile</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>form_data</span>::<span class='ident'>FormData</span>;
+
+<span class='kw'>use</span> <span class='ident'>encoding</span>::<span class='ident'>all</span>;
+<span class='kw'>use</span> <span class='ident'>encoding</span>::{<span class='ident'>Encoding</span>, <span class='ident'>DecoderTrap</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Cow</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='ident'>BufRead</span>, <span class='ident'>BufReader</span>, <span class='ident'>Read</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Drop</span>;
-
-<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>ContentType</span>, <span class='ident'>Headers</span>};
+<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>ContentType</span>, <span class='ident'>Headers</span>, <span class='ident'>ContentDisposition</span>, <span class='ident'>DispositionType</span>,
+                    <span class='ident'>DispositionParam</span>, <span class='ident'>Charset</span>};
 <span class='kw'>use</span> <span class='ident'>mime</span>::{<span class='ident'>Attr</span>, <span class='ident'>Mime</span>, <span class='ident'>Param</span>, <span class='ident'>SubLevel</span>, <span class='ident'>TopLevel</span>, <span class='ident'>Value</span>};
-<span class='kw'>use</span> <span class='ident'>tempdir</span>::<span class='ident'>TempDir</span>;
-<span class='kw'>use</span> <span class='ident'>textnonce</span>::<span class='ident'>TextNonce</span>;
-
 <span class='kw'>use</span> <span class='ident'>buf</span>::<span class='ident'>BufReadExt</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
-<span class='kw'>use</span> <span class='ident'>headers</span>::<span class='ident'>ContentDisposition</span>;
-
-<span class='doccomment'>/// An uploaded file that was received as part of `multipart/form-data` parsing.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Files are streamed to disk because they may not fit in memory.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>UploadedFile</span> {
-    <span class='doccomment'>/// The temporary file where the data was saved.</span>
-    <span class='kw'>pub</span> <span class='ident'>path</span>: <span class='ident'>PathBuf</span>,
-    <span class='doccomment'>/// The filename that was specified in the data, unfiltered. It may or may not be legal on the</span>
-    <span class='doccomment'>/// local filesystem.</span>
-    <span class='kw'>pub</span> <span class='ident'>filename</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// The unvalidated content-type that was specified in the data.</span>
-    <span class='kw'>pub</span> <span class='ident'>content_type</span>: <span class='ident'>Mime</span>,
-    <span class='doccomment'>/// The size of the file.</span>
-    <span class='kw'>pub</span> <span class='ident'>size</span>: <span class='ident'>usize</span>,
-    <span class='comment'>// The temporary directory the upload was put into, saved for the Drop trait</span>
-    <span class='ident'>tempdir</span>: <span class='ident'>PathBuf</span>,
-}
-
-<span class='kw'>impl</span> <span class='ident'>UploadedFile</span> {
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>content_type</span>: <span class='ident'>Mime</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>UploadedFile</span>,<span class='ident'>Error</span><span class='op'>&gt;</span> {
-        <span class='comment'>// Setup a file to capture the contents.</span>
-        <span class='kw'>let</span> <span class='ident'>tempdir</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>TempDir</span>::<span class='ident'>new</span>(<span class='string'>&quot;formdata&quot;</span>)).<span class='ident'>into_path</span>();
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>tempdir</span>.<span class='ident'>clone</span>();
-        <span class='ident'>path</span>.<span class='ident'>push</span>(<span class='ident'>TextNonce</span>::<span class='ident'>sized_urlsafe</span>(<span class='number'>32</span>).<span class='ident'>unwrap</span>().<span class='ident'>into_string</span>());
-        <span class='prelude-val'>Ok</span>(<span class='ident'>UploadedFile</span> {
-            <span class='ident'>path</span>: <span class='ident'>path</span>,
-            <span class='ident'>filename</span>: <span class='prelude-val'>None</span>,
-            <span class='ident'>content_type</span>: <span class='ident'>content_type</span>,
-            <span class='ident'>size</span>: <span class='number'>0</span>,
-            <span class='ident'>tempdir</span>: <span class='ident'>tempdir</span>,
-        })
-    }
-}
-
-<span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>UploadedFile</span> {
-    <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='kw'>if</span> ::<span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>remove_file</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>path</span>).<span class='ident'>is_ok</span>() {
-            <span class='kw'>let</span> _ <span class='op'>=</span> ::<span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>remove_dir</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>tempdir</span>);
-        }
-    }
-}
-
-<span class='doccomment'>/// The extracted text fields and uploaded files from a `multipart/form-data` request.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Use `parse_multipart` to devise this object from a request.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>FormData</span> {
-    <span class='doccomment'>/// Name-value pairs for plain text fields. Technically, these are form data parts with no</span>
-    <span class='doccomment'>/// filename specified in the part&#39;s `Content-Disposition`.</span>
-    <span class='kw'>pub</span> <span class='ident'>fields</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>, <span class='ident'>String</span>)<span class='op'>&gt;</span>,
-    <span class='doccomment'>/// Name-value pairs for temporary files. Technically, these are form data parts with a filename</span>
-    <span class='doccomment'>/// specified in the part&#39;s `Content-Disposition`.</span>
-    <span class='kw'>pub</span> <span class='ident'>files</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>String</span>, <span class='ident'>UploadedFile</span>)<span class='op'>&gt;</span>,
-}
-
-<span class='kw'>impl</span> <span class='ident'>FormData</span> {
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>FormData</span> {
-        <span class='ident'>FormData</span> { <span class='ident'>fields</span>: <span class='macro'>vec</span><span class='macro'>!</span>[], <span class='ident'>files</span>: <span class='macro'>vec</span><span class='macro'>!</span>[] }
-    }
-}
 
 <span class='doccomment'>/// Parses and processes a stream of `multipart/form-data` content.</span>
 <span class='doccomment'>///</span>
@@ -599,6 +661,7 @@
     <span class='comment'>// Capture headers to blank line.</span>
     <span class='ident'>ReadingHeaders</span>,
     <span class='comment'>// Capture entire `multipart/mixed` body until boundary, then discard past CRLF.</span>
+    <span class='comment'>// &quot;Content Disposition Header for Each Part&quot; https://tools.ietf.org/html/rfc7578#section-4.2</span>
     <span class='ident'>CapturingMixed</span>(<span class='ident'>ContentDisposition</span>, <span class='ident'>ContentType</span>),
     <span class='comment'>// Capture value until boundary, then discard past CRLF.</span>
     <span class='ident'>CapturingValue</span>(<span class='ident'>ContentDisposition</span>),
@@ -668,24 +731,30 @@
                         <span class='comment'>// Turn raw headers into hyper headers.</span>
                         <span class='kw'>let</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Headers</span>::<span class='ident'>from_raw</span>(<span class='ident'>raw_headers</span>));
 
+                        <span class='comment'>// Each part must contain a Content Disposition Header field</span>
+                        <span class='comment'>// https://tools.ietf.org/html/rfc7578#section-4.2</span>
                         <span class='kw'>let</span> <span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDisposition</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>headers</span>.<span class='ident'>get</span>() {
                             <span class='prelude-val'>Some</span>(<span class='ident'>cd</span>) <span class='op'>=&gt;</span> <span class='ident'>cd</span>,
                             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>MissingDisposition</span>),
                         };
+                        <span class='kw'>let</span> <span class='ident'>cd_filename</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='op'>=</span>
+                            <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_content_disposition_filename</span>(<span class='ident'>cd</span>));
 
                         <span class='kw'>let</span> <span class='ident'>ct</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>ContentType</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>headers</span>.<span class='ident'>get</span>();
 
                         <span class='kw'>match</span> <span class='ident'>mode</span> {
-                            <span class='ident'>FormData</span> <span class='kw'>if</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span> <span class='string'>&quot;form-data&quot;</span> <span class='op'>=&gt;</span> {
+                            <span class='ident'>FormData</span> <span class='kw'>if</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span>
+                                <span class='ident'>DispositionType</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;form-data&quot;</span>.<span class='ident'>to_owned</span>()) <span class='op'>=&gt;</span> {
                                 <span class='ident'>state</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>is_multipart_mixed</span>(<span class='ident'>ct</span>) {
                                     <span class='ident'>CapturingMixed</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>(), <span class='ident'>ct</span>.<span class='ident'>unwrap</span>().<span class='ident'>clone</span>())
-                                } <span class='kw'>else</span> <span class='kw'>if</span> <span class='ident'>ct</span>.<span class='ident'>is_some</span>() <span class='op'>||</span> <span class='ident'>cd</span>.<span class='ident'>filename</span>.<span class='ident'>is_some</span>() {
+                                } <span class='kw'>else</span> <span class='kw'>if</span> <span class='ident'>ct</span>.<span class='ident'>is_some</span>() <span class='op'>||</span> <span class='ident'>cd_filename</span>.<span class='ident'>is_some</span>() {
                                     <span class='ident'>CapturingFile</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>(), <span class='ident'>ct</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>ct</span><span class='op'>|</span> <span class='ident'>ct</span>.<span class='ident'>clone</span>()))
                                 } <span class='kw'>else</span> {
                                     <span class='ident'>CapturingValue</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>())
                                 };
                             },
-                            <span class='ident'>Mixed</span>(_) <span class='kw'>if</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span> <span class='string'>&quot;file&quot;</span> <span class='op'>=&gt;</span> {
+                            <span class='ident'>Mixed</span>(_) <span class='kw'>if</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span> <span class='ident'>DispositionType</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;file&quot;</span>.<span class='ident'>to_owned</span>())
+                                <span class='op'>||</span> <span class='ident'>cd</span>.<span class='ident'>disposition</span> <span class='op'>==</span> <span class='ident'>DispositionType</span>::<span class='ident'>Attachment</span> <span class='op'>=&gt;</span> {
                                 <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>CapturingFile</span>(<span class='ident'>cd</span>.<span class='ident'>clone</span>(), <span class='ident'>ct</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>ct</span><span class='op'>|</span> <span class='ident'>ct</span>.<span class='ident'>clone</span>()));
                             },
                             _ <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>InvalidDisposition</span>),
@@ -696,17 +765,19 @@
                 }
             },
             <span class='ident'>CapturingMixed</span>(<span class='ident'>cd</span>, <span class='ident'>ct</span>) <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>cd_name</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>get_content_disposition_name</span>(<span class='kw-2'>&amp;</span><span class='ident'>cd</span>);
                 <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_boundary_token</span>(<span class='kw-2'>&amp;</span>(<span class='ident'>ct</span>.<span class='number'>0</span>).<span class='number'>2</span>));
-                <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>Mixed</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd</span>.<span class='ident'>name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>)));
+                <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>Mixed</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd_name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>)));
                 <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>run_state_machine</span>(<span class='ident'>boundary</span>, <span class='ident'>reader</span>, <span class='ident'>form_data</span>, <span class='ident'>mode</span>));
                 <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>Discarding</span>;
             },
             <span class='ident'>CapturingValue</span>(_) <span class='kw'>if</span> <span class='ident'>mode</span> <span class='op'>!=</span> <span class='ident'>FormData</span> <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>(),
             <span class='ident'>CapturingValue</span>(<span class='ident'>cd</span>) <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>cd_name</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>get_content_disposition_name</span>(<span class='kw-2'>&amp;</span><span class='ident'>cd</span>);
                 <span class='ident'>buf</span>.<span class='ident'>truncate</span>(<span class='number'>0</span>);
                 <span class='kw'>let</span> _ <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='kw-2'>&amp;</span><span class='ident'>crlf_boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span>));
 
-                <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd</span>.<span class='ident'>name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>));
+                <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd_name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>));
                 <span class='kw'>let</span> <span class='ident'>val</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>String</span>::<span class='ident'>from_utf8</span>(<span class='ident'>buf</span>));
 
                 <span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>push</span>((<span class='ident'>key</span>, <span class='ident'>val</span>));
@@ -714,21 +785,26 @@
                 <span class='ident'>state</span> <span class='op'>=</span> <span class='ident'>ReadingHeaders</span>;
             },
             <span class='ident'>CapturingFile</span>(<span class='ident'>cd</span>, <span class='ident'>ct</span>) <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>cd_name</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>get_content_disposition_name</span>(<span class='kw-2'>&amp;</span><span class='ident'>cd</span>);
+                <span class='kw'>let</span> <span class='ident'>cd_filename</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>get_content_disposition_filename</span>(<span class='kw-2'>&amp;</span><span class='ident'>cd</span>));
+
                 <span class='comment'>// Setup a file to capture the contents.</span>
                 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>uploaded_file</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>UploadedFile</span>::<span class='ident'>new</span>(
                     <span class='ident'>ct</span>.<span class='ident'>map_or</span>(<span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>), <span class='op'>|</span><span class='ident'>ct</span><span class='op'>|</span> <span class='ident'>ct</span>.<span class='number'>0</span>)));
-                <span class='ident'>uploaded_file</span>.<span class='ident'>filename</span> <span class='op'>=</span> <span class='ident'>cd</span>.<span class='ident'>filename</span>.<span class='ident'>clone</span>();
+                <span class='ident'>uploaded_file</span>.<span class='ident'>filename</span> <span class='op'>=</span> <span class='ident'>cd_filename</span>;
                 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>File</span>::<span class='ident'>create</span>(<span class='ident'>uploaded_file</span>.<span class='ident'>path</span>.<span class='ident'>clone</span>()));
 
                 <span class='comment'>// Stream out the file.</span>
                 <span class='kw'>let</span> <span class='ident'>read</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>reader</span>.<span class='ident'>stream_until_token</span>(<span class='kw-2'>&amp;</span><span class='ident'>crlf_boundary</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>file</span>));
                 <span class='ident'>uploaded_file</span>.<span class='ident'>size</span> <span class='op'>=</span> <span class='ident'>read</span> <span class='op'>-</span> <span class='ident'>crlf_boundary</span>.<span class='ident'>len</span>();
 
-                <span class='comment'>// TODO: Handle Content-Transfer-Encoding.</span>
+                <span class='comment'>// TODO: Handle Content-Transfer-Encoding.  RFC 7578 section 4.7 deprecated</span>
+                <span class='comment'>// this, and the authors state &quot;Currently, no deployed implementations that</span>
+                <span class='comment'>// send such bodies have been discovered&quot;, so this is very low priority.</span>
 
                 <span class='kw'>let</span> <span class='ident'>key</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>mode</span> {
                     <span class='ident'>Mixed</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>name</span>.<span class='ident'>clone</span>(),
-                    <span class='ident'>FormData</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd</span>.<span class='ident'>name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>)),
+                    <span class='ident'>FormData</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>cd_name</span>.<span class='ident'>ok_or</span>(<span class='ident'>Error</span>::<span class='ident'>NoName</span>)),
                 };
 
                 <span class='ident'>form_data</span>.<span class='ident'>files</span>.<span class='ident'>push</span>((<span class='ident'>key</span>, <span class='ident'>uploaded_file</span>));
@@ -778,6 +854,37 @@
     <span class='ident'>get_boundary_token</span>(<span class='ident'>params</span>)
 }
 
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='kw'>fn</span> <span class='ident'>get_content_disposition_name</span>(<span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDisposition</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
+    <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(_, <span class='kw-2'>ref</span> <span class='ident'>value</span>)) <span class='op'>=</span> <span class='ident'>cd</span>.<span class='ident'>parameters</span>.<span class='ident'>iter</span>()
+        .<span class='ident'>find</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>x</span><span class='op'>|</span> <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>x</span> {
+            <span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='kw-2'>ref</span> <span class='ident'>token</span>,_) <span class='op'>=&gt;</span> <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>token</span> <span class='op'>==</span> <span class='string'>&quot;name&quot;</span>,
+            _ <span class='op'>=&gt;</span> <span class='boolval'>false</span>,
+        })
+    {
+        <span class='prelude-val'>Some</span>(<span class='ident'>value</span>.<span class='ident'>clone</span>())
+    } <span class='kw'>else</span> {
+        <span class='prelude-val'>None</span>
+    }
+}
+
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='kw'>fn</span> <span class='ident'>get_content_disposition_filename</span>(<span class='ident'>cd</span>: <span class='kw-2'>&amp;</span><span class='ident'>ContentDisposition</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>DispositionParam</span>::<span class='ident'>Filename</span>(<span class='kw-2'>ref</span> <span class='ident'>charset</span>, _, <span class='kw-2'>ref</span> <span class='ident'>bytes</span>)) <span class='op'>=</span>
+        <span class='ident'>cd</span>.<span class='ident'>parameters</span>.<span class='ident'>iter</span>().<span class='ident'>find</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>x</span><span class='op'>|</span> <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>x</span> {
+            <span class='ident'>DispositionParam</span>::<span class='ident'>Filename</span>(_,_,_) <span class='op'>=&gt;</span> <span class='boolval'>true</span>,
+            _ <span class='op'>=&gt;</span> <span class='boolval'>false</span>,
+        })
+    {
+        <span class='kw'>match</span> <span class='ident'>charset_decode</span>(<span class='ident'>charset</span>, <span class='ident'>bytes</span>) {
+            <span class='prelude-val'>Ok</span>(<span class='ident'>filename</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='prelude-val'>Some</span>(<span class='ident'>filename</span>)),
+            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>Decoding</span>(<span class='ident'>e</span>)),
+        }
+    } <span class='kw'>else</span> {
+        <span class='prelude-val'>Ok</span>(<span class='prelude-val'>None</span>)
+    }
+}
+
 <span class='kw'>fn</span> <span class='ident'>get_boundary_token</span>(<span class='ident'>params</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>Param</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Error</span><span class='op'>&gt;</span> {
     <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>attr</span>, <span class='kw-2'>ref</span> <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>params</span>.<span class='ident'>iter</span>() {
         <span class='kw'>if</span> <span class='kw'>let</span> (<span class='kw-2'>&amp;</span><span class='ident'>Attr</span>::<span class='ident'>Boundary</span>, <span class='kw-2'>&amp;</span><span class='ident'>Value</span>::<span class='ident'>Ext</span>(<span class='kw-2'>ref</span> <span class='ident'>val</span>)) <span class='op'>=</span> (<span class='ident'>attr</span>, <span class='ident'>val</span>) {
@@ -788,11 +895,47 @@
     <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>BoundaryNotSpecified</span>)
 }
 
+<span class='comment'>// https://tools.ietf.org/html/rfc7578#section-4.1 (`--` is included in the boundary param)</span>
 <span class='kw'>fn</span> <span class='ident'>crlf_boundary</span>(<span class='ident'>boundary</span>: <span class='kw-2'>&amp;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> {
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>crlf_boundary</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='number'>2</span> <span class='op'>+</span> <span class='ident'>boundary</span>.<span class='ident'>len</span>());
     <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='string'>b&quot;\r\n&quot;</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>i</span><span class='op'>|</span> <span class='ident'>i</span>));
     <span class='ident'>crlf_boundary</span>.<span class='ident'>extend</span>(<span class='ident'>boundary</span>.<span class='ident'>clone</span>());
     <span class='ident'>crlf_boundary</span>
+}
+
+<span class='comment'>// This decodes bytes encoded according to a hyper::header::Charset encoding, using the</span>
+<span class='comment'>// rust-encoding crate.  Only supports encodings defined in both crates.</span>
+<span class='kw'>fn</span> <span class='ident'>charset_decode</span>(<span class='ident'>charset</span>: <span class='kw-2'>&amp;</span><span class='ident'>Charset</span>, <span class='ident'>bytes</span>: <span class='kw-2'>&amp;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Cow</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span>, <span class='ident'>str</span><span class='op'>&gt;&gt;</span> {
+    <span class='prelude-val'>Ok</span>(<span class='kw'>match</span> <span class='op'>*</span><span class='ident'>charset</span> {
+        <span class='ident'>Charset</span>::<span class='ident'>Us_Ascii</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ASCII</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_1</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_1</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_2</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_2</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_3</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_3</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_4</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_4</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_5</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_5</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_6</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_6</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_7</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_7</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_8</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_8</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_9</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;ISO_8859_9 is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_10</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_8859_10</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Shift_Jis</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Shift_Jis is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Euc_Jp</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>EUC_JP</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_2022_Kr</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Iso_2022_Kr is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Euc_Kr</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Euc_Kr is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_2022_Jp</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>ISO_2022_JP</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_2022_Jp_2</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Iso_2022_Jp_2 is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_6_E</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Iso_8859_6_E is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_6_I</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Iso_8859_6_I is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_8_E</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Iso_8859_8_E is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Iso_8859_8_I</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Iso_8859_8_I is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Gb2312</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Gb2312 is not supported&quot;</span>.<span class='ident'>into</span>()),
+        <span class='ident'>Charset</span>::<span class='ident'>Big5</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>BIG5_2003</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Koi8_R</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>KOI8_R</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+        <span class='ident'>Charset</span>::<span class='ident'>Ext</span>(<span class='kw-2'>ref</span> <span class='ident'>s</span>) <span class='op'>=&gt;</span> <span class='kw'>match</span> <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='op'>*</span><span class='ident'>s</span> {
+            <span class='string'>&quot;UTF-8&quot;</span> <span class='op'>=&gt;</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>all</span>::<span class='ident'>UTF_8</span>.<span class='ident'>decode</span>(<span class='ident'>bytes</span>, <span class='ident'>DecoderTrap</span>::<span class='ident'>Strict</span>)),
+            _ <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Encoding is not supported&quot;</span>.<span class='ident'>into</span>()),
+        },
+    })
 }
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
@@ -806,6 +949,8 @@
     <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Request</span> <span class='kw'>as</span> <span class='ident'>HyperRequest</span>;
 
     <span class='kw'>use</span> <span class='ident'>mock</span>::<span class='ident'>MockStream</span>;
+
+    <span class='kw'>use</span> <span class='ident'>serde_json</span>;
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>parser</span>() {
@@ -859,6 +1004,65 @@
                         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>));
                     }
                 }
+            },
+            <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>err</span>),
+        }
+    }
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>multi_file_parser</span>() {
+        <span class='kw'>let</span> <span class='ident'>input</span> <span class='op'>=</span> <span class='string'>b&quot;POST / HTTP/1.1\r\n\
+                      Host: example.domain\r\n\
+                      Content-Type: multipart/form-data; boundary=\&quot;abcdefg\&quot;\r\n\
+                      Content-Length: 1000\r\n\
+                      \r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\&quot;field1\&quot;\r\n\
+                      \r\n\
+                      data1\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\&quot;field2\&quot;; filename=\&quot;image.gif\&quot;\r\n\
+                      Content-Type: image/gif\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      with two lines\r\n\
+                      --abcdefg\r\n\
+                      Content-Disposition: form-data; name=\&quot;field2\&quot;; filename=\&quot;file.txt\&quot;\r\n\
+                      \r\n\
+                      This is a file\r\n\
+                      --abcdefg--&quot;</span>;
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>mock</span> <span class='op'>=</span> <span class='ident'>MockStream</span>::<span class='ident'>with_input</span>(<span class='ident'>input</span>);
+
+        <span class='kw'>let</span> <span class='ident'>mock</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>NetworkStream</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>mock</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stream</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>mock</span>);
+        <span class='kw'>let</span> <span class='ident'>sock</span>: <span class='ident'>SocketAddr</span> <span class='op'>=</span> <span class='string'>&quot;127.0.0.1:80&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>req</span> <span class='op'>=</span> <span class='ident'>HyperRequest</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stream</span>, <span class='ident'>sock</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> <span class='ident'>get_multipart_boundary</span>(<span class='kw-2'>&amp;</span><span class='ident'>req</span>.<span class='ident'>headers</span>).<span class='ident'>unwrap</span>();
+
+        <span class='kw'>match</span> <span class='ident'>parse_multipart</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>req</span>, <span class='ident'>boundary</span>) {
+            <span class='prelude-val'>Ok</span>(<span class='ident'>form_data</span>) <span class='op'>=&gt;</span> {
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>fields</span>.<span class='ident'>len</span>(), <span class='number'>1</span>);
+                <span class='kw'>for</span> (<span class='ident'>key</span>, <span class='ident'>val</span>) <span class='kw'>in</span> <span class='ident'>form_data</span>.<span class='ident'>fields</span> {
+                    <span class='kw'>if</span> <span class='kw-2'>&amp;</span><span class='ident'>key</span> <span class='op'>==</span> <span class='string'>&quot;field1&quot;</span> {
+                        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='ident'>val</span>, <span class='string'>&quot;data1&quot;</span>);
+                    }
+                }
+
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>.<span class='ident'>files</span>.<span class='ident'>len</span>(), <span class='number'>2</span>);
+                <span class='kw'>let</span> (<span class='kw-2'>ref</span> <span class='ident'>key</span>, <span class='kw-2'>ref</span> <span class='ident'>file</span>) <span class='op'>=</span> <span class='ident'>form_data</span>.<span class='ident'>files</span>[<span class='number'>0</span>];
+
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>key</span>, <span class='string'>&quot;field2&quot;</span>);
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>30</span>);
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>(), <span class='string'>&quot;image.gif&quot;</span>);
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Image</span><span class='op'>/</span><span class='ident'>Gif</span>));
+
+                <span class='kw'>let</span> (<span class='kw-2'>ref</span> <span class='ident'>key</span>, <span class='kw-2'>ref</span> <span class='ident'>file</span>) <span class='op'>=</span> <span class='ident'>form_data</span>.<span class='ident'>files</span>[<span class='number'>1</span>];
+                <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>key</span> <span class='op'>==</span> <span class='string'>&quot;field2&quot;</span>);
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>size</span>, <span class='number'>14</span>);
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>filename</span>.<span class='ident'>as_ref</span>().<span class='ident'>unwrap</span>(), <span class='string'>&quot;file.txt&quot;</span>);
+                <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>file</span>.<span class='ident'>content_type</span>, <span class='macro'>mime</span><span class='macro'>!</span>(<span class='ident'>Text</span><span class='op'>/</span><span class='ident'>Plain</span>; <span class='ident'>Charset</span><span class='op'>=</span><span class='ident'>Utf8</span>));
+
             },
             <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>err</span>),
         }
@@ -928,6 +1132,33 @@
             <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>err</span>),
         }
     }
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>test_serde_uploaded_file</span>() {
+        <span class='kw'>let</span> <span class='ident'>uploaded_file</span> <span class='op'>=</span> <span class='ident'>UploadedFile</span>::<span class='ident'>new</span>(
+            <span class='string'>&quot;text/html; charset=utf-8&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>() ).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>serialized</span> <span class='op'>=</span> <span class='ident'>serde_json</span>::<span class='ident'>to_string</span>(<span class='kw-2'>&amp;</span><span class='ident'>uploaded_file</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>deserialized</span>: <span class='ident'>UploadedFile</span> <span class='op'>=</span> <span class='ident'>serde_json</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>serialized</span>).<span class='ident'>unwrap</span>();
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>uploaded_file</span>, <span class='ident'>deserialized</span>);
+    }
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>test_serde_form_data</span>() {
+        <span class='kw'>let</span> <span class='ident'>form_data</span> <span class='op'>=</span> <span class='ident'>FormData</span> {
+            <span class='ident'>fields</span>: <span class='macro'>vec</span><span class='macro'>!</span>[
+                (<span class='string'>&quot;name&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;Betty&quot;</span>.<span class='ident'>to_owned</span>()),
+                (<span class='string'>&quot;age&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;32&quot;</span>.<span class='ident'>to_owned</span>()) ],
+            <span class='ident'>files</span>: <span class='macro'>vec</span><span class='macro'>!</span>[
+                (<span class='string'>&quot;test.txt&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>UploadedFile</span>::<span class='ident'>new</span>(
+                    <span class='string'>&quot;text/html; charset=utf-8&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>()),
+                (<span class='string'>&quot;test.txt&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>UploadedFile</span>::<span class='ident'>new</span>(
+                    <span class='string'>&quot;text/html; charset=utf-8&quot;</span>.<span class='ident'>parse</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>()),
+                ],
+        };
+        <span class='kw'>let</span> <span class='ident'>serialized</span> <span class='op'>=</span> <span class='ident'>serde_json</span>::<span class='ident'>to_string</span>(<span class='kw-2'>&amp;</span><span class='ident'>form_data</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>deserialized</span>: <span class='ident'>FormData</span> <span class='op'>=</span> <span class='ident'>serde_json</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>serialized</span>).<span class='ident'>unwrap</span>();
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>form_data</span>, <span class='ident'>deserialized</span>);
+    }
 }
 </pre>
 </section>
@@ -989,6 +1220,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

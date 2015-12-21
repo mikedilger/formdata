@@ -9,6 +9,7 @@
 
     <title>error.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -145,7 +146,20 @@
 <span id="103">103</span>
 <span id="104">104</span>
 <span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
 </pre><pre class='rust '>
+<span class='comment'>// Copyright © 2015 by Michael Dilger (of New Zealand)</span>
+<span class='comment'>// This code is licensed under the MIT license (see LICENSE-MIT for details)</span>
+
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Cow</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>StdError</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>::{<span class='self'>self</span>, <span class='ident'>Display</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
@@ -182,6 +196,8 @@
     <span class='ident'>Hyper</span>(<span class='ident'>hyper</span>::<span class='ident'>Error</span>),
     <span class='doccomment'>/// An error occurred during UTF-8 processing.</span>
     <span class='ident'>Utf8</span>(<span class='ident'>FromUtf8Error</span>),
+    <span class='doccomment'>/// An error occurred during character decoding</span>
+    <span class='ident'>Decoding</span>(<span class='ident'>Cow</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span>, <span class='ident'>str</span><span class='op'>&gt;</span>),
 }
 
 <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
@@ -219,6 +235,8 @@
                 <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}: {}&quot;</span>, <span class='self'>self</span>.<span class='ident'>description</span>(), <span class='ident'>e</span>).<span class='ident'>fmt</span>(<span class='ident'>f</span>),
             <span class='ident'>Error</span>::<span class='ident'>Utf8</span>(<span class='kw-2'>ref</span> <span class='ident'>e</span>) <span class='op'>=&gt;</span>
                 <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}: {}&quot;</span>, <span class='self'>self</span>.<span class='ident'>description</span>(), <span class='ident'>e</span>).<span class='ident'>fmt</span>(<span class='ident'>f</span>),
+            <span class='ident'>Error</span>::<span class='ident'>Decoding</span>(<span class='kw-2'>ref</span> <span class='ident'>e</span>) <span class='op'>=&gt;</span>
+                <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}: {}&quot;</span>, <span class='self'>self</span>.<span class='ident'>description</span>(), <span class='ident'>e</span>).<span class='ident'>fmt</span>(<span class='ident'>f</span>),
             _ <span class='op'>=&gt;</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='self'>self</span>.<span class='ident'>description</span>()).<span class='ident'>fmt</span>(<span class='ident'>f</span>),
         }
     }
@@ -248,6 +266,7 @@
             <span class='ident'>Error</span>::<span class='ident'>Io</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;An I/O error occurred.&quot;</span>,
             <span class='ident'>Error</span>::<span class='ident'>Hyper</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;A Hyper error occurred.&quot;</span>,
             <span class='ident'>Error</span>::<span class='ident'>Utf8</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;A UTF-8 error occurred.&quot;</span>,
+            <span class='ident'>Error</span>::<span class='ident'>Decoding</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;A decoding error occurred.&quot;</span>,
         }
     }
 }
@@ -311,6 +330,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

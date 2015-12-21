@@ -9,6 +9,7 @@
 
     <title>formdata::parse_multipart - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -45,8 +46,8 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-301' class='srclink' href='../src/formdata/lib.rs.html#101-106' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn parse_multipart&lt;S: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(stream: &amp;mut S, boundary: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>, <a class='enum' href='../formdata/error/enum.Error.html' title='formdata::error::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parses and processes a stream of <code>multipart/form-data</code> content.</p>
+        </span><a id='src-524' class='srclink' href='../src/formdata/lib.rs.html#47-52' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn parse_multipart&lt;S: <a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(stream: &amp;mut S, boundary: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/form_data/struct.FormData.html' title='formdata::form_data::FormData'>FormData</a>, <a class='enum' href='../formdata/error/enum.Error.html' title='formdata::error::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parses and processes a stream of <code>multipart/form-data</code> content.</p>
 
 <p>The request is streamed, and this function saves embedded uploaded files to disk as they are
 encountered by the parser.</p>
@@ -109,6 +110,6 @@ encountered by the parser.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

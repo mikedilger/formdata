@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-121aea75f9ef2ce2/hyper-0.6.15/src/header/shared/quality_item.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/mike/.cargo/registry/src/github.com-88ac128001ac3a9a/hyper-0.7.0/src/header/shared/quality_item.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>quality_item.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
 
     
@@ -378,7 +379,7 @@
     <span class='ident'>QualityItem</span>::<span class='ident'>new</span>(<span class='ident'>item</span>, <span class='ident'>Default</span>::<span class='ident'>default</span>())
 }
 
-<span class='doccomment'>/// Convenience function to create a `Quality` fromt a float.</span>
+<span class='doccomment'>/// Convenience function to create a `Quality` from a float.</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>q</span>(<span class='ident'>f</span>: <span class='ident'>f32</span>) <span class='op'>-&gt;</span> <span class='ident'>Quality</span> {
     <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>f</span> <span class='op'>&gt;=</span> <span class='number'>0f32</span> <span class='op'>&amp;&amp;</span> <span class='ident'>f</span> <span class='op'>&lt;=</span> <span class='number'>1f32</span>, <span class='string'>&quot;q value must be between 0.0 and 1.0&quot;</span>);
     <span class='ident'>from_f32</span>(<span class='ident'>f</span>)
@@ -531,6 +532,6 @@
     <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     
-    <script async src="../../../../search-index.js"></script>
+    <script defer src="../../../../search-index.js"></script>
 </body>
 </html>

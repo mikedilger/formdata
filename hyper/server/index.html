@@ -9,6 +9,7 @@
 
     <title>hyper::server - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -45,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-6197' class='srclink' href='../../src/hyper/server/mod.rs.html#1-513' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-6751' class='srclink' href='../../src/hyper/server/mod.rs.html#1-507' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>HTTP Server</p>
 
 <h1 id='server' class='section-header'><a href='#server'>Server</a></h1>
@@ -141,8 +142,8 @@ and only once. But this has 2 downsides:</p>
 <code>Response&lt;Fresh&gt;</code> includes a <code>headers_mut()</code> method, allowing you add more
 headers. It also does not implement <code>Write</code>, so you can&#39;t accidentally
 write early. Once the &quot;head&quot; of the response is correct, you can &quot;send&quot; it
-out by calling <code>start</code> on the <code>Request&lt;Fresh&gt;</code>. This will return a new
-<code>Request&lt;Streaming&gt;</code> object, that no longer has <code>headers_mut()</code>, but does
+out by calling <code>start</code> on the <code>Response&lt;Fresh&gt;</code>. This will return a new
+<code>Response&lt;Streaming&gt;</code> object, that no longer has <code>headers_mut()</code>, but does
 implement <code>Write</code>.</p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
 <table><tr><td><code>pub use self::<a class='mod'
@@ -254,6 +255,6 @@ implement <code>Write</code>.</p>
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>
