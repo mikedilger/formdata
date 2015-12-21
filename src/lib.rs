@@ -437,6 +437,8 @@ mod tests {
         let mut req = HyperRequest::new(&mut stream, sock).unwrap();
         let boundary = get_multipart_boundary(&req.headers).unwrap();
 
+        // println!("{:?}", boundary);
+
         match parse_multipart(&mut req, boundary) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
@@ -454,7 +456,7 @@ mod tests {
                 assert_eq!(file.filename.as_ref().unwrap(), "image.gif");
                 assert_eq!(file.content_type, mime!(Image/Gif));
 
-                (ref key, ref file) = form_data.files[1];
+                let (ref key, ref file) = form_data.files[1];
                 assert!(key == "field2");
                 assert_eq!(file.size, 14);
                 assert_eq!(file.filename.as_ref().unwrap(), "file.txt");
@@ -462,6 +464,7 @@ mod tests {
 
             },
             Err(err) => panic!("{}", err),
+        }
     }
 
     #[test]
