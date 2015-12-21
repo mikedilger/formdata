@@ -14,6 +14,7 @@ use hyper::header::{Header, HeaderFormat, parsing};
 ///
 /// This is an internal type not meant for general public usage, as its implementation limited in
 /// scope.
+// https://tools.ietf.org/html/rfc7578#section-4.2
 #[derive(Clone, Debug, PartialEq)]
 pub struct ContentDisposition {
     pub disposition: String,
