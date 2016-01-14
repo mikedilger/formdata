@@ -59,7 +59,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
 
             // If the buffer starts with a token suffix matching a token prefix from the end of the
             // previous buffer, then we have found a token.
-            if prefix_lengths.len() > 0 {
+            if !prefix_lengths.is_empty() {
                 let largest_prefix_len = prefix_lengths[0];
 
                 // FIXME: once Vec::drain() stabilizes, use that instead
@@ -67,7 +67,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
                 prefix_lengths.truncate(0);
 
                 let mut partmatch = false;
-                for &prefix_len in drain.iter() {
+                for &prefix_len in &drain {
                     // If the buffer is too small to fit an entire suffix
                     if buffer.len() < token.len() - prefix_len {
                         if buffer[..] == token[prefix_len..prefix_len + buffer.len()] {
@@ -113,7 +113,7 @@ fn stream_until_token<R: BufRead + ?Sized, W: Write>(stream: &mut R, token: &[u8
                 window = buffer.len();
             }
             // Remember the largest prefix for writing later if it didn't match
-            let mut reserve = if prefix_lengths.len() > 0 {
+            let mut reserve = if !prefix_lengths.is_empty() {
                 buffer.len()
             } else {
                 0

@@ -102,7 +102,7 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
                     return Err(Error::Eof);
                 }
                 // `parse_headers` requires this token at the end:
-                buf.extend(b"\r\n\r\n".iter().map(|&i| i));
+                buf.extend(b"\r\n\r\n".iter().cloned());
 
                 // Parse the headers.
                 let mut header_memory = [httparse::EMPTY_HEADER; 4];
@@ -128,14 +128,14 @@ fn run_state_machine<R: BufRead>(boundary: String, reader: &mut R, form_data: &m
                                 state = if is_multipart_mixed(ct) {
                                     CapturingMixed(cd.clone(), ct.unwrap().clone())
                                 } else if ct.is_some() || cd_filename.is_some() {
-                                    CapturingFile(cd.clone(), ct.map(|ct| ct.clone()))
+                                    CapturingFile(cd.clone(), ct.cloned())
                                 } else {
                                     CapturingValue(cd.clone())
                                 };
                             },
                             Mixed(_) if cd.disposition == DispositionType::Ext("file".to_owned())
                                 || cd.disposition == DispositionType::Attachment => {
-                                state = CapturingFile(cd.clone(), ct.map(|ct| ct.clone()));
+                                state = CapturingFile(cd.clone(), ct.cloned());
                             },
                             _ => return Err(Error::InvalidDisposition),
                         }
@@ -276,16 +276,16 @@ fn get_boundary_token(params: &[Param]) -> Result<String, Error> {
 }
 
 // https://tools.ietf.org/html/rfc7578#section-4.1 (`--` is included in the boundary param)
-fn crlf_boundary(boundary: &Vec<u8>) -> Vec<u8> {
+fn crlf_boundary(boundary: &[u8]) -> Vec<u8> {
     let mut crlf_boundary = Vec::with_capacity(2 + boundary.len());
-    crlf_boundary.extend(b"\r\n".iter().map(|&i| i));
+    crlf_boundary.extend(b"\r\n".iter().cloned());
     crlf_boundary.extend(boundary.clone());
     crlf_boundary
 }
 
 // This decodes bytes encoded according to a hyper::header::Charset encoding, using the
 // rust-encoding crate.  Only supports encodings defined in both crates.
-fn charset_decode(charset: &Charset, bytes: &Vec<u8>) -> Result<String, Cow<'static, str>> {
+fn charset_decode(charset: &Charset, bytes: &[u8]) -> Result<String, Cow<'static, str>> {
     Ok(match *charset {
         Charset::Us_Ascii => try!(all::ASCII.decode(bytes, DecoderTrap::Strict)),
         Charset::Iso_8859_1 => try!(all::ISO_8859_1.decode(bytes, DecoderTrap::Strict)),
