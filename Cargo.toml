@@ -29,7 +29,7 @@ hyper = "^0.7"
 httparse = "^1.0"
 mime = "^0.1"
 tempdir = "^0.3"
-textnonce = "^0.1"
+textnonce = "^0.2"
 log = "^0.3"
 serde = "^0.6"
 serde_macros = { version = "^0.6", optional = true }
