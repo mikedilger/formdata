@@ -14,9 +14,12 @@ keywords = ["multipart", "form-data", "hyper", "http", "mime"]
 build = "build.rs"
 
 [features]
-default = ["with-syntex", "ssl"]
-with-syntex = ["syntex", "serde_codegen"]
+default = [ "rust-stable", "ssl" ]
+rust-stable = [ "serde_codegen", "syntex", "textnonce/rust-stable" ]
+rust-nightly = [ "serde_macros", "textnonce/rust-nightly" ]
 ssl = ["hyper/ssl"]
+# Deprecated feature names
+with-syntex = [ "rust-stable" ]
 
 [build-dependencies]
 serde_codegen = { version = "0.7", optional = true }
@@ -30,7 +33,7 @@ hyper = {version = "0.8", default-features = false }
 httparse = "1.1"
 mime = { version = "0.2", features = [ "serde" ] }
 tempdir = "0.3"
-textnonce = "0.2"
+textnonce = { version = "0.3", default-features = false }
 log = "0.3"
 serde = "0.7"
 serde_macros = { version = "0.7", optional = true }

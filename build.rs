@@ -1,4 +1,4 @@
-#[cfg(feature = "with-syntex")]
+#[cfg(feature = "rust-stable")]
 mod inner {
     extern crate syntex;
     extern crate serde_codegen;
@@ -17,7 +17,7 @@ mod inner {
     }
 }
 
-#[cfg(not(feature = "with-syntex"))]
+#[cfg(feature = "rust-nightly")]
 mod inner {
     pub fn main() {}
 }

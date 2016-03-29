@@ -6,8 +6,8 @@
 //!
 //! The main entry point is `parse_multipart`
 
-#![cfg_attr(not(feature = "with-syntex"), feature(custom_attribute, custom_derive, plugin))]
-#![cfg_attr(not(feature = "with-syntex"), plugin(serde_macros))]
+#![cfg_attr(feature = "rust-nightly", feature(custom_attribute, custom_derive, plugin))]
+#![cfg_attr(feature = "rust-nightly", plugin(serde_macros))]
 #![cfg_attr(feature="clippy", feature(plugin))]
 #![cfg_attr(feature="clippy", plugin(clippy))]
 
@@ -24,8 +24,8 @@ extern crate serde;
 extern crate serde_json;
 extern crate encoding;
 
-#[cfg(feature = "with-syntex")]
+#[cfg(feature = "rust-stable")]
 include!(concat!(env!("OUT_DIR"), "/lib.rs"));
 
-#[cfg(not(feature = "with-syntex"))]
+#[cfg(feature = "rust-nightly")]
 include!("lib.rs.in");
