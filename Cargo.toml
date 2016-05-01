@@ -23,13 +23,13 @@ with-syntex = [ "rust-stable" ]
 
 [build-dependencies]
 serde_codegen = { version = "0.7", optional = true }
-syntex = { version = "0.30", optional = true }
+syntex = { version = "0.31", optional = true }
 
 [dev-dependencies]
 serde_json = "0.7"
 
 [dependencies]
-hyper = {version = "0.8", default-features = false }
+hyper = {version = "0.9", default-features = false }
 httparse = "1.1"
 mime = { version = "0.2", features = [ "serde" ] }
 tempdir = "0.3"
