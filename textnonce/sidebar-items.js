@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["TextNonce","A nonce is a cryptographic concept of an arbitrary number that is never used more than once."]]});

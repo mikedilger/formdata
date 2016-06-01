@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["NonblockingSslError","An error on a nonblocking stream."],["OpensslError","An error from the OpenSSL library"],["SslError","An SSL error"]]});
