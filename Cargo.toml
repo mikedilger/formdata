@@ -33,7 +33,7 @@ hyper = {version = "0.9", default-features = false }
 httparse = "1.1"
 mime = { version = "0.2", features = [ "serde" ] }
 tempdir = "0.3"
-textnonce = { version = "0.3", default-features = false }
+textnonce = { version = "0.3.3", default-features = false }
 log = "0.3"
 serde = "0.7"
 serde_macros = { version = "0.7", optional = true }
