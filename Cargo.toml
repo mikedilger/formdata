@@ -23,7 +23,7 @@ with-syntex = [ "rust-stable" ]
 
 [build-dependencies]
 serde_codegen = { version = "0.7", optional = true }
-syntex = { version = "0.32", optional = true }
+syntex = { version = "0.33", optional = true }
 
 [dev-dependencies]
 serde_json = "0.7"
