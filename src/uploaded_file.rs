@@ -11,7 +11,7 @@ use textnonce::TextNonce;
 /// An uploaded file that was received as part of `multipart/form-data` parsing.
 ///
 /// Files are streamed to disk because they may not fit in memory.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct UploadedFile {
     /// The temporary file where the data was saved.
     pub path: PathBuf,
