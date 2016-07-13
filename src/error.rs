@@ -7,7 +7,7 @@ use std::fmt::{self, Display};
 use std::io;
 use std::string::FromUtf8Error;
 
-use super::{httparse, hyper};
+use super::{httparse, hyper, mime_multipart};
 
 /// An error type for the `formdata` crate.
 #[derive(Debug)]
@@ -40,6 +40,8 @@ pub enum Error {
     Utf8(FromUtf8Error),
     /// An error occurred during character decoding
     Decoding(Cow<'static, str>),
+    /// A MIME multipart error
+    Multipart(mime_multipart::Error),
 }
 
 impl From<io::Error> for Error {
@@ -66,6 +68,12 @@ impl From<FromUtf8Error> for Error {
     }
 }
 
+impl From<mime_multipart::Error> for Error {
+    fn from(err: mime_multipart::Error) -> Error {
+        Error::Multipart(err)
+    }
+}
+
 impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -78,6 +86,8 @@ impl Display for Error {
             Error::Utf8(ref e) =>
                 format!("{}: {}", self.description(), e).fmt(f),
             Error::Decoding(ref e) =>
+                format!("{}: {}", self.description(), e).fmt(f),
+            Error::Multipart(ref e) =>
                 format!("{}: {}", self.description(), e).fmt(f),
             _ => format!("{}", self.description()).fmt(f),
         }
@@ -109,6 +119,7 @@ impl StdError for Error {
             Error::Hyper(_) => "A Hyper error occurred.",
             Error::Utf8(_) => "A UTF-8 error occurred.",
             Error::Decoding(_) => "A decoding error occurred.",
+            Error::Multipart(_) => "A MIME multipart decoding error occurred.",
         }
     }
 }

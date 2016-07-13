@@ -1,7 +1,7 @@
 // Copyright © 2015 by Michael Dilger (of New Zealand)
 // This code is licensed under the MIT license (see LICENSE-MIT for details)
 
-use uploaded_file::UploadedFile;
+use mime_multipart::FilePart;
 
 /// The extracted text fields and uploaded files from a `multipart/form-data` request.
 ///
@@ -13,7 +13,7 @@ pub struct FormData {
     pub fields: Vec<(String, String)>,
     /// Name-value pairs for temporary files. Technically, these are form data parts with a filename
     /// specified in the part's `Content-Disposition`.
-    pub files: Vec<(String, UploadedFile)>,
+    pub files: Vec<(String, FilePart)>,
 }
 
 impl FormData {
