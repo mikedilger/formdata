@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `buf` mod in crate `formdata`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, buf">
+    <meta name="description" content="API documentation for the Rust `get_formdata` fn in crate `formdata`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, get_formdata">
 
-    <title>formdata::buf - Rust</title>
+    <title>formdata::get_formdata - Rust</title>
 
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
     
 
     
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>formdata</a></p><script>window.sidebarCurrent = {name: 'buf', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>formdata</a></p><script>window.sidebarCurrent = {name: 'get_formdata', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,21 +42,14 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>formdata</a>::<wbr><a class='mod' href=''>buf</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>formdata</a>::<wbr><a class='fn' href=''>get_formdata</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-12' class='srclink' href='../../src/formdata/home/mike/local/formdata/target/debug/build/formdata-3b04f385f64ff81c/out/lib.rs.html#4-328' title='goto source code'>[src]</a></span></h1>
-<h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='trait' href='trait.BufReadExt.html'
-                                  title='formdata::buf::BufReadExt'>BufReadExt</a></td>
-                           <td class='docblock short'>
-                                <p>Extends any type that implements BufRead with a stream_until_token() function.</p>
-                           </td>
-                       </tr></table></section>
+               </span><a id='src-153' class='srclink' href='../src/formdata/src/lib.rs.html#37-44' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn get_formdata&lt;S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(stream: &amp;mut S, headers: &amp;<a class='struct' href='https://hyperium.github.io/hyper/hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>,&nbsp;<a class='enum' href='../formdata/enum.Error.html' title='formdata::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parse MIME <code>multipart/form-data</code> information from a stream as a <code>FormData</code>.</p>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -79,6 +72,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -108,13 +103,13 @@
     
 
     <script>
-        window.rootPath = "../../";
+        window.rootPath = "../";
         window.currentCrate = "formdata";
         window.playgroundUrl = "";
     </script>
-    <script src="../../jquery.js"></script>
-    <script src="../../main.js"></script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
     
-    <script defer src="../../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

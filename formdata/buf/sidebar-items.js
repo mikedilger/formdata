@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["BufReadExt","Extends any type that implements BufRead with a stream_until_token() function."]]});

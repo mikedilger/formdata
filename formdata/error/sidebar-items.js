@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["Error","An error type for the `formdata` crate."]]});

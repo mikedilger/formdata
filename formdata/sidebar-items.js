@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["get_multipart_boundary","Get the `multipart/form-data` boundary string from hyper::Headers"],["parse_multipart","Parses and processes a stream of `multipart/form-data` content."]],"mod":[["buf",""],["error",""],["form_data",""],["uploaded_file",""]]});
+initSidebarItems({"enum":[["Error","An error type for the `formdata` crate."]],"fn":[["get_formdata","Parse MIME `multipart/form-data` information from a stream as a `FormData`."]],"struct":[["FormData","The extracted text fields and uploaded files from a `multipart/form-data` request."]]});
