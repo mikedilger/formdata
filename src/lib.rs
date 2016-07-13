@@ -4,7 +4,7 @@
 //! This crate parses and processes a stream of data that contains
 //! `multipart/form-data` content.
 //!
-//! The main entry point is `parse_multipart`
+//! The main entry point is `get_formdata`
 
 #![cfg_attr(feature="clippy", feature(plugin))]
 #![cfg_attr(feature="clippy", plugin(clippy))]

@@ -23,11 +23,8 @@ this crate does.
 ## Example
 
 ```rust
-// `headers` is your `hyper::headers::Headers` from your hyper or iron request.
-// `request` is the readable stream, and could be your hyper Request or iron HttpRequest, or
-
-let boundary = try!(get_multipart_boundary(&headers));
-let form_data = try!(parse_multipart(&mut request, boundary));
+let (_, _, headers, _, _, mut reader) = hyper_request.deconstruct();
+let form_data = try!(get_formdata(&mut reader, &headers));
 
 for (name, value) in form_data.fields {
     println!("Posted field name={} value={}",name,value);
@@ -35,7 +32,9 @@ for (name, value) in form_data.fields {
 
 for (name, file) in form_data.files {
     println!("Posted file name={} filename={:?} content_type={} size={} temporary_path={:?}",
-             name, file.filename, file.content_type, file.size, file.path);
+             name, try!(file.filename()).unwrap(),
+             file.content_type.unwrap(),
+             file.size.unwrap(),
+             file.path);
 }
-
 ```
