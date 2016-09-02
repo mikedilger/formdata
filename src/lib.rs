@@ -28,9 +28,11 @@ mod mock;
 pub use error::Error;
 pub use form_data::FormData;
 
-use std::io::Read;
-use hyper::header::{Headers, ContentDisposition, DispositionParam};
-use mime_multipart::Node;
+use std::io::{Read, Write};
+use hyper::header::{Headers, ContentDisposition, DispositionParam, ContentType,
+                    DispositionType};
+use mime_multipart::{Node, Part};
+use mime::{Mime, TopLevel, SubLevel};
 
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
 pub fn read_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
@@ -114,6 +116,44 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
     }
 }
 
+/// Stream out `multipart/form-data` body content matching the passed in `formdata`.  This
+/// does not stream out headers, so the caller must stream those out before calling
+/// write_formdata().
+///
+/// Note: File field names to be set in the headers in the FilePart; the FormData.files vector
+/// pair first elements are not used herein.
+
+pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<usize, Error>
+{
+    // Translate to Nodes
+    let mut nodes: Vec<Node> = Vec::with_capacity(formdata.fields.len() + formdata.files.len());
+
+    for &(ref name, ref value) in &formdata.fields {
+        let mut h = Headers::new();
+        h.set(ContentType(Mime(TopLevel::Text, SubLevel::Plain, vec![])));
+        h.set(ContentDisposition {
+            disposition: DispositionType::Ext("form-data".to_owned()),
+            parameters: vec![DispositionParam::Ext("name".to_owned(), name.clone())],
+        });
+        nodes.push( Node::Part( Part {
+            headers: h,
+            body: value.as_bytes().to_owned(),
+        }));
+    }
+
+    for &(ref _name, ref filepart) in &formdata.files {
+        // FIXME: maybe ensure the content-disposition formdata 'name' equals `_name`
+        nodes.push( Node::File( filepart.clone() ) );
+    }
+
+    let boundary = ::mime_multipart::generate_boundary();
+
+    // Write out
+    let count = try!(::mime_multipart::write_multipart(stream, &boundary, &nodes));
+
+    Ok(count)
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -122,10 +162,16 @@ mod tests {
     use super::*;
 
     use std::net::SocketAddr;
+    use std::fs::File;
+    use std::io::Write;
 
     use hyper::buffer::BufReader;
     use hyper::net::NetworkStream;
     use hyper::server::Request as HyperRequest;
+    use hyper::header::{Headers, ContentDisposition, DispositionParam, ContentType,
+                        DispositionType};
+    use mime_multipart::FilePart;
+    use mime::{Mime, TopLevel, SubLevel};
 
     use mock::MockStream;
 
@@ -308,5 +354,36 @@ mod tests {
             },
             Err(err) => panic!("{}", err),
         }
+    }
+
+    #[test]
+    fn simple_writer() {
+        // Create a simple short file for testing
+        let tmpdir = tempdir::TempDir::new("formdata_test").unwrap();
+        let tmppath = tmpdir.path().join("testfile");
+        let mut tmpfile = File::create(tmppath.clone()).unwrap();
+        writeln!(tmpfile, "this is example file content").unwrap();
+
+        let mut photo_headers = Headers::new();
+        photo_headers.set(ContentType(Mime(TopLevel::Image, SubLevel::Gif, vec![])));
+        photo_headers.set(ContentDisposition {
+            disposition: DispositionType::Ext("form-data".to_owned()),
+            parameters: vec![DispositionParam::Ext("name".to_owned(), "photo".to_owned()),
+                             DispositionParam::Ext("filename".to_owned(), "mike.gif".to_owned())],
+        });
+
+        let formdata = FormData {
+            fields: vec![ ("name".to_owned(), "Mike".to_owned()),
+                            ("age".to_owned(), "46".to_owned()) ],
+            files: vec![ ("photo".to_owned(), FilePart::new(photo_headers, &tmppath)) ],
+        };
+
+        let mut output: Vec<u8> = Vec::new();
+        match write_formdata(&mut output, &formdata) {
+            Ok(count) => assert_eq!(count, 568),
+            Err(e) => panic!("Unable to write formdata: {}", e),
+        }
+
+        println!("{}", String::from_utf8_lossy(&output));
     }
 }
