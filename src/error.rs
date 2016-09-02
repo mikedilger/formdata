@@ -10,7 +10,6 @@ use std::string::FromUtf8Error;
 use super::{httparse, hyper, mime_multipart};
 
 /// An error type for the `formdata` crate.
-#[derive(Debug)]
 pub enum Error {
     /// The Hyper request did not have a Content-Type header.
     NoRequestContentType,
@@ -94,6 +93,16 @@ impl Display for Error {
     }
 }
 
+impl fmt::Debug for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        try!( f.write_str(&*self.description()) );
+        if self.cause().is_some() {
+            try!( write!(f, ": {:?}", self.cause().unwrap()) ); // recurse
+        }
+        Ok(())
+    }
+}
+
 impl StdError for Error {
     fn description(&self) -> &str{
         match *self {
@@ -119,7 +128,7 @@ impl StdError for Error {
             Error::Hyper(_) => "A Hyper error occurred.",
             Error::Utf8(_) => "A UTF-8 error occurred.",
             Error::Decoding(_) => "A decoding error occurred.",
-            Error::Multipart(_) => "A MIME multipart decoding error occurred.",
+            Error::Multipart(_) => "A MIME multipart error occurred.",
         }
     }
 }
