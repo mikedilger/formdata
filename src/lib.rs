@@ -119,9 +119,6 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
 /// Stream out `multipart/form-data` body content matching the passed in `formdata`.  This
 /// does not stream out headers, so the caller must stream those out before calling
 /// write_formdata().
-///
-/// Note: File field names to be set in the headers in the FilePart; the FormData.files vector
-/// pair first elements are not used herein.
 
 pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<usize, Error>
 {
@@ -141,9 +138,21 @@ pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<u
         }));
     }
 
-    for &(ref _name, ref filepart) in &formdata.files {
-        // FIXME: maybe ensure the content-disposition formdata 'name' equals `_name`
-        nodes.push( Node::File( filepart.clone() ) );
+    for &(ref name, ref filepart) in &formdata.files {
+        let mut filepart = filepart.clone();
+        // We leave all headers that the caller specified, except that we rewrite
+        // Content-Disposition.
+        while filepart.headers.remove::<ContentDisposition>() { };
+        let filename = match filepart.path.file_name() {
+            Some(fname) => fname.to_string_lossy().into_owned(),
+            None => return Err(Error::NotAFile),
+        };
+        filepart.headers.set(ContentDisposition {
+            disposition: DispositionType::Ext("form-data".to_owned()),
+            parameters: vec![DispositionParam::Ext("name".to_owned(), name.clone()),
+                             DispositionParam::Ext("filename".to_owned(), filename)],
+        });
+        nodes.push( Node::File( filepart ) );
     }
 
     let boundary = ::mime_multipart::generate_boundary();
@@ -159,7 +168,7 @@ pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<u
 mod tests {
     extern crate tempdir;
 
-    use super::*;
+    use super::{FormData, write_formdata, read_formdata};
 
     use std::net::SocketAddr;
     use std::fs::File;
