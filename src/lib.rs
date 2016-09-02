@@ -36,7 +36,7 @@ use mime_multipart::Node;
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
 pub fn read_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
 {
-    let nodes = try!(mime_multipart::parse_multipart_body(stream, headers, false));
+    let nodes = try!(mime_multipart::read_multipart_body(stream, headers, false));
 
     let mut formdata = FormData::new();
     try!(fill_formdata(&mut formdata, nodes));
