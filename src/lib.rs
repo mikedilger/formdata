@@ -13,7 +13,6 @@ extern crate httparse;
 extern crate hyper;
 #[macro_use]
 extern crate mime;
-extern crate tempdir;
 extern crate textnonce;
 #[macro_use]
 extern crate log;
@@ -118,6 +117,8 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    extern crate tempdir;
+
     use super::*;
 
     use std::net::SocketAddr;
