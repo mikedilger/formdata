@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `formdata` crate.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, formdata">
+    <meta name="description" content="API documentation for the Rust `read_formdata` fn in crate `formdata`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, read_formdata">
 
-    <title>formdata - Rust</title>
+    <title>formdata::read_formdata - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'></p><script>window.sidebarCurrent = {name: 'formdata', ty: 'mod', relpath: '../'};</script>
+        <p class='location'><a href='index.html'>formdata</a></p><script>window.sidebarCurrent = {name: 'read_formdata', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,50 +42,14 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>formdata</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>formdata</a>::<wbr><a class='fn' href=''>read_formdata</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/formdata/src/lib.rs.html#4-389' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>This crate parses and processes a stream of data that contains
-<code>multipart/form-data</code> content.</p>
-
-<p>The main entry point is <code>read_formdata</code></p>
-</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.FormData.html'
-                                  title='formdata::FormData'>FormData</a></td>
-                           <td class='docblock short'>
-                                <p>The extracted text fields and uploaded files from a <code>multipart/form-data</code> request.</p>
-                           </td>
-                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='enum' href='enum.Error.html'
-                                  title='formdata::Error'>Error</a></td>
-                           <td class='docblock short'>
-                                <p>An error type for the <code>formdata</code> crate.</p>
-                           </td>
-                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.read_formdata.html'
-                                  title='formdata::read_formdata'>read_formdata</a></td>
-                           <td class='docblock short'>
-                                <p>Parse MIME <code>multipart/form-data</code> information from a stream as a <code>FormData</code>.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.write_formdata.html'
-                                  title='formdata::write_formdata'>write_formdata</a></td>
-                           <td class='docblock short'>
-                                <p>Stream out <code>multipart/form-data</code> body content matching the passed in <code>formdata</code>.  This
-does not stream out headers, so the caller must stream those out before calling
-write_formdata().</p>
-                           </td>
-                       </tr></table></section>
+               </span><a id='src-138' class='srclink' href='../src/formdata/src/lib.rs.html#38-45' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn read_formdata&lt;S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(stream: &amp;mut S, headers: &amp;<a class='struct' href='https://hyperium.github.io/hyper/hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>,&nbsp;<a class='enum' href='../formdata/enum.Error.html' title='formdata::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parse MIME <code>multipart/form-data</code> information from a stream as a <code>FormData</code>.</p>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

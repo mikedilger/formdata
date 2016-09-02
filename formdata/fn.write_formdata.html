@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `get_formdata` fn in crate `formdata`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, get_formdata">
+    <meta name="description" content="API documentation for the Rust `write_formdata` fn in crate `formdata`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, write_formdata">
 
-    <title>formdata::get_formdata - Rust</title>
+    <title>formdata::write_formdata - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>formdata</a></p><script>window.sidebarCurrent = {name: 'get_formdata', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>formdata</a></p><script>window.sidebarCurrent = {name: 'write_formdata', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,12 +43,17 @@
     </nav>
 
     <section id='main' class="content fn">
-<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>formdata</a>::<wbr><a class='fn' href=''>get_formdata</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>formdata</a>::<wbr><a class='fn' href=''>write_formdata</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-153' class='srclink' href='../src/formdata/src/lib.rs.html#37-44' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn get_formdata&lt;S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Read.html' title='std::io::Read'>Read</a>&gt;(stream: &amp;mut S, headers: &amp;<a class='struct' href='https://hyperium.github.io/hyper/hyper/header/struct.Headers.html' title='hyper::header::Headers'>Headers</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>,&nbsp;<a class='enum' href='../formdata/enum.Error.html' title='formdata::Error'>Error</a>&gt;</pre><div class='docblock'><p>Parse MIME <code>multipart/form-data</code> information from a stream as a <code>FormData</code>.</p>
+               </span><a id='src-192' class='srclink' href='../src/formdata/src/lib.rs.html#126-155' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn write_formdata&lt;S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a>&gt;(stream: &amp;mut S, formdata: &amp;<a class='struct' href='../formdata/struct.FormData.html' title='formdata::FormData'>FormData</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,&nbsp;<a class='enum' href='../formdata/enum.Error.html' title='formdata::Error'>Error</a>&gt;</pre><div class='docblock'><p>Stream out <code>multipart/form-data</code> body content matching the passed in <code>formdata</code>.  This
+does not stream out headers, so the caller must stream those out before calling
+write_formdata().</p>
+
+<p>Note: File field names to be set in the headers in the FilePart; the FormData.files vector
+pair first elements are not used herein.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 
