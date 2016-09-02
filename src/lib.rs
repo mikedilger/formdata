@@ -1,10 +1,73 @@
 // Copyright © 2015 by Michael Dilger (of New Zealand)
 // This code is licensed under the MIT license (see LICENSE-MIT for details)
 
-//! This crate parses and processes a stream of data that contains
-//! `multipart/form-data` content.
+//! This library provides a type for storing `multipart/form-data` data, as well as functions
+//! to stream (read or write) such data over HTTP.
 //!
-//! The main entry point is `read_formdata`
+//! `multipart/form-data` format as described by [RFC 7578](https://tools.ietf.org/html/rfc7578).
+//! HTML forms with enctype=`multipart/form-data` `POST` their data in this format.
+//! This `enctype` is typically used whenever a form has file upload input fields,
+//! as the default `application/x-www-form-urlencoded` cannot handle file uploads.
+//!
+//! Whether reading from a stream or writing out to a stream, files are never stored entirely
+//! in memory, but instead streamed through a buffer.
+//!
+//! ## Read Example
+//!
+//! ```no_run
+//! extern crate mime;
+//! extern crate hyper;
+//! extern crate formdata;
+//!
+//! use hyper::server::{Server, Request, Response};
+//!
+//! fn main() {
+//!   let server = Server::http("0.0.0.0:0").unwrap().handle(handler).unwrap();
+//! }
+//!
+//! fn handler(hyper_request: Request, res: Response) {
+//!   let (_, _, headers, _, _, mut reader) = hyper_request.deconstruct();
+//!   let form_data = formdata::read_formdata(&mut reader, &headers).unwrap();
+//!
+//!   for (name, value) in form_data.fields {
+//!     println!("Posted field name={} value={}", name, value);
+//!   }
+//!
+//!   for (name, file) in form_data.files {
+//!     println!("Posted file name={} path={:?}", name, file.path);
+//!   }
+//! }
+//! ```
+//!
+//! ## Write Example
+//!
+//! ```no_run
+//! extern crate mime;
+//! extern crate hyper;
+//! extern crate formdata;
+//!
+//! use std::path::Path;
+//! use hyper::header::{Headers, ContentType};
+//! use mime::{Mime, TopLevel, SubLevel};
+//! use formdata::{FormData, FilePart};
+//!
+//! fn main() {
+//!   let mut stream = ::std::io::stdout();
+//!   let mut photo_headers = Headers::new();
+//!   photo_headers.set(ContentType(Mime(TopLevel::Image, SubLevel::Gif, vec![])));
+//!   // no need to set Content-Disposition (in fact it will be rewritten)
+//!
+//!   let formdata = FormData {
+//!     fields: vec![ ("name".to_owned(), "Baxter".to_owned()),
+//!                   ("age".to_owned(), "1 month".to_owned()) ],
+//!     files: vec![ ("photo".to_owned(), FilePart::new(
+//!          photo_headers, Path::new("/tmp/puppy.gif"))) ],
+//!   };
+//!
+//!   let count = formdata::write_formdata(&mut stream, &formdata).unwrap();
+//!   println!("COUNT = {}", count);
+//! }
+//! ```
 
 #![cfg_attr(feature="clippy", feature(plugin))]
 #![cfg_attr(feature="clippy", plugin(clippy))]
