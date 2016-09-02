@@ -41,6 +41,8 @@ pub enum Error {
     Decoding(Cow<'static, str>),
     /// A MIME multipart error
     Multipart(mime_multipart::Error),
+    /// Filepart is not a file
+    NotAFile,
 }
 
 impl From<io::Error> for Error {
@@ -129,6 +131,7 @@ impl StdError for Error {
             Error::Utf8(_) => "A UTF-8 error occurred.",
             Error::Decoding(_) => "A decoding error occurred.",
             Error::Multipart(_) => "A MIME multipart error occurred.",
+            Error::NotAFile => "FilePart is not a file.",
         }
     }
 }
