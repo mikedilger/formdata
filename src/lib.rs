@@ -32,6 +32,7 @@ use std::io::{Read, Write};
 use hyper::header::{Headers, ContentDisposition, DispositionParam, ContentType,
                     DispositionType};
 use mime_multipart::{Node, Part};
+pub use mime_multipart::FilePart;
 use mime::{Mime, TopLevel, SubLevel};
 
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
