@@ -176,6 +176,9 @@
 <span id="132">132</span>
 <span id="133">133</span>
 <span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright © 2015 by Michael Dilger (of New Zealand)</span>
 <span class='comment'>// This code is licensed under the MIT license (see LICENSE-MIT for details)</span>
@@ -220,6 +223,8 @@
     <span class='ident'>Decoding</span>(<span class='ident'>Cow</span><span class='op'>&lt;</span><span class='lifetime'>&#39;static</span>, <span class='ident'>str</span><span class='op'>&gt;</span>),
     <span class='doccomment'>/// A MIME multipart error</span>
     <span class='ident'>Multipart</span>(<span class='ident'>mime_multipart</span>::<span class='ident'>Error</span>),
+    <span class='doccomment'>/// Filepart is not a file</span>
+    <span class='ident'>NotAFile</span>,
 }
 
 <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
@@ -308,6 +313,7 @@
             <span class='ident'>Error</span>::<span class='ident'>Utf8</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;A UTF-8 error occurred.&quot;</span>,
             <span class='ident'>Error</span>::<span class='ident'>Decoding</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;A decoding error occurred.&quot;</span>,
             <span class='ident'>Error</span>::<span class='ident'>Multipart</span>(_) <span class='op'>=&gt;</span> <span class='string'>&quot;A MIME multipart error occurred.&quot;</span>,
+            <span class='ident'>Error</span>::<span class='ident'>NotAFile</span> <span class='op'>=&gt;</span> <span class='string'>&quot;FilePart is not a file.&quot;</span>,
         }
     }
 }

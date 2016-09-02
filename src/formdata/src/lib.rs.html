@@ -431,14 +431,150 @@
 <span id="387">387</span>
 <span id="388">388</span>
 <span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright © 2015 by Michael Dilger (of New Zealand)</span>
 <span class='comment'>// This code is licensed under the MIT license (see LICENSE-MIT for details)</span>
 
-<span class='doccomment'>//! This crate parses and processes a stream of data that contains</span>
-<span class='doccomment'>//! `multipart/form-data` content.</span>
+<span class='doccomment'>//! This library provides a type for storing `multipart/form-data` data, as well as functions</span>
+<span class='doccomment'>//! to stream (read or write) such data over HTTP.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! The main entry point is `read_formdata`</span>
+<span class='doccomment'>//! `multipart/form-data` format as described by [RFC 7578](https://tools.ietf.org/html/rfc7578).</span>
+<span class='doccomment'>//! HTML forms with enctype=`multipart/form-data` `POST` their data in this format.</span>
+<span class='doccomment'>//! This `enctype` is typically used whenever a form has file upload input fields,</span>
+<span class='doccomment'>//! as the default `application/x-www-form-urlencoded` cannot handle file uploads.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! Whether reading from a stream or writing out to a stream, files are never stored entirely</span>
+<span class='doccomment'>//! in memory, but instead streamed through a buffer.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ## Read Example</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ```no_run</span>
+<span class='doccomment'>//! extern crate mime;</span>
+<span class='doccomment'>//! extern crate hyper;</span>
+<span class='doccomment'>//! extern crate formdata;</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! use hyper::server::{Server, Request, Response};</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! fn main() {</span>
+<span class='doccomment'>//!   let server = Server::http(&quot;0.0.0.0:0&quot;).unwrap().handle(handler).unwrap();</span>
+<span class='doccomment'>//! }</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! fn handler(hyper_request: Request, res: Response) {</span>
+<span class='doccomment'>//!   let (_, _, headers, _, _, mut reader) = hyper_request.deconstruct();</span>
+<span class='doccomment'>//!   let form_data = formdata::read_formdata(&amp;mut reader, &amp;headers).unwrap();</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!   for (name, value) in form_data.fields {</span>
+<span class='doccomment'>//!     println!(&quot;Posted field name={} value={}&quot;, name, value);</span>
+<span class='doccomment'>//!   }</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!   for (name, file) in form_data.files {</span>
+<span class='doccomment'>//!     println!(&quot;Posted file name={} path={:?}&quot;, name, file.path);</span>
+<span class='doccomment'>//!   }</span>
+<span class='doccomment'>//! }</span>
+<span class='doccomment'>//! ```</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ## Write Example</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ```no_run</span>
+<span class='doccomment'>//! extern crate mime;</span>
+<span class='doccomment'>//! extern crate hyper;</span>
+<span class='doccomment'>//! extern crate formdata;</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! use std::path::Path;</span>
+<span class='doccomment'>//! use hyper::header::{Headers, ContentType};</span>
+<span class='doccomment'>//! use mime::{Mime, TopLevel, SubLevel};</span>
+<span class='doccomment'>//! use formdata::{FormData, FilePart};</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! fn main() {</span>
+<span class='doccomment'>//!   let mut stream = ::std::io::stdout();</span>
+<span class='doccomment'>//!   let mut photo_headers = Headers::new();</span>
+<span class='doccomment'>//!   photo_headers.set(ContentType(Mime(TopLevel::Image, SubLevel::Gif, vec![])));</span>
+<span class='doccomment'>//!   // no need to set Content-Disposition (in fact it will be rewritten)</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!   let formdata = FormData {</span>
+<span class='doccomment'>//!     fields: vec![ (&quot;name&quot;.to_owned(), &quot;Baxter&quot;.to_owned()),</span>
+<span class='doccomment'>//!                   (&quot;age&quot;.to_owned(), &quot;1 month&quot;.to_owned()) ],</span>
+<span class='doccomment'>//!     files: vec![ (&quot;photo&quot;.to_owned(), FilePart::new(</span>
+<span class='doccomment'>//!          photo_headers, Path::new(&quot;/tmp/puppy.gif&quot;))) ],</span>
+<span class='doccomment'>//!   };</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!   let count = formdata::write_formdata(&amp;mut stream, &amp;formdata).unwrap();</span>
+<span class='doccomment'>//!   println!(&quot;COUNT = {}&quot;, count);</span>
+<span class='doccomment'>//! }</span>
+<span class='doccomment'>//! ```</span>
 
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>cfg_attr</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;clippy&quot;</span>, <span class='ident'>feature</span>(<span class='ident'>plugin</span>))]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>cfg_attr</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;clippy&quot;</span>, <span class='ident'>plugin</span>(<span class='ident'>clippy</span>))]</span>
@@ -466,6 +602,7 @@
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>ContentDisposition</span>, <span class='ident'>DispositionParam</span>, <span class='ident'>ContentType</span>,
                     <span class='ident'>DispositionType</span>};
 <span class='kw'>use</span> <span class='ident'>mime_multipart</span>::{<span class='ident'>Node</span>, <span class='ident'>Part</span>};
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>mime_multipart</span>::<span class='ident'>FilePart</span>;
 <span class='kw'>use</span> <span class='ident'>mime</span>::{<span class='ident'>Mime</span>, <span class='ident'>TopLevel</span>, <span class='ident'>SubLevel</span>};
 
 <span class='doccomment'>/// Parse MIME `multipart/form-data` information from a stream as a `FormData`.</span>
@@ -553,9 +690,6 @@
 <span class='doccomment'>/// Stream out `multipart/form-data` body content matching the passed in `formdata`.  This</span>
 <span class='doccomment'>/// does not stream out headers, so the caller must stream those out before calling</span>
 <span class='doccomment'>/// write_formdata().</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Note: File field names to be set in the headers in the FilePart; the FormData.files vector</span>
-<span class='doccomment'>/// pair first elements are not used herein.</span>
 
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_formdata</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>Write</span><span class='op'>&gt;</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>S</span>, <span class='ident'>formdata</span>: <span class='kw-2'>&amp;</span><span class='ident'>FormData</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>usize</span>, <span class='ident'>Error</span><span class='op'>&gt;</span>
 {
@@ -575,9 +709,21 @@
         }));
     }
 
-    <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>_name</span>, <span class='kw-2'>ref</span> <span class='ident'>filepart</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='ident'>formdata</span>.<span class='ident'>files</span> {
-        <span class='comment'>// FIXME: maybe ensure the content-disposition formdata &#39;name&#39; equals `_name`</span>
-        <span class='ident'>nodes</span>.<span class='ident'>push</span>( <span class='ident'>Node</span>::<span class='ident'>File</span>( <span class='ident'>filepart</span>.<span class='ident'>clone</span>() ) );
+    <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>, <span class='kw-2'>ref</span> <span class='ident'>filepart</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='ident'>formdata</span>.<span class='ident'>files</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>filepart</span> <span class='op'>=</span> <span class='ident'>filepart</span>.<span class='ident'>clone</span>();
+        <span class='comment'>// We leave all headers that the caller specified, except that we rewrite</span>
+        <span class='comment'>// Content-Disposition.</span>
+        <span class='kw'>while</span> <span class='ident'>filepart</span>.<span class='ident'>headers</span>.<span class='ident'>remove</span>::<span class='op'>&lt;</span><span class='ident'>ContentDisposition</span><span class='op'>&gt;</span>() { };
+        <span class='kw'>let</span> <span class='ident'>filename</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>filepart</span>.<span class='ident'>path</span>.<span class='ident'>file_name</span>() {
+            <span class='prelude-val'>Some</span>(<span class='ident'>fname</span>) <span class='op'>=&gt;</span> <span class='ident'>fname</span>.<span class='ident'>to_string_lossy</span>().<span class='ident'>into_owned</span>(),
+            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NotAFile</span>),
+        };
+        <span class='ident'>filepart</span>.<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>ContentDisposition</span> {
+            <span class='ident'>disposition</span>: <span class='ident'>DispositionType</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;form-data&quot;</span>.<span class='ident'>to_owned</span>()),
+            <span class='ident'>parameters</span>: <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;name&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>name</span>.<span class='ident'>clone</span>()),
+                             <span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;filename&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>filename</span>)],
+        });
+        <span class='ident'>nodes</span>.<span class='ident'>push</span>( <span class='ident'>Node</span>::<span class='ident'>File</span>( <span class='ident'>filepart</span> ) );
     }
 
     <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> ::<span class='ident'>mime_multipart</span>::<span class='ident'>generate_boundary</span>();
@@ -593,7 +739,7 @@
 <span class='kw'>mod</span> <span class='ident'>tests</span> {
     <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>tempdir</span>;
 
-    <span class='kw'>use</span> <span class='kw'>super</span>::<span class='op'>*</span>;
+    <span class='kw'>use</span> <span class='kw'>super</span>::{<span class='ident'>FormData</span>, <span class='ident'>write_formdata</span>, <span class='ident'>read_formdata</span>};
 
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::<span class='ident'>SocketAddr</span>;
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
