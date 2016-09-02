@@ -4,7 +4,7 @@
 //! This crate parses and processes a stream of data that contains
 //! `multipart/form-data` content.
 //!
-//! The main entry point is `get_formdata`
+//! The main entry point is `read_formdata`
 
 #![cfg_attr(feature="clippy", feature(plugin))]
 #![cfg_attr(feature="clippy", plugin(clippy))]
@@ -34,7 +34,7 @@ use hyper::header::{Headers, ContentDisposition, DispositionParam};
 use mime_multipart::Node;
 
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
-pub fn get_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
+pub fn read_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
 {
     let nodes = try!(mime_multipart::parse_multipart_body(stream, headers, false));
 
@@ -159,7 +159,7 @@ mod tests {
         let req = HyperRequest::new(&mut stream, sock).unwrap();
         let (_, _, headers, _, _, mut reader) = req.deconstruct();
 
-        match get_formdata(&mut reader, &headers) {
+        match read_formdata(&mut reader, &headers) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
                 for (key, val) in form_data.fields {
@@ -216,7 +216,7 @@ mod tests {
         let req = HyperRequest::new(&mut stream, sock).unwrap();
         let (_, _, headers, _, _, mut reader) = req.deconstruct();
 
-        match get_formdata(&mut reader, &headers) {
+        match read_formdata(&mut reader, &headers) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
                 for (key, val) in form_data.fields {
@@ -280,7 +280,7 @@ mod tests {
         let req = HyperRequest::new(&mut stream, sock).unwrap();
         let (_, _, headers, _, _, mut reader) = req.deconstruct();
 
-        match get_formdata(&mut reader, &headers) {
+        match read_formdata(&mut reader, &headers) {
             Ok(form_data) => {
                 assert_eq!(form_data.fields.len(), 1);
                 for (key, val) in form_data.fields {
