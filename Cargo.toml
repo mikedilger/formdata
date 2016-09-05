@@ -24,4 +24,4 @@ textnonce = "0.4"
 log = "0.3"
 encoding = "0.2"
 clippy = { version = "0.0", optional = true }
-mime_multipart = "0.3"
+mime_multipart = ">=0.3.2, <0.4"

@@ -92,11 +92,9 @@ pub use error::Error;
 pub use form_data::FormData;
 
 use std::io::{Read, Write};
-use hyper::header::{Headers, ContentDisposition, DispositionParam, ContentType,
-                    DispositionType};
-use mime_multipart::{Node, Part};
+use hyper::header::{Headers, ContentDisposition, DispositionParam};
+use mime_multipart::Node;
 pub use mime_multipart::FilePart;
-use mime::{Mime, TopLevel, SubLevel};
 
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
 pub fn read_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
@@ -180,44 +178,13 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
     }
 }
 
+
 /// Stream out `multipart/form-data` body content matching the passed in `formdata`.  This
 /// does not stream out headers, so the caller must stream those out before calling
 /// write_formdata().
-
 pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<usize, Error>
 {
-    // Translate to Nodes
-    let mut nodes: Vec<Node> = Vec::with_capacity(formdata.fields.len() + formdata.files.len());
-
-    for &(ref name, ref value) in &formdata.fields {
-        let mut h = Headers::new();
-        h.set(ContentType(Mime(TopLevel::Text, SubLevel::Plain, vec![])));
-        h.set(ContentDisposition {
-            disposition: DispositionType::Ext("form-data".to_owned()),
-            parameters: vec![DispositionParam::Ext("name".to_owned(), name.clone())],
-        });
-        nodes.push( Node::Part( Part {
-            headers: h,
-            body: value.as_bytes().to_owned(),
-        }));
-    }
-
-    for &(ref name, ref filepart) in &formdata.files {
-        let mut filepart = filepart.clone();
-        // We leave all headers that the caller specified, except that we rewrite
-        // Content-Disposition.
-        while filepart.headers.remove::<ContentDisposition>() { };
-        let filename = match filepart.path.file_name() {
-            Some(fname) => fname.to_string_lossy().into_owned(),
-            None => return Err(Error::NotAFile),
-        };
-        filepart.headers.set(ContentDisposition {
-            disposition: DispositionType::Ext("form-data".to_owned()),
-            parameters: vec![DispositionParam::Ext("name".to_owned(), name.clone()),
-                             DispositionParam::Ext("filename".to_owned(), filename)],
-        });
-        nodes.push( Node::File( filepart ) );
-    }
+    let nodes = try!(formdata.to_multipart());
 
     let boundary = ::mime_multipart::generate_boundary();
 
@@ -227,12 +194,27 @@ pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<u
     Ok(count)
 }
 
+/// Stream out `multipart/form-data` body content matching the passed in `formdata` as
+/// Transfer-Encoding: Chunked.  This does not stream out headers, so the caller must stream
+/// those out before calling write_formdata().
+pub fn write_formdata_chunked<S: Write>(stream: &mut S, formdata: &FormData) -> Result<(), Error>
+{
+    let nodes = try!(formdata.to_multipart());
+
+    let boundary = ::mime_multipart::generate_boundary();
+
+    // Write out
+    try!(::mime_multipart::write_multipart_chunked(stream, &boundary, &nodes));
+
+    Ok(())
+}
+
 
 #[cfg(test)]
 mod tests {
     extern crate tempdir;
 
-    use super::{FormData, write_formdata, read_formdata};
+    use super::{FormData, read_formdata, write_formdata, write_formdata_chunked};
 
     use std::net::SocketAddr;
     use std::fs::File;
@@ -453,10 +435,38 @@ mod tests {
 
         let mut output: Vec<u8> = Vec::new();
         match write_formdata(&mut output, &formdata) {
-            Ok(count) => assert_eq!(count, 568),
+            Ok(count) => assert_eq!(count, 570),
             Err(e) => panic!("Unable to write formdata: {}", e),
         }
 
+        println!("{}", String::from_utf8_lossy(&output));
+    }
+
+
+    #[test]
+    fn chunked_writer() {
+        // Create a simple short file for testing
+        let tmpdir = tempdir::TempDir::new("formdata_test").unwrap();
+        let tmppath = tmpdir.path().join("testfile");
+        let mut tmpfile = File::create(tmppath.clone()).unwrap();
+        writeln!(tmpfile, "this is example file content").unwrap();
+
+        let mut photo_headers = Headers::new();
+        photo_headers.set(ContentType(Mime(TopLevel::Image, SubLevel::Gif, vec![])));
+        photo_headers.set(ContentDisposition {
+            disposition: DispositionType::Ext("form-data".to_owned()),
+            parameters: vec![DispositionParam::Ext("name".to_owned(), "photo".to_owned()),
+                             DispositionParam::Ext("filename".to_owned(), "mike.gif".to_owned())],
+        });
+
+        let formdata = FormData {
+            fields: vec![ ("name".to_owned(), "Mike".to_owned()),
+                            ("age".to_owned(), "46".to_owned()) ],
+            files: vec![ ("photo".to_owned(), FilePart::new(photo_headers, &tmppath)) ],
+        };
+
+        let mut output: Vec<u8> = Vec::new();
+        assert!(write_formdata_chunked(&mut output, &formdata).is_ok());
         println!("{}", String::from_utf8_lossy(&output));
     }
 }
