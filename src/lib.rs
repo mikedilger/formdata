@@ -64,7 +64,8 @@
 //!          photo_headers, Path::new("/tmp/puppy.gif"))) ],
 //!   };
 //!
-//!   let count = formdata::write_formdata(&mut stream, &formdata).unwrap();
+//!   let boundary = formdata::generate_boundary();
+//!   let count = formdata::write_formdata(&mut stream, &boundary, &formdata).unwrap();
 //!   println!("COUNT = {}", count);
 //! }
 //! ```
@@ -95,6 +96,7 @@ use std::io::{Read, Write};
 use hyper::header::{Headers, ContentDisposition, DispositionParam};
 use mime_multipart::Node;
 pub use mime_multipart::FilePart;
+pub use mime_multipart::generate_boundary;
 
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
 pub fn read_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
@@ -182,14 +184,13 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
 /// Stream out `multipart/form-data` body content matching the passed in `formdata`.  This
 /// does not stream out headers, so the caller must stream those out before calling
 /// write_formdata().
-pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<usize, Error>
+pub fn write_formdata<S: Write>(stream: &mut S, boundary: &Vec<u8>, formdata: &FormData)
+                                -> Result<usize, Error>
 {
     let nodes = try!(formdata.to_multipart());
 
-    let boundary = ::mime_multipart::generate_boundary();
-
     // Write out
-    let count = try!(::mime_multipart::write_multipart(stream, &boundary, &nodes));
+    let count = try!(::mime_multipart::write_multipart(stream, boundary, &nodes));
 
     Ok(count)
 }
@@ -197,14 +198,13 @@ pub fn write_formdata<S: Write>(stream: &mut S, formdata: &FormData) -> Result<u
 /// Stream out `multipart/form-data` body content matching the passed in `formdata` as
 /// Transfer-Encoding: Chunked.  This does not stream out headers, so the caller must stream
 /// those out before calling write_formdata().
-pub fn write_formdata_chunked<S: Write>(stream: &mut S, formdata: &FormData) -> Result<(), Error>
+pub fn write_formdata_chunked<S: Write>(stream: &mut S, boundary: &Vec<u8>, formdata: &FormData)
+                                        -> Result<(), Error>
 {
     let nodes = try!(formdata.to_multipart());
 
-    let boundary = ::mime_multipart::generate_boundary();
-
     // Write out
-    try!(::mime_multipart::write_multipart_chunked(stream, &boundary, &nodes));
+    try!(::mime_multipart::write_multipart_chunked(stream, boundary, &nodes));
 
     Ok(())
 }
@@ -214,7 +214,8 @@ pub fn write_formdata_chunked<S: Write>(stream: &mut S, formdata: &FormData) -> 
 mod tests {
     extern crate tempdir;
 
-    use super::{FormData, read_formdata, write_formdata, write_formdata_chunked};
+    use super::{FormData, read_formdata, write_formdata, write_formdata_chunked,
+                FilePart, generate_boundary};
 
     use std::net::SocketAddr;
     use std::fs::File;
@@ -225,7 +226,6 @@ mod tests {
     use hyper::server::Request as HyperRequest;
     use hyper::header::{Headers, ContentDisposition, DispositionParam, ContentType,
                         DispositionType};
-    use mime_multipart::FilePart;
     use mime::{Mime, TopLevel, SubLevel};
 
     use mock::MockStream;
@@ -434,7 +434,8 @@ mod tests {
         };
 
         let mut output: Vec<u8> = Vec::new();
-        match write_formdata(&mut output, &formdata) {
+        let boundary = generate_boundary();
+        match write_formdata(&mut output, &boundary, &formdata) {
             Ok(count) => assert_eq!(count, 570),
             Err(e) => panic!("Unable to write formdata: {}", e),
         }
@@ -466,7 +467,8 @@ mod tests {
         };
 
         let mut output: Vec<u8> = Vec::new();
-        assert!(write_formdata_chunked(&mut output, &formdata).is_ok());
+        let boundary = generate_boundary();
+        assert!(write_formdata_chunked(&mut output, &boundary, &formdata).is_ok());
         println!("{}", String::from_utf8_lossy(&output));
     }
 }
