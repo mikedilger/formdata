@@ -504,6 +504,16 @@
 <span id="460">460</span>
 <span id="461">461</span>
 <span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright © 2015 by Michael Dilger (of New Zealand)</span>
 <span class='comment'>// This code is licensed under the MIT license (see LICENSE-MIT for details)</span>
@@ -599,11 +609,9 @@
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>form_data</span>::<span class='ident'>FormData</span>;
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::{<span class='ident'>Read</span>, <span class='ident'>Write</span>};
-<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>ContentDisposition</span>, <span class='ident'>DispositionParam</span>, <span class='ident'>ContentType</span>,
-                    <span class='ident'>DispositionType</span>};
-<span class='kw'>use</span> <span class='ident'>mime_multipart</span>::{<span class='ident'>Node</span>, <span class='ident'>Part</span>};
+<span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>header</span>::{<span class='ident'>Headers</span>, <span class='ident'>ContentDisposition</span>, <span class='ident'>DispositionParam</span>};
+<span class='kw'>use</span> <span class='ident'>mime_multipart</span>::<span class='ident'>Node</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>mime_multipart</span>::<span class='ident'>FilePart</span>;
-<span class='kw'>use</span> <span class='ident'>mime</span>::{<span class='ident'>Mime</span>, <span class='ident'>TopLevel</span>, <span class='ident'>SubLevel</span>};
 
 <span class='doccomment'>/// Parse MIME `multipart/form-data` information from a stream as a `FormData`.</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>read_formdata</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>Read</span><span class='op'>&gt;</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>S</span>, <span class='ident'>headers</span>: <span class='kw-2'>&amp;</span><span class='ident'>Headers</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>FormData</span>, <span class='ident'>Error</span><span class='op'>&gt;</span>
@@ -687,44 +695,13 @@
     }
 }
 
+
 <span class='doccomment'>/// Stream out `multipart/form-data` body content matching the passed in `formdata`.  This</span>
 <span class='doccomment'>/// does not stream out headers, so the caller must stream those out before calling</span>
 <span class='doccomment'>/// write_formdata().</span>
-
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_formdata</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>Write</span><span class='op'>&gt;</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>S</span>, <span class='ident'>formdata</span>: <span class='kw-2'>&amp;</span><span class='ident'>FormData</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>usize</span>, <span class='ident'>Error</span><span class='op'>&gt;</span>
 {
-    <span class='comment'>// Translate to Nodes</span>
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>nodes</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Node</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='ident'>formdata</span>.<span class='ident'>fields</span>.<span class='ident'>len</span>() <span class='op'>+</span> <span class='ident'>formdata</span>.<span class='ident'>files</span>.<span class='ident'>len</span>());
-
-    <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>, <span class='kw-2'>ref</span> <span class='ident'>value</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='ident'>formdata</span>.<span class='ident'>fields</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>h</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
-        <span class='ident'>h</span>.<span class='ident'>set</span>(<span class='ident'>ContentType</span>(<span class='ident'>Mime</span>(<span class='ident'>TopLevel</span>::<span class='ident'>Text</span>, <span class='ident'>SubLevel</span>::<span class='ident'>Plain</span>, <span class='macro'>vec</span><span class='macro'>!</span>[])));
-        <span class='ident'>h</span>.<span class='ident'>set</span>(<span class='ident'>ContentDisposition</span> {
-            <span class='ident'>disposition</span>: <span class='ident'>DispositionType</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;form-data&quot;</span>.<span class='ident'>to_owned</span>()),
-            <span class='ident'>parameters</span>: <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;name&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>name</span>.<span class='ident'>clone</span>())],
-        });
-        <span class='ident'>nodes</span>.<span class='ident'>push</span>( <span class='ident'>Node</span>::<span class='ident'>Part</span>( <span class='ident'>Part</span> {
-            <span class='ident'>headers</span>: <span class='ident'>h</span>,
-            <span class='ident'>body</span>: <span class='ident'>value</span>.<span class='ident'>as_bytes</span>().<span class='ident'>to_owned</span>(),
-        }));
-    }
-
-    <span class='kw'>for</span> <span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>name</span>, <span class='kw-2'>ref</span> <span class='ident'>filepart</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='ident'>formdata</span>.<span class='ident'>files</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>filepart</span> <span class='op'>=</span> <span class='ident'>filepart</span>.<span class='ident'>clone</span>();
-        <span class='comment'>// We leave all headers that the caller specified, except that we rewrite</span>
-        <span class='comment'>// Content-Disposition.</span>
-        <span class='kw'>while</span> <span class='ident'>filepart</span>.<span class='ident'>headers</span>.<span class='ident'>remove</span>::<span class='op'>&lt;</span><span class='ident'>ContentDisposition</span><span class='op'>&gt;</span>() { };
-        <span class='kw'>let</span> <span class='ident'>filename</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>filepart</span>.<span class='ident'>path</span>.<span class='ident'>file_name</span>() {
-            <span class='prelude-val'>Some</span>(<span class='ident'>fname</span>) <span class='op'>=&gt;</span> <span class='ident'>fname</span>.<span class='ident'>to_string_lossy</span>().<span class='ident'>into_owned</span>(),
-            <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>NotAFile</span>),
-        };
-        <span class='ident'>filepart</span>.<span class='ident'>headers</span>.<span class='ident'>set</span>(<span class='ident'>ContentDisposition</span> {
-            <span class='ident'>disposition</span>: <span class='ident'>DispositionType</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;form-data&quot;</span>.<span class='ident'>to_owned</span>()),
-            <span class='ident'>parameters</span>: <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;name&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>name</span>.<span class='ident'>clone</span>()),
-                             <span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;filename&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>filename</span>)],
-        });
-        <span class='ident'>nodes</span>.<span class='ident'>push</span>( <span class='ident'>Node</span>::<span class='ident'>File</span>( <span class='ident'>filepart</span> ) );
-    }
+    <span class='kw'>let</span> <span class='ident'>nodes</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>formdata</span>.<span class='ident'>to_multipart</span>());
 
     <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> ::<span class='ident'>mime_multipart</span>::<span class='ident'>generate_boundary</span>();
 
@@ -734,12 +711,27 @@
     <span class='prelude-val'>Ok</span>(<span class='ident'>count</span>)
 }
 
+<span class='doccomment'>/// Stream out `multipart/form-data` body content matching the passed in `formdata` as</span>
+<span class='doccomment'>/// Transfer-Encoding: Chunked.  This does not stream out headers, so the caller must stream</span>
+<span class='doccomment'>/// those out before calling write_formdata().</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_formdata_chunked</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>Write</span><span class='op'>&gt;</span>(<span class='ident'>stream</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>S</span>, <span class='ident'>formdata</span>: <span class='kw-2'>&amp;</span><span class='ident'>FormData</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>Error</span><span class='op'>&gt;</span>
+{
+    <span class='kw'>let</span> <span class='ident'>nodes</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>formdata</span>.<span class='ident'>to_multipart</span>());
+
+    <span class='kw'>let</span> <span class='ident'>boundary</span> <span class='op'>=</span> ::<span class='ident'>mime_multipart</span>::<span class='ident'>generate_boundary</span>();
+
+    <span class='comment'>// Write out</span>
+    <span class='macro'>try</span><span class='macro'>!</span>(::<span class='ident'>mime_multipart</span>::<span class='ident'>write_multipart_chunked</span>(<span class='ident'>stream</span>, <span class='kw-2'>&amp;</span><span class='ident'>boundary</span>, <span class='kw-2'>&amp;</span><span class='ident'>nodes</span>));
+
+    <span class='prelude-val'>Ok</span>(())
+}
+
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>tests</span> {
     <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>tempdir</span>;
 
-    <span class='kw'>use</span> <span class='kw'>super</span>::{<span class='ident'>FormData</span>, <span class='ident'>write_formdata</span>, <span class='ident'>read_formdata</span>};
+    <span class='kw'>use</span> <span class='kw'>super</span>::{<span class='ident'>FormData</span>, <span class='ident'>read_formdata</span>, <span class='ident'>write_formdata</span>, <span class='ident'>write_formdata_chunked</span>};
 
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::<span class='ident'>SocketAddr</span>;
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
@@ -960,10 +952,38 @@
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>output</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
         <span class='kw'>match</span> <span class='ident'>write_formdata</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>output</span>, <span class='kw-2'>&amp;</span><span class='ident'>formdata</span>) {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>count</span>) <span class='op'>=&gt;</span> <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>count</span>, <span class='number'>568</span>),
+            <span class='prelude-val'>Ok</span>(<span class='ident'>count</span>) <span class='op'>=&gt;</span> <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>count</span>, <span class='number'>570</span>),
             <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Unable to write formdata: {}&quot;</span>, <span class='ident'>e</span>),
         }
 
+        <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>String</span>::<span class='ident'>from_utf8_lossy</span>(<span class='kw-2'>&amp;</span><span class='ident'>output</span>));
+    }
+
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>chunked_writer</span>() {
+        <span class='comment'>// Create a simple short file for testing</span>
+        <span class='kw'>let</span> <span class='ident'>tmpdir</span> <span class='op'>=</span> <span class='ident'>tempdir</span>::<span class='ident'>TempDir</span>::<span class='ident'>new</span>(<span class='string'>&quot;formdata_test&quot;</span>).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>tmppath</span> <span class='op'>=</span> <span class='ident'>tmpdir</span>.<span class='ident'>path</span>().<span class='ident'>join</span>(<span class='string'>&quot;testfile&quot;</span>);
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>tmpfile</span> <span class='op'>=</span> <span class='ident'>File</span>::<span class='ident'>create</span>(<span class='ident'>tmppath</span>.<span class='ident'>clone</span>()).<span class='ident'>unwrap</span>();
+        <span class='macro'>writeln</span><span class='macro'>!</span>(<span class='ident'>tmpfile</span>, <span class='string'>&quot;this is example file content&quot;</span>).<span class='ident'>unwrap</span>();
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>photo_headers</span> <span class='op'>=</span> <span class='ident'>Headers</span>::<span class='ident'>new</span>();
+        <span class='ident'>photo_headers</span>.<span class='ident'>set</span>(<span class='ident'>ContentType</span>(<span class='ident'>Mime</span>(<span class='ident'>TopLevel</span>::<span class='ident'>Image</span>, <span class='ident'>SubLevel</span>::<span class='ident'>Gif</span>, <span class='macro'>vec</span><span class='macro'>!</span>[])));
+        <span class='ident'>photo_headers</span>.<span class='ident'>set</span>(<span class='ident'>ContentDisposition</span> {
+            <span class='ident'>disposition</span>: <span class='ident'>DispositionType</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;form-data&quot;</span>.<span class='ident'>to_owned</span>()),
+            <span class='ident'>parameters</span>: <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;name&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;photo&quot;</span>.<span class='ident'>to_owned</span>()),
+                             <span class='ident'>DispositionParam</span>::<span class='ident'>Ext</span>(<span class='string'>&quot;filename&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;mike.gif&quot;</span>.<span class='ident'>to_owned</span>())],
+        });
+
+        <span class='kw'>let</span> <span class='ident'>formdata</span> <span class='op'>=</span> <span class='ident'>FormData</span> {
+            <span class='ident'>fields</span>: <span class='macro'>vec</span><span class='macro'>!</span>[ (<span class='string'>&quot;name&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;Mike&quot;</span>.<span class='ident'>to_owned</span>()),
+                            (<span class='string'>&quot;age&quot;</span>.<span class='ident'>to_owned</span>(), <span class='string'>&quot;46&quot;</span>.<span class='ident'>to_owned</span>()) ],
+            <span class='ident'>files</span>: <span class='macro'>vec</span><span class='macro'>!</span>[ (<span class='string'>&quot;photo&quot;</span>.<span class='ident'>to_owned</span>(), <span class='ident'>FilePart</span>::<span class='ident'>new</span>(<span class='ident'>photo_headers</span>, <span class='kw-2'>&amp;</span><span class='ident'>tmppath</span>)) ],
+        };
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>output</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>write_formdata_chunked</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>output</span>, <span class='kw-2'>&amp;</span><span class='ident'>formdata</span>).<span class='ident'>is_ok</span>());
         <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>String</span>::<span class='ident'>from_utf8_lossy</span>(<span class='kw-2'>&amp;</span><span class='ident'>output</span>));
     }
 }

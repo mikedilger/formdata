@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/formdata/src/lib.rs.html#4-462' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-0' class='srclink' href='../src/formdata/src/lib.rs.html#4-472' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This library provides a type for storing <code>multipart/form-data</code> data, as well as functions
 to stream (read or write) such data over HTTP.</p>
 
@@ -151,6 +151,15 @@ was received as part of <code>multipart/*</code> parsing.</p>
                                 <p>Stream out <code>multipart/form-data</code> body content matching the passed in <code>formdata</code>.  This
 does not stream out headers, so the caller must stream those out before calling
 write_formdata().</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.write_formdata_chunked.html'
+                                  title='formdata::write_formdata_chunked'>write_formdata_chunked</a></td>
+                           <td class='docblock short'>
+                                <p>Stream out <code>multipart/form-data</code> body content matching the passed in <code>formdata</code> as
+Transfer-Encoding: Chunked.  This does not stream out headers, so the caller must stream
+those out before calling write_formdata().</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>
