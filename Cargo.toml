@@ -9,19 +9,15 @@ documentation = "https://mikedilger.github.io/formdata"
 license = "MIT"
 keywords = ["multipart", "form-data", "hyper", "http", "mime"]
 
-[features]
-default = [ "ssl" ]
-ssl = ["hyper/ssl"]
-
 [dev-dependencies]
 tempdir = "0.3"
 
 [dependencies]
-hyper = { version = "0.9", default-features = false }
+hyper = { version = "0.10" }
 httparse = "1.1"
 mime = "0.2"
 textnonce = "0.4"
 log = "0.3"
 encoding = "0.2"
 clippy = { version = "0.0", optional = true }
-mime_multipart = ">=0.3.2, <0.4"
+mime_multipart = "0.4"
