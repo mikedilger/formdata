@@ -436,7 +436,7 @@ mod tests {
         let mut output: Vec<u8> = Vec::new();
         let boundary = generate_boundary();
         match write_formdata(&mut output, &boundary, &formdata) {
-            Ok(count) => assert_eq!(count, 570),
+            Ok(count) => assert_eq!(count, 568),
             Err(e) => panic!("Unable to write formdata: {}", e),
         }
 
