@@ -16,7 +16,7 @@ tempdir = "0.3"
 hyper = { version = "0.10" }
 httparse = "1.2"
 mime = "0.2"
-textnonce = "0.4"
+textnonce = "0.5"
 log = "0.3"
 encoding = "0.2"
 clippy = { version = "0.0", optional = true }
