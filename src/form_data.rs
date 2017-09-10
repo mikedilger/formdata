@@ -4,7 +4,6 @@
 use mime_multipart::{Node, Part, FilePart};
 use hyper::header::{Headers, ContentDisposition, DispositionParam, DispositionType,
                     ContentType};
-use mime::{Mime, TopLevel, SubLevel};
 use error::Error;
 
 /// The extracted text fields and uploaded files from a `multipart/form-data` request.
@@ -32,7 +31,7 @@ impl FormData {
 
         for &(ref name, ref value) in &self.fields {
             let mut h = Headers::new();
-            h.set(ContentType(Mime(TopLevel::Text, SubLevel::Plain, vec![])));
+            h.set(ContentType::plaintext());
             h.set(ContentDisposition {
                 disposition: DispositionType::Ext("form-data".to_owned()),
                 parameters: vec![DispositionParam::Ext("name".to_owned(), name.clone())],
@@ -47,7 +46,7 @@ impl FormData {
             let mut filepart = filepart.clone();
             // We leave all headers that the caller specified, except that we rewrite
             // Content-Disposition.
-            while filepart.headers.remove::<ContentDisposition>() { };
+            while filepart.headers.remove::<ContentDisposition>().is_some() { };
             let filename = match filepart.path.file_name() {
                 Some(fname) => fname.to_string_lossy().into_owned(),
                 None => return Err(Error::NotAFile),

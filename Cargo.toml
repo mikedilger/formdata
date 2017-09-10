@@ -1,6 +1,6 @@
 [package]
 name = "formdata"
-version = "0.12.1"
+version = "0.12.2"
 description = "Parsing of multipart/form-data"
 authors = [ "Mike Dilger <mike@optcomp.nz>" ]
 readme = "README.md"
@@ -13,11 +13,11 @@ keywords = ["multipart", "form-data", "hyper", "http", "mime"]
 tempdir = "0.3"
 
 [dependencies]
-hyper = { version = "0.10" }
+hyper = { version = "0.11" }
 httparse = "1.2"
-mime = "0.2"
+mime = "0.3"
 textnonce = "0.6"
 log = "0.3"
 encoding = "0.2"
 clippy = { version = "0.0", optional = true }
-mime_multipart = "0.5"
+mime_multipart = { git = "https://github.com/iseurie/mime-multipart" }
