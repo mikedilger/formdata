@@ -17,7 +17,7 @@ hyper = { version = "0.10" }
 httparse = "1.2"
 mime = "0.2"
 textnonce = "0.6"
-log = "0.3"
+log = "0.4"
 encoding = "0.2"
 clippy = { version = "0.0", optional = true }
 mime_multipart = "0.5"
