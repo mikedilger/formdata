@@ -98,8 +98,8 @@ impl Display for Error {
 impl fmt::Debug for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         try!( f.write_str(&*self.description()) );
-        if self.cause().is_some() {
-            try!( write!(f, ": {:?}", self.cause().unwrap()) ); // recurse
+        if self.source().is_some() {
+            try!( write!(f, ": {:?}", self.source().unwrap()) ); // recurse
         }
         Ok(())
     }
