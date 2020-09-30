@@ -75,10 +75,8 @@
 
 extern crate httparse;
 extern crate hyper;
-#[macro_use]
 extern crate mime;
 extern crate textnonce;
-#[macro_use]
 extern crate log;
 extern crate encoding;
 
@@ -101,10 +99,10 @@ pub use mime_multipart::generate_boundary;
 /// Parse MIME `multipart/form-data` information from a stream as a `FormData`.
 pub fn read_formdata<S: Read>(stream: &mut S, headers: &Headers) -> Result<FormData, Error>
 {
-    let nodes = try!(mime_multipart::read_multipart_body(stream, headers, false));
+    let nodes = mime_multipart::read_multipart_body(stream, headers, false)?;
 
     let mut formdata = FormData::new();
-    try!(fill_formdata(&mut formdata, nodes));
+    fill_formdata(&mut formdata, nodes)?;
     Ok(formdata)
 }
 
@@ -124,8 +122,8 @@ fn fill_formdata(formdata: &mut FormData, nodes: Vec<Node>) -> Result<(), Error>
                     };
                     get_content_disposition_name(&cd)
                 };
-                let key = try!(cd_name.ok_or(Error::NoName));
-                let val = try!(String::from_utf8(part.body));
+                let key = cd_name.ok_or(Error::NoName)?;
+                let val = String::from_utf8(part.body)?;
                 formdata.fields.push((key, val));
             },
             Node::File(part) => {
@@ -136,7 +134,7 @@ fn fill_formdata(formdata: &mut FormData, nodes: Vec<Node>) -> Result<(), Error>
                     };
                     get_content_disposition_name(&cd)
                 };
-                let key = try!(cd_name.ok_or(Error::NoName));
+                let key = cd_name.ok_or(Error::NoName)?;
                 formdata.files.push((key, part));
             }
             Node::Multipart((headers, nodes)) => {
@@ -147,11 +145,11 @@ fn fill_formdata(formdata: &mut FormData, nodes: Vec<Node>) -> Result<(), Error>
                     };
                     get_content_disposition_name(&cd)
                 };
-                let key = try!(cd_name.ok_or(Error::NoName));
+                let key = cd_name.ok_or(Error::NoName)?;
                 for node in nodes {
                     match node {
                         Node::Part(part) => {
-                            let val = try!(String::from_utf8(part.body));
+                            let val = String::from_utf8(part.body)?;
                             formdata.fields.push((key.clone(), val));
                         },
                         Node::File(part) => {
@@ -187,10 +185,10 @@ fn get_content_disposition_name(cd: &ContentDisposition) -> Option<String> {
 pub fn write_formdata<S: Write>(stream: &mut S, boundary: &Vec<u8>, formdata: &FormData)
                                 -> Result<usize, Error>
 {
-    let nodes = try!(formdata.to_multipart());
+    let nodes = formdata.to_multipart()?;
 
     // Write out
-    let count = try!(::mime_multipart::write_multipart(stream, boundary, &nodes));
+    let count = ::mime_multipart::write_multipart(stream, boundary, &nodes)?;
 
     Ok(count)
 }
@@ -201,10 +199,10 @@ pub fn write_formdata<S: Write>(stream: &mut S, boundary: &Vec<u8>, formdata: &F
 pub fn write_formdata_chunked<S: Write>(stream: &mut S, boundary: &Vec<u8>, formdata: &FormData)
                                         -> Result<(), Error>
 {
-    let nodes = try!(formdata.to_multipart());
+    let nodes = formdata.to_multipart()?;
 
     // Write out
-    try!(::mime_multipart::write_multipart_chunked(stream, boundary, &nodes));
+    ::mime_multipart::write_multipart_chunked(stream, boundary, &nodes)?;
 
     Ok(())
 }
