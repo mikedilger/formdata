@@ -75,6 +75,7 @@
 
 extern crate httparse;
 extern crate hyper;
+#[cfg_attr(test, macro_use)]
 extern crate mime;
 extern crate textnonce;
 extern crate log;
