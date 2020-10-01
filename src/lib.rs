@@ -254,7 +254,7 @@ mod tests {
 
         let mut mock = MockStream::with_input(input);
 
-        let mock: &mut NetworkStream = &mut mock;
+        let mock: &mut dyn NetworkStream = &mut mock;
         let mut stream = BufReader::new(mock);
         let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
         let req = HyperRequest::new(&mut stream, sock).unwrap();
@@ -311,7 +311,7 @@ mod tests {
 
         let mut mock = MockStream::with_input(input);
 
-        let mock: &mut NetworkStream = &mut mock;
+        let mock: &mut dyn NetworkStream = &mut mock;
         let mut stream = BufReader::new(mock);
         let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
         let req = HyperRequest::new(&mut stream, sock).unwrap();
@@ -375,7 +375,7 @@ mod tests {
 
         let mut mock = MockStream::with_input(input);
 
-        let mock: &mut NetworkStream = &mut mock;
+        let mock: &mut dyn NetworkStream = &mut mock;
         let mut stream = BufReader::new(mock);
         let sock: SocketAddr = "127.0.0.1:80".parse().unwrap();
         let req = HyperRequest::new(&mut stream, sock).unwrap();
