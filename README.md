@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/mikedilger/formdata.svg?branch=master)](https://travis-ci.org/mikedilger/formdata)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
+THIS LIBRARY AND REPOSITORY ARE UNMAINTAINED
+
 Documentation is available at https://mikedilger.github.io/formdata
 
 This library provides a type for storing `multipart/form-data` data, as well as functions
